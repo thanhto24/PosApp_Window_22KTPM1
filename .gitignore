@@ -1,32 +1,63 @@
-# Prerequisites
-*.d
-
-# Compiled Object files
-*.slo
-*.lo
-*.o
+# Visual Studio-specific files
+.vs/
+*.user
+*.suo
+*.cache
+*.pdb
 *.obj
+*.log
+*.tlog
+*.ilk
+*.idb
+*.ipch
+*.VC.db
+*.VC.VC.opendb
+*.VC.opendb
+*.opendb
 
-# Precompiled Headers
-*.gch
-*.pch
+# Build outputs
+bin/
+obj/
+Debug/
+Release/
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+CMakeLists.txt.user
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
+# Windows Package output
+AppPackages/
+BundleArtifacts/
+TestResults/
 
-# Fortran module files
-*.mod
-*.smod
+# NuGet and dependency files
+*.nupkg
+*.snupkg
+packages/
+project.lock.json
+project.assets.json
 
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
+# Temporary files
+*.tmp
+*.temp
+*.rsuser
+*.dotCover
+*.ncrunch*
+*.g.cs
+*.g.i.cs
+*.csproj.user
+*.xproj.user
+*.sln.docstates
 
-# Executables
-*.exe
-*.out
-*.app
+# Rider-specific (JetBrains)
+.idea/
+*.iml
+*.sln.iml
+
+# Node.js (if using React or other web-based UI)
+node_modules/
+npm-debug.log
+
+# WinUI-specific generated files
+GeneratedFiles/
+Generated/
