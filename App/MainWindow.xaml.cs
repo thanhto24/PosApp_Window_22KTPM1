@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -26,11 +26,9 @@ namespace App
         public MainWindow()
         {
             this.InitializeComponent();
-        }
 
-        private void myButton_Click(object sender, RoutedEventArgs e)
-        {
-            myButton.Content = "Clicked";
+            // Điều hướng đến Login.xaml khi ứng dụng khởi động
+            MainFrame.Navigate(typeof(Pages.Login));
         }
     }
 }
