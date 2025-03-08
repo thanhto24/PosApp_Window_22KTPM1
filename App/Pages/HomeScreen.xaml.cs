@@ -1,67 +1,56 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+using System.Collections.ObjectModel;
+using Microsoft.UI.Text;
+using Microsoft.UI;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
-using System.Collections.ObjectModel;
-
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
+using Windows.UI;
 
 namespace App.Pages
 {
     public sealed partial class HomeScreen : Page
     {
-        public ObservableCollection
-<Product> ProductList
-        { get; } = new()
+        public ObservableCollection<Product> ProductList { get; } = new()
         {
             new("Hồng Trà Đài Loan", "12,000đ", "ms-appx:///Assets/tea1.jpg"),
             new("Trà Xanh Hoa Nhài", "12,000đ", "ms-appx:///Assets/tea2.jpg"),
             new("Trà Sữa Lài", "20,000đ", "ms-appx:///Assets/tea3.jpg")
         };
 
-        private List
-    <string> cartItems = new();
+        private List<string> cartItems = new();
         private double totalAmount = 0;
+        private Button selectedButton = null;
 
         public HomeScreen()
         {
             this.InitializeComponent();
-            cartListView.ItemsSource = new ObservableCollection
-        <string>(cartItems);
+            cartListView.ItemsSource = new ObservableCollection<string>(cartItems);
         }
 
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void MenuButton_Click(object sender, RoutedEventArgs e)
         {
-            var textBox = sender as TextBox;
-            if (textBox != null)
+            if (sender is Button clickedButton)
             {
-                // Nếu TextBox có nội dung, ẩn placeholder, nếu rỗng thì hiện placeholder
-                VisualStateManager.GoToState(textBox, string.IsNullOrEmpty(textBox.Text) ? "Normal" : "TextNotEmpty", true);
+                HighlightSelectedButton(clickedButton);
             }
         }
 
-        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
+        private void HighlightSelectedButton(Button clickedButton)
         {
-            var textBox = sender as TextBox;
-            if (textBox != null)
+            if (selectedButton != null)
             {
-                // Nếu TextBox không có nội dung khi mất focus, quay về trạng thái Normal để hiển thị placeholder
-                if (string.IsNullOrEmpty(textBox.Text))
-                {
-                    VisualStateManager.GoToState(textBox, "Normal", true);
-                }
+                selectedButton.FontWeight = FontWeights.Normal;
+                selectedButton.Background = new SolidColorBrush(Colors.White);
+                selectedButton.Foreground = new SolidColorBrush(Colors.Black);
             }
+
+            clickedButton.FontWeight = FontWeights.Bold;
+            clickedButton.Background = new SolidColorBrush(Colors.DarkOrange);
+            clickedButton.Foreground = new SolidColorBrush(Colors.White);
+
+            selectedButton = clickedButton;
         }
 
         private void AddToCart_Click(object sender, RoutedEventArgs e)
@@ -116,10 +105,8 @@ namespace App.Pages
         public string Price { get; set; } = string.Empty;
         public string ImagePath { get; set; } = string.Empty;
 
-        // Constructor mặc định cần thiết để tránh lỗi XAML compiler
         public Product() { }
 
-        // Constructor có tham số để khởi tạo nhanh
         public Product(string name, string price, string imagePath)
         {
             Name = name;
@@ -127,5 +114,4 @@ namespace App.Pages
             ImagePath = imagePath;
         }
     }
-
 }

@@ -16,7 +16,6 @@
             <Setter Property="FontSize" Value="16"/>
             <Setter Property="Width" Value="190"/>
             <Setter Property="Height" Value="40"/>
-            <!-- Thêm Padding -->
             <Setter Property="Margin" Value="5"/>
             <Setter Property="BorderThickness" Value="0"/>
 
@@ -29,28 +28,35 @@
                                     <VisualState x:Name="Normal"/>
                                     <VisualState x:Name="PointerOver">
                                         <Storyboard>
-                                            <ColorAnimation Storyboard.TargetName="BackgroundBorder"
-                                            Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
-                                            To="LightGray"
-                                            Duration="0:0:0.2"/>
+                                            <!-- Đổi màu chữ thành đỏ khi hover -->
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter"
+                                                                   Storyboard.TargetProperty="Foreground">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="Red"/>
+                                            </ObjectAnimationUsingKeyFrames>
                                         </Storyboard>
                                     </VisualState>
                                     <VisualState x:Name="Pressed">
                                         <Storyboard>
-                                            <ColorAnimation Storyboard.TargetName="BackgroundBorder"
-                                            Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
-                                            To="DarkGray"
-                                            Duration="0:0:0.1"/>
+                                            <!-- Khi nhấn vào, màu chữ chuyển thành DarkRed -->
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter"
+                                                                   Storyboard.TargetProperty="Foreground">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="DarkRed"/>
+                                            </ObjectAnimationUsingKeyFrames>
                                         </Storyboard>
                                     </VisualState>
                                 </VisualStateGroup>
                             </VisualStateManager.VisualStateGroups>
 
-                            <!-- Thêm Padding vào Border -->
-                            <Border x:Name="BackgroundBorder" Background="{TemplateBinding Background}" 
-                            BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" 
-                            CornerRadius="5" Padding="{TemplateBinding Padding}">
-                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <Border x:Name="BackgroundBorder"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="5"
+                            Padding="{TemplateBinding Padding}">
+                                <ContentPresenter x:Name="ContentPresenter"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          Foreground="{TemplateBinding Foreground}"/>
                             </Border>
                         </Grid>
                     </ControlTemplate>
@@ -58,74 +64,51 @@
             </Setter>
         </Style>
 
-
-
-
-        <Style TargetType="TextBox" x:Key="CustomTextBoxStyle">
-            <Setter Property="Background" Value="Black"/>
+        <!-- Style cho nút "Lưu" -->
+        <Style x:Key="SaveButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Orange"/>
             <Setter Property="Foreground" Value="White"/>
-            <Setter Property="PlaceholderText" Value="Nhập tên khách hàng"/>
-            <Setter Property="PlaceholderForeground" Value="White"/>
-            <Setter Property="BorderBrush" Value="Gray"/>
-            <Setter Property="BorderThickness" Value="2"/>
-            <Setter Property="Padding" Value="10"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Width" Value="120"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="BorderThickness" Value="0"/>
 
             <Setter Property="Template">
                 <Setter.Value>
-                    <ControlTemplate TargetType="TextBox">
+                    <ControlTemplate TargetType="Button">
                         <Grid>
                             <VisualStateManager.VisualStateGroups>
                                 <VisualStateGroup x:Name="CommonStates">
                                     <VisualState x:Name="Normal"/>
                                     <VisualState x:Name="PointerOver">
                                         <Storyboard>
-                                            <ColorAnimation Storyboard.TargetName="BackgroundElement"
-                                                    Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
-                                                    To="Black"
-                                                    Duration="0:0:0.2"/>
-                                        </Storyboard>
-                                    </VisualState>
-                                    <VisualState x:Name="Focused">
-                                        <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PlaceholderTextElement"
-                                                                   Storyboard.TargetProperty="Opacity">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="0"/>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter"
+                                                                       Storyboard.TargetProperty="Foreground">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="Red"/>
                                             </ObjectAnimationUsingKeyFrames>
                                         </Storyboard>
                                     </VisualState>
-                                    <VisualState x:Name="TextNotEmpty">
+                                    <VisualState x:Name="Pressed">
                                         <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PlaceholderTextElement"
-                                                                   Storyboard.TargetProperty="Opacity">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="0"/>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter"
+                                                                       Storyboard.TargetProperty="Foreground">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="DarkRed"/>
                                             </ObjectAnimationUsingKeyFrames>
                                         </Storyboard>
                                     </VisualState>
                                 </VisualStateGroup>
                             </VisualStateManager.VisualStateGroups>
 
-                            <Border x:Name="BackgroundElement"
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="5">
-                                <Grid>
-                                    <!-- Placeholder Text -->
-                                    <TextBlock x:Name="PlaceholderTextElement"
-                                               Text="{TemplateBinding PlaceholderText}"
-                                               Foreground="{TemplateBinding PlaceholderForeground}"
-                                               Margin="10,0,0,0"
-                                               VerticalAlignment="Center"
-                                               IsHitTestVisible="False">
-                                    </TextBlock>
-
-
-                                    <!-- Input Content -->
-                                    <ScrollViewer x:Name="ContentElement"
-                                          Padding="{TemplateBinding Padding}"
-                                          Margin="5"
-                                          VerticalAlignment="Center"/>
-                                </Grid>
+                            <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="5"
+                                Padding="{TemplateBinding Padding}">
+                                <ContentPresenter x:Name="ContentPresenter"
+                                              HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              Foreground="{TemplateBinding Foreground}"/>
                             </Border>
                         </Grid>
                     </ControlTemplate>
@@ -133,46 +116,46 @@
             </Setter>
         </Style>
 
+        <!-- Style cho nút "TÍNH TIỀN" -->
+        <Style x:Key="CheckoutButtonStyle" TargetType="Button" BasedOn="{StaticResource SaveButtonStyle}">
+            <Setter Property="Background" Value="Blue"/>
+        </Style>
     </Page.Resources>
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
-            <!-- Sidebar -->
             <ColumnDefinition Width="*"/>
-            <!-- Product List -->
             <ColumnDefinition Width="Auto"/>
-            <!-- Order Summary (Cart -->
         </Grid.ColumnDefinitions>
 
         <!-- Sidebar Menu -->
         <StackPanel Grid.Column="0" Background="#FFDD8E" Width="200" Height="600" 
-            VerticalAlignment="Stretch" 
-            HorizontalAlignment="Left">
-            <Button Content="NƯỚC ÉP" Style="{StaticResource MenuButtonStyle}" />
-            <Button Content="TRÀ ĐÀI LOAN" Style="{StaticResource MenuButtonStyle}" />
-            <Button Content="TRÀ SỮA" Style="{StaticResource MenuButtonStyle}" />
-            <Button Content="CAFÉ" Style="{StaticResource MenuButtonStyle}" />
-            <Button Content="BÁNH NGỌT" Style="{StaticResource MenuButtonStyle}" />
-            <Button Content="MÌ" Style="{StaticResource MenuButtonStyle}" />
-            <Button Content="PIZZA" Style="{StaticResource MenuButtonStyle}" />
+            VerticalAlignment="Stretch" HorizontalAlignment="Left">
+            <Button Content="NƯỚC ÉP" Style="{StaticResource MenuButtonStyle}" Click="MenuButton_Click"/>
+            <Button Content="TRÀ ĐÀI LOAN" Style="{StaticResource MenuButtonStyle}" Click="MenuButton_Click"/>
+            <Button Content="TRÀ SỮA" Style="{StaticResource MenuButtonStyle}" Click="MenuButton_Click"/>
+            <Button Content="CAFÉ" Style="{StaticResource MenuButtonStyle}" Click="MenuButton_Click"/>
+            <Button Content="BÁNH NGỌT" Style="{StaticResource MenuButtonStyle}" Click="MenuButton_Click"/>
+            <Button Content="MÌ" Style="{StaticResource MenuButtonStyle}" Click="MenuButton_Click"/>
+            <Button Content="PIZZA" Style="{StaticResource MenuButtonStyle}" Click="MenuButton_Click"/>
         </StackPanel>
 
         <!-- Product List -->
-        <GridView Grid.Column="1" Padding="20" ItemsSource="{x:Bind ProductList}">
+        <GridView Grid.Column="1" Padding="20" ItemsSource="{x:Bind ProductList}" Background="#FFF5E4" Width="Auto">
             <GridView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <ItemsWrapGrid Orientation="Horizontal"/>
                 </ItemsPanelTemplate>
             </GridView.ItemsPanel>
-
             <GridView.ItemTemplate>
                 <DataTemplate>
                     <Border Width="150" Height="200" Margin="10" BorderThickness="1" BorderBrush="Gray">
                         <StackPanel>
                             <Image Source="{Binding ImagePath}" Height="100"/>
-                            <TextBlock Text="{Binding Name}" FontWeight="Bold" TextAlignment="Center"/>
+                            <TextBlock Text="{Binding Name}" FontWeight="Bold" TextAlignment="Center" Foreground="Black"/>
                             <TextBlock Text="{Binding Price}" Foreground="Red" TextAlignment="Center"/>
-                            <Button Content="Chọn" Click="AddToCart_Click"/>
+                            <Button Content="Chọn" Click="AddToCart_Click" Background="Black"/>
                         </StackPanel>
                     </Border>
                 </DataTemplate>
@@ -180,13 +163,15 @@
         </GridView>
 
         <!-- Order Summary (Cart) -->
-        <StackPanel Grid.Column="2" Width="300" Background="#F0F0F0" Padding="10" Margin="200, 0, 0, 0">
-            <TextBox PlaceholderText="Nhập tên khách hàng" Margin="5" Style="{StaticResource CustomTextBoxStyle}" TextChanged="TextBox_TextChanged" LostFocus="TextBox_LostFocus"/>
+        <StackPanel Grid.Column="2" Width="300" Background="#C1D8C3" Padding="10" Margin="200, 0, 0, 0">
+            <TextBox PlaceholderText="Nhập tên khách hàng" Margin="5"/>
             <ListView x:Name="cartListView" Margin="5"/>
             <TextBlock x:Name="txtTotal" Text="Tổng cộng: 0đ" FontSize="16" FontWeight="Bold" Margin="5" Foreground="Black"/>
-            <StackPanel Orientation="Horizontal">
-                <Button Content="Lưu" Click="SaveOrder_Click" Background="Orange" Foreground="White" Width="120"/>
-                <Button Content="TÍNH TIỀN" Click="Checkout_Click" Background="Blue" Foreground="White" Width="120"/>
+            <StackPanel Orientation="Horizontal"
+            VerticalAlignment="Bottom"
+            HorizontalAlignment="Center">
+                <Button Content="Lưu" Click="SaveOrder_Click" Style="{StaticResource SaveButtonStyle}"/>
+                <Button Content="TÍNH TIỀN" Click="Checkout_Click" Style="{StaticResource CheckoutButtonStyle}"/>
             </StackPanel>
         </StackPanel>
     </Grid>
