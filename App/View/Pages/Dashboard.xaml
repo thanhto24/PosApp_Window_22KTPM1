@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="App.View.Pages.Dashboard"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:App.View.Pages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <NavigationView x:Name="navigation" IsBackButtonVisible="Collapsed" ItemInvoked="navigation_ItemInvoked" SelectionChanged="navigation_SelectionChanged">
+            <NavigationView.MenuItems>
+                <NavigationViewItem Icon="Shop" Content="Bán hàng" IsExpanded="True">
+                    <NavigationViewItem.MenuItems>
+                        <NavigationViewItem Icon="Refresh" Content="Đơn hàng" Tag="CategoriesPage"/>
+                        <NavigationViewItem Icon="Refresh" Content="Bán hàng" Tag="HomeScreen"/>
+                    </NavigationViewItem.MenuItems>
+                </NavigationViewItem>
+                
+                <NavigationViewItem Content="Sản phẩm - Dịch vụ" IsExpanded="True">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE7BF;" />
+                    </NavigationViewItem.Icon>
+                    <NavigationViewItem.MenuItems>
+                        <NavigationViewItem Icon="Refresh" Content="Sản phẩm - dịch vụ" Tag="OrdersPage"/>
+                        <NavigationViewItem Icon="Refresh" Content="Thiết lập Menu" Tag="OrdersPage"/>
+                        <NavigationViewItem Icon="Refresh" Content="Nhóm tùy chọn" Tag="OrdersPage"/>
+                    </NavigationViewItem.MenuItems>
+                </NavigationViewItem>
+
+                <NavigationViewItem Icon="Shop" Content="Quản lý Kho" IsExpanded="True">
+                </NavigationViewItem>
+
+                <NavigationViewItem Icon="Refresh" Content="Báo cáo" IsExpanded="True">
+                    <NavigationViewItem.MenuItems >
+                        <NavigationViewItem Icon="Refresh" Content="Báo cáo Hàng hóa"/>
+                        <NavigationViewItem Icon="Refresh" Content="Báo cáo Đơn hàng"/>
+                        <NavigationViewItem Icon="Refresh" Content="Báo cáo Doanh thu"/>
+                    </NavigationViewItem.MenuItems>
+                </NavigationViewItem>
+            </NavigationView.MenuItems>
+
+            <NavigationView.FooterMenuItems>
+                <NavigationViewItem Content="Account" Tag="SamplePage4" Icon="Contact" />
+                <NavigationViewItem Content="Your Cart" Tag="SamplePage5" Icon="Shop" />
+                <NavigationViewItem Content="Help" Tag="SamplePage5" Icon="Help" />
+            </NavigationView.FooterMenuItems>
+
+            <Frame x:Name="container"/>
+        </NavigationView>
+    </Grid>
+</Page>

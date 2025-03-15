@@ -7,17 +7,20 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
 using Windows.UI;
+using App.Model;
+using App.View.ViewModel;
 
-namespace App.Pages
+namespace App.View.Pages
 {
     public sealed partial class HomeScreen : Page
     {
-        public ObservableCollection<Product> ProductList { get; } = new()
-        {
-            new("Hồng Trà Đài Loan", "12,000đ", "ms-appx:///Assets/tea1.jpg"),
-            new("Trà Xanh Hoa Nhài", "12,000đ", "ms-appx:///Assets/tea2.jpg"),
-            new("Trà Sữa Lài", "20,000đ", "ms-appx:///Assets/tea3.jpg")
-        };
+        public ProductViewModel ProductModel { get; set; } = new ProductViewModel();
+        //public ObservableCollection<Product> ProductList { get; set; } = new ()
+        //{
+        //    new("Hồng Trà Đài Loan", "12,000đ", "ms-appx:///Assets/tea1.jpg"),
+        //    new("Trà Xanh Hoa Nhài", "12,000đ", "ms-appx:///Assets/tea2.jpg"),
+        //    new("Trà Sữa Lài", "20,000đ", "ms-appx:///Assets/tea3.jpg")
+        //};
 
         private List<string> cartItems = new();
         private double totalAmount = 0;
@@ -96,22 +99,6 @@ namespace App.Pages
             cartItems.Clear();
             totalAmount = 0;
             txtTotal.Text = "Tổng cộng: 0đ";
-        }
-    }
-
-    public class Product
-    {
-        public string Name { get; set; } = string.Empty;
-        public string Price { get; set; } = string.Empty;
-        public string ImagePath { get; set; } = string.Empty;
-
-        public Product() { }
-
-        public Product(string name, string price, string imagePath)
-        {
-            Name = name;
-            Price = price;
-            ImagePath = imagePath;
         }
     }
 }

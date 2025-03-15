@@ -2,8 +2,8 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
-
-namespace App.Pages
+using App.View.Pages;
+namespace App.View.Pages
 {
     /// <summary>
     /// Trang đăng nhập.
@@ -23,7 +23,7 @@ namespace App.Pages
             if (username == "admin" && password == "123")
             {
                 // Điều hướng sang trang Home.xaml
-                this.Frame.Navigate(typeof(Pages.HomeScreen));
+                this.Frame.Navigate(typeof(Dashboard));
             }
             else
             {

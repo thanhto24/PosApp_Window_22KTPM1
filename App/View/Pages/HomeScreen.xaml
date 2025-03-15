@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Page
-    x:Class="App.Pages.HomeScreen"
+    x:Class="App.View.Pages.HomeScreen"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:App.Pages"
+    xmlns:local="using:App.View.Pages"
+    xmlns:model="using:App.Model"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
@@ -142,19 +143,19 @@
         </StackPanel>
 
         <!-- Product List -->
-        <GridView Grid.Column="1" Padding="20" ItemsSource="{x:Bind ProductList}" Background="#FFF5E4" Width="Auto">
+        <GridView Grid.Column="1" Padding="20" ItemsSource="{x:Bind ProductModel.categories}" Background="#FFF5E4" Width="Auto">
             <GridView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <ItemsWrapGrid Orientation="Horizontal"/>
                 </ItemsPanelTemplate>
             </GridView.ItemsPanel>
             <GridView.ItemTemplate>
-                <DataTemplate>
+                <DataTemplate x:DataType="model:Product">
                     <Border Width="150" Height="200" Margin="10" BorderThickness="1" BorderBrush="Gray">
                         <StackPanel>
-                            <Image Source="{Binding ImagePath}" Height="100"/>
-                            <TextBlock Text="{Binding Name}" FontWeight="Bold" TextAlignment="Center" Foreground="Black"/>
-                            <TextBlock Text="{Binding Price}" Foreground="Red" TextAlignment="Center"/>
+                            <Image Source="{x:Bind ImagePath}" Height="100"/>
+                            <TextBlock Text="{x:Bind Name}" FontWeight="Bold" TextAlignment="Center" Foreground="Black"/>
+                            <TextBlock Text="{x:Bind Price}" Foreground="Red" TextAlignment="Center"/>
                             <Button Content="Chọn" Click="AddToCart_Click" Background="Black"/>
                         </StackPanel>
                     </Border>
