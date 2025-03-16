@@ -19,12 +19,12 @@ namespace App.View.ViewModel
             _dao = Services.GetKeyedSingleton<IDao>();
             List<Product> list_product = _dao.Categories.GetAll();
 
-            categories = new FullObservableCollection<Product>();
+            categories = new FullObservableCollection<Product>(list_product);
 
-            foreach (Product p in list_product)
-            {
-                categories.Add(p);
-            }
+            //foreach (Product p in list_product)
+            //{
+            //    categories.Add(p);
+            //}
         }
 
         public void Add(Product item)

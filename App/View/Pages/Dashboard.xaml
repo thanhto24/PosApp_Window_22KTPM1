@@ -18,15 +18,21 @@
                         <NavigationViewItem Icon="Refresh" Content="Bán hàng" Tag="HomeScreen"/>
                     </NavigationViewItem.MenuItems>
                 </NavigationViewItem>
-                
+
+                <NavigationViewItem Icon="Shop" Content="Đối tác" IsExpanded="True">
+                    <NavigationViewItem.MenuItems>
+                        <NavigationViewItem Icon="Refresh" Content="Khách hàng" Tag="CategoriesPage"/>
+                        <NavigationViewItem Icon="Refresh" Content="Nhóm Khách hàng" Tag="HomeScreen"/>
+                    </NavigationViewItem.MenuItems>
+                </NavigationViewItem>
+
                 <NavigationViewItem Content="Sản phẩm - Dịch vụ" IsExpanded="True">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE7BF;" />
                     </NavigationViewItem.Icon>
                     <NavigationViewItem.MenuItems>
-                        <NavigationViewItem Icon="Refresh" Content="Sản phẩm - dịch vụ" Tag="OrdersPage"/>
-                        <NavigationViewItem Icon="Refresh" Content="Thiết lập Menu" Tag="OrdersPage"/>
-                        <NavigationViewItem Icon="Refresh" Content="Nhóm tùy chọn" Tag="OrdersPage"/>
+                        <NavigationViewItem Icon="Refresh" Content="Sản phẩm - dịch vụ" Tag="ProductPage"/>
+                        <NavigationViewItem Icon="Refresh" Content="Thiết lập Menu" Tag="MenuSetupPage"/>
                     </NavigationViewItem.MenuItems>
                 </NavigationViewItem>
 
@@ -35,9 +41,9 @@
 
                 <NavigationViewItem Icon="Refresh" Content="Báo cáo" IsExpanded="True">
                     <NavigationViewItem.MenuItems >
-                        <NavigationViewItem Icon="Refresh" Content="Báo cáo Hàng hóa"/>
-                        <NavigationViewItem Icon="Refresh" Content="Báo cáo Đơn hàng"/>
-                        <NavigationViewItem Icon="Refresh" Content="Báo cáo Doanh thu"/>
+                        <NavigationViewItem Icon="Refresh" Content="Báo cáo Tổng quan"/>
+                        <NavigationViewItem Icon="Refresh" Content="Báo cáo Hóa đơn"/>
+                        <NavigationViewItem Icon="Refresh" Content="Mặt hàng bán chạy"/>
                     </NavigationViewItem.MenuItems>
                 </NavigationViewItem>
             </NavigationView.MenuItems>
