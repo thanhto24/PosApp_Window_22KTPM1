@@ -55,6 +55,11 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Page Update="View\Pages\Management.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
     <Page Update="View\Pages\Dashboard.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
