@@ -13,6 +13,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="View\Pages\CustomerGroupPage.xaml" />
+    <None Remove="View\Pages\CustomerPage.xaml" />
     <None Remove="View\Pages\Dashboard.xaml" />
     <None Remove="View\Pages\MenuSetupPage.xaml" />
     <None Remove="View\Pages\ProductPage.xaml" />
@@ -55,6 +57,16 @@
     <Content Update="Assets\tea3.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="View\Pages\CustomerGroupPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="View\Pages\CustomerPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="View\Pages\MenuSetupPage.xaml">
