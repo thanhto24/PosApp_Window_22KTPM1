@@ -13,7 +13,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="View\Pages\AllOrdersPage.xaml" />
     <None Remove="View\Pages\Dashboard.xaml" />
+    <None Remove="View\Pages\VoucherPage.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -42,6 +44,7 @@
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.1742" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.6.250205002" />
     <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" />
+    <PackageReference Include="WinUIEx" Version="2.5.1" />
   </ItemGroup>
   <ItemGroup>
     <Content Update="Assets\tea1.jpg">
@@ -53,6 +56,16 @@
     <Content Update="Assets\tea3.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="View\Pages\VoucherPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="View\Pages\AllOrdersPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="View\Pages\Dashboard.xaml">
