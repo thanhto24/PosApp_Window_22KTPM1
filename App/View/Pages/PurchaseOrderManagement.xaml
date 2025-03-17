@@ -17,25 +17,22 @@
                     Margin="0,10,10,0"
                     Spacing="10">
 
-            <!-- Nút Xuất Báo Cáo -->
             <Button Padding="10,5"
-            Background="#F4A261"
-            Foreground="White"
-            BorderThickness="0"
-            CornerRadius="5">
+                    Background="#F4A261"
+                    Foreground="White"
+                    BorderThickness="0"
+                    CornerRadius="5">
                 <StackPanel Orientation="Horizontal" Spacing="5">
                     <FontIcon Glyph="&#xE118;" FontSize="16"/>
-                    <!-- Biểu tượng tải xuống -->
                     <TextBlock Text="Xuất báo cáo" FontSize="14"/>
                 </StackPanel>
             </Button>
 
-            <!-- Nút Đặt Lại Tồn Kho -->
             <Button Padding="10,5"
-            Background="#2F2E41"
-            Foreground="White"
-            BorderThickness="0"
-            CornerRadius="5">
+                    Background="#2F2E41"
+                    Foreground="White"
+                    BorderThickness="0"
+                    CornerRadius="5">
                 <StackPanel Orientation="Horizontal" Spacing="5">
                     <TextBlock Text="Đặt lại tồn kho" FontSize="14"/>
                 </StackPanel>
@@ -43,13 +40,14 @@
 
         </StackPanel>
 
-        
-        <StackPanel Orientation="Horizontal" Margin="20,50,0,0" HorizontalAlignment="Left" Spacing="20">
+        <StackPanel Orientation="Vertical" Margin="20,50,0,0" HorizontalAlignment="Left" Spacing="20">
 
-            <!-- Bộ chọn ngày -->
-            <StackPanel>
-                <TextBlock Text="Thời gian" FontSize="12" Foreground="Gray" Margin="0, 0, 0, 10"/>
-                <Button x:Name="DatePickerButton"
+            <!-- Nhóm hàng hóa và Kho (Cùng một hàng) -->
+            <StackPanel Orientation="Horizontal" Spacing="20">
+                <!-- Bộ chọn ngày -->
+                <StackPanel>
+                    <TextBlock Text="Thời gian" FontSize="12" Foreground="Gray" Margin="0, 0, 0, 10"/>
+                    <Button x:Name="DatePickerButton"
                 HorizontalAlignment="Left"
                 BorderBrush="Gray"
                 BorderThickness="1"
@@ -57,87 +55,69 @@
                 Width="280"
                 Background="White"
                 Click="DatePickerButton_Click">
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Spacing="10">
-                        <TextBlock x:Name="SelectedDateText" Text="16/03/2025 - 16/03/2025" FontSize="14" Foreground="Black"/>
-                        <FontIcon Glyph="&#xE787;" FontSize="16" Foreground="Black"/>
-                    </StackPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Spacing="10">
+                            <TextBlock x:Name="SelectedDateText" Text="16/03/2025 - 16/03/2025" FontSize="14" Foreground="Black"/>
+                            <FontIcon Glyph="&#xE787;" FontSize="16" Foreground="Black"/>
+                        </StackPanel>
 
-                    <Button.Flyout>
-                        <Flyout x:Name="DatePickerFlyout">
-                            <StackPanel Padding="10">
-                                <GridView SelectionMode="None" ItemsSource="{Binding PresetDates}" Foreground="Black">
-                                    <GridView.ItemsPanel>
-                                        <ItemsPanelTemplate>
-                                            <WrapGrid MaximumRowsOrColumns="3"/>
-                                        </ItemsPanelTemplate>
-                                    </GridView.ItemsPanel>
-                                    <GridView.ItemTemplate>
-                                        <DataTemplate>
-                                            <Button Content="{Binding}" Click="PresetDate_Click" 
-                                            Background="White" BorderThickness="1"
-                                            Padding="5,2" MinWidth="100" Foreground="Black"/>
-                                        </DataTemplate>
-                                    </GridView.ItemTemplate>
-                                </GridView>
+                        <Button.Flyout>
+                            <Flyout x:Name="DatePickerFlyout">
+                                <StackPanel Padding="10">
+                                    <GridView SelectionMode="None" ItemsSource="{Binding PresetDates}" Foreground="Black">
+                                        <GridView.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <WrapGrid MaximumRowsOrColumns="3"/>
+                                            </ItemsPanelTemplate>
+                                        </GridView.ItemsPanel>
+                                        <GridView.ItemTemplate>
+                                            <DataTemplate>
+                                                <Button Content="{Binding}" Click="PresetDate_Click" 
+                                                Background="White" BorderThickness="1"
+                                                Padding="5,2" MinWidth="100" Foreground="Black"/>
+                                            </DataTemplate>
+                                        </GridView.ItemTemplate>
+                                    </GridView>
 
-                                <TextBlock Text="Tùy chỉnh" Margin="0,10,0,5" FontWeight="Bold"/>
-                                <StackPanel Orientation="Vertical" Spacing="10">
-                                    <DatePicker x:Name="StartDatePicker" Foreground="Black"/>
-                                    <DatePicker x:Name="EndDatePicker" Foreground="Black"/>
+                                    <TextBlock Text="Tùy chỉnh" Margin="0,10,0,5" FontWeight="Bold"/>
+                                    <StackPanel Orientation="Vertical" Spacing="10">
+                                        <DatePicker x:Name="StartDatePicker" Foreground="Black"/>
+                                        <DatePicker x:Name="EndDatePicker" Foreground="Black"/>
+                                    </StackPanel>
+
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+                                        <Button Content="Hủy" Click="Cancel_Click"/>
+                                        <Button Content="Áp dụng" Background="#F4A261" Foreground="White" Click="Apply_Click"/>
+                                    </StackPanel>
                                 </StackPanel>
+                            </Flyout>
+                        </Button.Flyout>
+                    </Button>
+                </StackPanel>
+                <!-- Bộ chọn nhóm hàng hóa -->
+                <StackPanel>
+                    <TextBlock Text="Nhóm hàng hóa" FontSize="12" Foreground="Gray" Margin="5,0,0,10"/>
+                    <ComboBox x:Name="CbCategory" Width="250" PlaceholderText="Tất cả" FontSize="14">
+                        <ComboBoxItem Content="Tất cả" IsSelected="True"/>
+                        <ComboBoxItem Content="Mì - Cháo - Phở"/>
+                        <ComboBoxItem Content="Bia - kẹo"/>
+                        <ComboBoxItem Content="Dầu gội - sữa tắm"/>
+                        <ComboBoxItem Content="Văn phòng phẩm"/>
+                        <ComboBoxItem Content="BEVERAGE"/>
+                    </ComboBox>
+                </StackPanel>
 
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
-                                    <Button Content="Hủy" Click="Cancel_Click"/>
-                                    <Button Content="Áp dụng" Background="#F4A261" Foreground="White" Click="Apply_Click"/>
-                                </StackPanel>
-                            </StackPanel>
-                        </Flyout>
-                    </Button.Flyout>
-                </Button>
-            </StackPanel>
-
-            <!-- Bộ chọn nhóm hàng hóa -->
-            <StackPanel>
-                <TextBlock Text="Nhóm hàng hóa" 
-                   FontSize="12" 
-                   Foreground="Gray" 
-                   Margin="5,0,0,10"
-                   x:Name="TxtCategory"
-                   PointerPressed="TxtCategory_PointerPressed"/>
-                <ComboBox x:Name="CbCategory" 
-                  Width="250" 
-                  PlaceholderText="Tất cả" 
-                  FontSize="14"
-                  IsDropDownOpen="False">
-                    <ComboBoxItem Content="Tất cả" IsSelected="True"/>
-                    <ComboBoxItem Content="Mì - Cháo - Phở"/>
-                    <ComboBoxItem Content="Bia - kẹo"/>
-                    <ComboBoxItem Content="Dầu gội - sữa tắm"/>
-                    <ComboBoxItem Content="Văn phòng phẩm"/>
-                    <ComboBoxItem Content="BEVERAGE"/>
-                </ComboBox>
-            </StackPanel>
-
-            <!-- Bộ chọn kho -->
-            <StackPanel>
-                <TextBlock Text="Kho" 
-                   FontSize="12" 
-                   Foreground="Gray" 
-                   Margin="5,0,0,10"
-                   x:Name="TxtCategoryWare"
-                   PointerPressed="TxtCategoryWare_PointerPressed"/>
-                <ComboBox x:Name="CbCategoryWare" 
-                  Width="250" 
-                  PlaceholderText="Tất cả" 
-                  FontSize="14"
-                  IsDropDownOpen="False">
-                    <ComboBoxItem Content="Tất cả" IsSelected="True"/>
-                    <ComboBoxItem Content="Kho trung tâm"/>
-                </ComboBox>
+                <!-- Bộ chọn kho -->
+                <StackPanel>
+                    <TextBlock Text="Kho" FontSize="12" Foreground="Gray" Margin="5,0,0,10"/>
+                    <ComboBox x:Name="CbCategoryWare" Width="250" PlaceholderText="Tất cả" FontSize="14">
+                        <ComboBoxItem Content="Tất cả" IsSelected="True"/>
+                        <ComboBoxItem Content="Kho trung tâm"/>
+                    </ComboBox>
+                </StackPanel>
             </StackPanel>
 
             <!-- Tìm kiếm -->
-            <StackPanel Width="370" Grid.Row="1" Margin="0,20,0,0" HorizontalAlignment="Left">
+            <StackPanel Width="370" Margin="0,20,0,0" HorizontalAlignment="Left">
                 <TextBlock Text="Từ khóa" FontSize="12" Foreground="Gray" Margin="5,0,0,2"/>
                 <Grid>
                     <TextBox Width="300" Height="40" Padding="10, 5, 5, 5" Margin="0, 0, 70, 0"/>
@@ -146,9 +126,75 @@
                     </Button>
                 </Grid>
             </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Spacing="20">
+
+                <!-- Ô Giá Trị Tồn Kho -->
+                <Border BorderBrush="LightGray" BorderThickness="1" Padding="10" Width="200" Height="80">
+                    <StackPanel>
+                        <TextBlock Text="GIÁ TRỊ TỒN KHO" FontSize="12" Foreground="Gray" FontWeight="Bold"/>
+                        <TextBlock Text="0 đ" FontSize="24" Foreground="SteelBlue" FontWeight="Bold"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Ô Tồn Kho Dưới Định Mức -->
+                <Border BorderBrush="LightGray" BorderThickness="1" Padding="10" Width="200" Height="80">
+                    <StackPanel>
+                        <TextBlock Text="TỒN KHO DƯỚI ĐỊNH MỨC" FontSize="12" Foreground="Gray" FontWeight="Bold"/>
+                        <TextBlock Text="0" FontSize="24" Foreground="Red" FontWeight="Bold"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Ô Tồn Kho Vượt Định Mức -->
+                <Border BorderBrush="LightGray" BorderThickness="1" Padding="10" Width="200" Height="80">
+                    <StackPanel>
+                        <TextBlock Text="TỒN KHO VƯỢT ĐỊNH MỨC" FontSize="12" Foreground="Gray" FontWeight="Bold"/>
+                        <TextBlock Text="0" FontSize="24" Foreground="DarkOrange" FontWeight="Bold"/>
+                    </StackPanel>
+                </Border>
+
+            </StackPanel>
+
+            <!-- Danh sách sản phẩm -->
+            <ScrollViewer VerticalScrollMode="Auto" HorizontalScrollMode="Disabled" Height="400">
+                <ListView x:Name="ProductList" ItemsSource="{Binding Products}" SelectionMode="None" Foreground="Black">
+                    <ListView.Header>
+                        <Grid Background="LightGray" Padding="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="2*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Mã sản phẩm" FontWeight="Bold" Grid.Column="0"/>
+                            <TextBlock Text="Tên sản phẩm" FontWeight="Bold" Grid.Column="1"/>
+                            <TextBlock Text="Số lượng" FontWeight="Bold" Grid.Column="2"/>
+                            <TextBlock Text="Giá vốn trung bình" FontWeight="Bold" Grid.Column="3"/>
+                            <TextBlock Text="Giá trị tồn kho" FontWeight="Bold" Grid.Column="4"/>
+                        </Grid>
+                    </ListView.Header>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Padding="10" BorderBrush="LightGray" BorderThickness="0,0,0,1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="3*"/>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="2*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{Binding ProductCode}" Grid.Column="0"/>
+                                <TextBlock Text="{Binding ProductName}" Grid.Column="1"/>
+                                <TextBlock Text="{Binding Quantity}" Grid.Column="2"/>
+                                <TextBlock Text="{Binding AverageCost}" Grid.Column="3"/>
+                                <TextBlock Text="{Binding InventoryValue}" Grid.Column="4"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </ScrollViewer>
+
         </StackPanel>
-
-
-
     </Grid>
 </Page>

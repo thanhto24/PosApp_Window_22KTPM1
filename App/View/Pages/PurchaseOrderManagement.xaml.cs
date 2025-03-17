@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Input;
+using System.Diagnostics;
 
 namespace App.View.Pages
 {
     public sealed partial class PurchaseOrderManagement : Page
     {
         public ObservableCollection<string> PresetDates { get; set; }
+        public ObservableCollection<Product> Products { get; set; }
 
         public PurchaseOrderManagement()
         {
@@ -19,7 +20,16 @@ namespace App.View.Pages
                 "Hôm nay", "Hôm qua", "7 ngày qua", "Tuần trước",
                 "Tháng trước", "30 ngày qua", "Trong quý", "Năm trước"
             };
+
+            Products = new ObservableCollection<Product>()
+            {
+                new Product("SP001", "Sản phẩm A", 10, 50000, 500000),
+                new Product("SP002", "Sản phẩm B", 5, 70000, 350000),
+                new Product("SP003", "Sản phẩm C", 20, 30000, 600000)
+            };
+
             this.DataContext = this;
+            ProductList.ItemsSource = Products;
         }
 
         // Hiển thị Flyout khi bấm vào nút chọn ngày
@@ -81,6 +91,22 @@ namespace App.View.Pages
 
         }
 
+        public class Product
+        {
+            public string ProductCode { get; set; }
+            public string ProductName { get; set; }
+            public int Quantity { get; set; }
+            public double AverageCost { get; set; }
+            public double InventoryValue { get; set; }
 
+            public Product(string code, string name, int quantity, double cost, double value)
+            {
+                ProductCode = code;
+                ProductName = name;
+                Quantity = quantity;
+                AverageCost = cost;
+                InventoryValue = value;
+            }
+        }
     }
 }
