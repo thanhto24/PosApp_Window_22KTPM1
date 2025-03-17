@@ -52,5 +52,18 @@ namespace App.Service
             }
         }
         public IRepository<Order> Orders { get; set; } = new MockOrderRepository();
+
+        public class MockVoucherRepository : IRepository<Voucher>
+        {
+            public List<Voucher> GetAll()
+            {
+                return new List<Voucher>() {
+                    new Voucher("1",DateTime.Now, DateTime.Now, 100, "aaa", 1,2,3),
+                    new Voucher("2",DateTime.Now, DateTime.Now, 100, "bbb", 1,2,3),
+                };
+            }
+        }
+
+        public IRepository<Voucher> Vouchers { get; set; } = new MockVoucherRepository();
     }
 }

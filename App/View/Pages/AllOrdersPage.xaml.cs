@@ -1,5 +1,4 @@
 using App.View.ViewModel; // Import ViewModel
-using App.ViewModel;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
@@ -12,7 +11,7 @@ namespace App.View.Pages
         public AllOrdersPage()
         {
             this.InitializeComponent();
-            OrderViewModel = new OrderViewModel(); // Kh?i t?o ViewModel
+            OrderViewModel = new OrderViewModel();
         }
     }
 }

@@ -3,14 +3,19 @@
     x:Class="App.View.Pages.VoucherPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:App.View.Pages"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
+    xmlns:model="using:App.Model"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid Padding="20">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -23,41 +28,130 @@
         </Grid.ColumnDefinitions>
 
         <!-- Nút Xem danh sách -->
-        <Button Content="Xem danh sách các voucher"
+        <Button Content="Xem danh sách voucher"
             Background="#F4A261"
             Foreground="White"
             FontWeight="Bold"
             Padding="10,5"
             HorizontalAlignment="Right"
-            Grid.Row="0" Grid.Column="1"/>
+            Grid.Row="0" Grid.Column="1"
+            Click="ShowVoucherDialog"/>
 
+        <!-- Chọn ngày hiệu lực -->
         <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Margin="0,10,0,0" Orientation="Horizontal" Spacing="15">
             <StackPanel>
                 <TextBlock Text="Từ ngày *" FontWeight="Bold" Foreground="Red"/>
-                <CalendarDatePicker Width="170" MinWidth="150"/>
+                <CalendarDatePicker x:Name="StartDatePicker" Width="170"/>
             </StackPanel>
 
             <StackPanel>
                 <TextBlock Text="Đến ngày *" FontWeight="Bold" Foreground="Red"/>
-                <CalendarDatePicker Width="170" MinWidth="150"/>
+                <CalendarDatePicker x:Name="EndDatePicker" Width="170"/>
             </StackPanel>
         </StackPanel>
 
-        <!-- Nhập số lượng mã giảm giá -->
+        <!-- Nhập code -->
         <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Margin="0,10,0,0">
-            <TextBlock Text="Nhập số lượng mã giảm giá (Tối đa là 20) *" FontWeight="Bold" Foreground="Red"/>
-            <TextBox Text="0" Padding="8" BorderBrush="#DADADA" BorderThickness="1"/>
+            <TextBlock Text="Nhập code *" FontWeight="Bold" Foreground="Red"/>
+            <TextBox x:Name="CodeBox" PlaceholderText="Nhập mã code" Padding="8"/>
         </StackPanel>
 
-        <!-- Nút Lấy mã giảm giá -->
-        <Button Content="Lấy mã giảm giá"
-            IsEnabled="False"
+        <!-- Nhập số lượng -->
+        <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Margin="0,10,0,0">
+            <TextBlock Text="Số lượng mã giảm giá (Tối đa 20) *" FontWeight="Bold" Foreground="Red"/>
+            <TextBox x:Name="VoucherQuantityBox" PlaceholderText="Nhập số lượng" Padding="8"/>
+        </StackPanel>
+
+        <!-- Nhập thông tin voucher -->
+        <StackPanel Grid.Row="4" Grid.ColumnSpan="2" Margin="0,10,0,0">
+            <TextBlock Text="Ghi chú (nếu có)" FontWeight="Bold"/>
+            <TextBox x:Name="NoteBox" PlaceholderText="Nhập mô tả voucher" Padding="8"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="5" Grid.ColumnSpan="2" Margin="0,10,0,0">
+            <TextBlock Text="Áp dụng cho đơn hàng tối thiểu (VNĐ) *" FontWeight="Bold" Foreground="Red"/>
+            <TextBox x:Name="MinOrderBox" PlaceholderText="Nhập số tiền tối thiểu" Padding="8"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="6" Grid.ColumnSpan="2" Margin="0,10,0,0">
+            <TextBlock Text="Giá trị giảm (Số tiền hoặc % giảm) *" FontWeight="Bold" Foreground="Red"/>
+            <TextBox x:Name="DiscountValueBox" PlaceholderText="Nhập số tiền hoặc phần trăm giảm" Padding="8"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="7" Grid.ColumnSpan="2" Margin="0,10,0,0">
+            <TextBlock Text="Mức giảm tối đa (VNĐ) *" FontWeight="Bold" Foreground="Red"/>
+            <TextBox x:Name="MaxDiscountBox" PlaceholderText="Nhập số tiền tối đa được giảm" Padding="8"/>
+        </StackPanel>
+
+        
+        
+        <!--Tạo mã-->
+        <Button Content="Tạo mã giảm giá"
+            Margin="0,30,0,0"
+            Background="#F4A261"
+            Foreground="White"
+            FontWeight="Bold"
             Padding="10,5"
-            Margin="0,20,0,0"
-            BorderBrush="#DADADA"
-            Background="Orange"
-            Grid.Row="3" Grid.Column="1"
-            HorizontalAlignment="Right"/>
+            Grid.Row="8" Grid.Column="1"
+            HorizontalAlignment="Right"
+            Click="GenerateVoucher"/>
+        
+        <!-- Dialog hiển thị danh sách voucher -->
+        <ContentDialog x:Name="VoucherDialog"
+                   Title="Danh sách Voucher"
+                   CloseButtonText="Đóng">
+            <ListView ItemsSource="{x:Bind VoucherViewModel.vouchers}">
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="model:Voucher">
+                        <Border BorderThickness="1" BorderBrush="Gray" Padding="10" CornerRadius="8" Margin="5">
+                            <Grid Width="400">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+
+
+                                <!-- Voucher Code -->
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Bind Code}" 
+                               FontSize="18" FontWeight="Bold" Foreground="DarkOrange"/>
+
+                                <TextBlock Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right"
+                                    Text="{x:Bind FormattedDate}" FontSize="14" Foreground="Red"/>
+
+                                <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Margin="0,5,0,0">
+                                    <TextBlock Text="Giảm: " FontWeight="Bold" Margin="0,0,5,0"/>
+                                    <TextBlock Text="{x:Bind FormattedDiscount}" Foreground="Green"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Margin="0,5,0,0">
+                                    <TextBlock Text="Đơn hàng tối thiểu: " FontWeight="Bold" Margin="0,0,5,0"/>
+                                    <TextBlock Text="{x:Bind FormattedMinOrderValue}"/>
+                                </StackPanel>
+
+
+                                <!-- Note -->
+                                <TextBlock Grid.Row="3" Grid.ColumnSpan="2" Text="{x:Bind Note}" 
+                               FontSize="12" Foreground="Gray" TextWrapping="WrapWholeWords"/>
+
+                                <!-- Edit & Delete Buttons -->
+                                <StackPanel Grid.Row="4" Grid.Column="2" Orientation="Horizontal" Spacing="5" HorizontalAlignment="Right">
+                                    <Button Content="Edit" Tag="{x:Bind}" Background="LightGray" Foreground="Black"
+                                Width="100" Height="30" Click="EditVoucher_Click"/>
+                                    <Button Content="Delete" Tag="{x:Bind}" Background="Red" Foreground="White"
+                                Width="100" Height="30" Click="DeleteVoucher_Click"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+        </ContentDialog>
     </Grid>
+
 
 </Page>

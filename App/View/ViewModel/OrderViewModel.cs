@@ -5,7 +5,7 @@ using App.Model;
 using App.Service;
 using App.Utils;
 
-namespace App.ViewModel
+namespace App.View.ViewModel
 {
     public class OrderViewModel
     {
