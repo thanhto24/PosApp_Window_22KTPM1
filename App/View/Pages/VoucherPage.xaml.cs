@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 using App.Model;
 using App.View.ViewModel;
+using Microsoft.Data.Sqlite;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using static System.Runtime.CompilerServices.RuntimeHelpers;
@@ -15,6 +17,7 @@ namespace App.View.Pages
     {
         public VoucherViewModel VoucherViewModel { get; set; }
         private Voucher? _selectedVoucher;
+        private string DatabasePath = Path.Combine(AppContext.BaseDirectory, "database.db");
 
         public VoucherPage()
         {
@@ -22,53 +25,65 @@ namespace App.View.Pages
             VoucherViewModel = new VoucherViewModel();
         }
 
-        private async void GenerateVoucher(object sender, RoutedEventArgs e)
+        private void GenerateVoucher(object sender, RoutedEventArgs e)
         {
+            if(CodeBox.Text == null)
+            {
+                ShowMessage("Vui lòng nhập mã Code.");
+                return;
+            }
+
             // Kiểm tra ngày hợp lệ
             if (StartDatePicker.Date == null || EndDatePicker.Date == null)
             {
-                await ShowMessage("Vui lòng chọn ngày hiệu lực.");
+                ShowMessage("Vui lòng chọn ngày hiệu lực.");
                 return;
             }
 
             if (StartDatePicker.Date.Value > EndDatePicker.Date.Value)
             {
-                await ShowMessage("Ngày kết thúc phải lớn hơn hoặc bằng ngày bắt đầu.");
+                ShowMessage("Ngày kết thúc phải lớn hơn hoặc bằng ngày bắt đầu.");
                 return;
             }
 
             // Kiểm tra số lượng hợp lệ
             if (!int.TryParse(VoucherQuantityBox.Text, out int quantity) || quantity < 1 || quantity > 20)
             {
-                await ShowMessage("Số lượng phải là số nguyên từ 1 đến 20.");
+                ShowMessage("Số lượng phải là số nguyên từ 1 đến 20.");
                 return;
             }
 
             // Kiểm tra đơn hàng tối thiểu
             if (!decimal.TryParse(MinOrderBox.Text, out decimal minOrder) || minOrder <= 0)
             {
-                await ShowMessage("Vui lòng nhập số tiền tối thiểu hợp lệ.");
+                ShowMessage("Vui lòng nhập số tiền tối thiểu hợp lệ.");
                 return;
             }
 
             // Kiểm tra giá trị giảm
-            bool isPercentage = DiscountValueBox.Text.Contains("%");
             string discountText = DiscountValueBox.Text.Replace("%", "").Trim();
-            if (!decimal.TryParse(discountText, out decimal discountValue) || discountValue <= 0 || (isPercentage && discountValue > 100))
+            if (!decimal.TryParse(discountText, out decimal discountValue) || discountValue <= 0 ||  discountValue > 100)
             {
-                await ShowMessage("Vui lòng nhập giá trị giảm hợp lệ (nếu là phần trăm, tối đa 100%).");
-                return;
-            }
-
-            // Kiểm tra mức giảm tối đa
-            if (!decimal.TryParse(MaxDiscountBox.Text, out decimal maxDiscount) || maxDiscount <= 0)
-            {
-                await ShowMessage("Vui lòng nhập mức giảm tối đa hợp lệ.");
+                ShowMessage("Vui lòng nhập % hợp lệ, từ 0% đến 100%).");
                 return;
             }
 
             // Nếu tất cả kiểm tra hợp lệ, tiến hành tạo mã giảm giá
-            // CreateVoucher(quantity, minOrder, discountValue, maxDiscount);
+            if(_selectedVoucher != null)
+            {
+                VoucherViewModel.UpdateVoucher(_selectedVoucher, CodeBox.Text, (DateTimeOffset)StartDatePicker.Date, (DateTimeOffset)EndDatePicker.Date, quantity, minOrder, discountValue, NoteBox.Text);
+                AddVoucherButton.Content = "Tạo mã giảm giá";
+                _selectedVoucher = null;
+                CodeBox.Text = "Nhập mã code";
+                StartDatePicker.Date = null;
+                EndDatePicker.Date = null;
+                VoucherQuantityBox.Text = "Nhập số lượng";
+                NoteBox.Text = "Nhập mô tả voucher";
+                MinOrderBox.Text = "Nhập số tiền tối thiểu";
+                DiscountValueBox.Text = "Nhập phần trăm giảm";
+            }
+            else
+                VoucherViewModel.CreateVoucher(CodeBox.Text, (DateTimeOffset)StartDatePicker.Date, (DateTimeOffset)EndDatePicker.Date, quantity, minOrder, discountValue, NoteBox.Text);
         }
 
         private void EditVoucher_Click(object sender, RoutedEventArgs e)
@@ -82,16 +97,20 @@ namespace App.View.Pages
                 EndDatePicker.Date = selectedVoucher.EndDate;
                 VoucherQuantityBox.Text = selectedVoucher.Quantity.ToString();
                 NoteBox.Text = selectedVoucher.Note;
-                MinOrderBox.Text = selectedVoucher.MinOrderValue.ToString();
+                MinOrderBox.Text = selectedVoucher.MinOrder.ToString();
                 DiscountValueBox.Text = selectedVoucher.DiscountValue.ToString();
-                MaxDiscountBox.Text = selectedVoucher.MaxDiscount.ToString();
+                _selectedVoucher = selectedVoucher;
             }
             VoucherDialog.Hide();
+            AddVoucherButton.Content = "Cập nhật thông tin mới";
         }
 
 
         private void DeleteVoucher_Click(object sender, RoutedEventArgs e)
         {
+            Button clickedButton = sender as Button;
+            if (clickedButton?.Tag is Voucher selectedVoucher)
+                VoucherViewModel.RemoveVoucher(selectedVoucher.Code);
             VoucherDialog.Hide();
         }
 
@@ -101,7 +120,7 @@ namespace App.View.Pages
             await VoucherDialog.ShowAsync();
         }
 
-        private async Task ShowMessage(string message)
+        private async void ShowMessage(string message)
         {
             ContentDialog dialog = new ContentDialog
             {

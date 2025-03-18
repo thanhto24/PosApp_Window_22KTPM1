@@ -19,5 +19,7 @@ namespace App.Model
             Price = price;
             ImagePath = image;
         }
+
+        public Product() { }
     }
 }

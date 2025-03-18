@@ -19,6 +19,13 @@ namespace App.Service
                     new Product ("Trà Sữa Lài", "20,000đ", "ms-appx:///Assets/tea3.jpg")
                 };
             }
+
+            public void Insert(Product product)
+            {
+            }
+            public void RemoveByQuery(string whereClause, Dictionary<string, object> parameters) { }
+            public void UpdateByQuery(Dictionary<string, object> setValues, string whereClause, Dictionary<string, object> whereParams) { }
+
         }
 
         public IRepository<Product> Categories { get; set; } = new MockCategoryRepository();
@@ -50,6 +57,13 @@ namespace App.Service
                               "Đã hủy", "Hoàn tiền", "Khách hàng hủy đơn do thay đổi nhu cầu")
                 };
             }
+
+            public void Insert(Order order)
+            {
+            }
+
+            public void RemoveByQuery(string whereClause, Dictionary<string, object> parameters) { }
+            public void UpdateByQuery(Dictionary<string, object> setValues, string whereClause, Dictionary<string, object> whereParams) { }
         }
         public IRepository<Order> Orders { get; set; } = new MockOrderRepository();
 
@@ -58,10 +72,17 @@ namespace App.Service
             public List<Voucher> GetAll()
             {
                 return new List<Voucher>() {
-                    new Voucher("1",DateTime.Now, DateTime.Now, 100, "aaa", 1,2,3),
-                    new Voucher("2",DateTime.Now, DateTime.Now, 100, "bbb", 1,2,3),
+                    new Voucher("1",DateTime.Now, DateTime.Now, 100, 1, 1, "abc"),
+                    new Voucher("2",DateTime.Now, DateTime.Now, 111, 2, 3, "def"),
                 };
             }
+
+            public void Insert(Voucher voucher)
+            {
+            }
+            public void RemoveByQuery(string whereClause, Dictionary<string, object> parameters) { }
+            public void UpdateByQuery(Dictionary<string, object> setValues, string whereClause, Dictionary<string, object> whereParams) { }
+
         }
 
         public IRepository<Voucher> Vouchers { get; set; } = new MockVoucherRepository();

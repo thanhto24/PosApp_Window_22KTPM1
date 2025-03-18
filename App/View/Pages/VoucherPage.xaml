@@ -19,7 +19,6 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -74,13 +73,8 @@
         </StackPanel>
 
         <StackPanel Grid.Row="6" Grid.ColumnSpan="2" Margin="0,10,0,0">
-            <TextBlock Text="Giá trị giảm (Số tiền hoặc % giảm) *" FontWeight="Bold" Foreground="Red"/>
-            <TextBox x:Name="DiscountValueBox" PlaceholderText="Nhập số tiền hoặc phần trăm giảm" Padding="8"/>
-        </StackPanel>
-
-        <StackPanel Grid.Row="7" Grid.ColumnSpan="2" Margin="0,10,0,0">
-            <TextBlock Text="Mức giảm tối đa (VNĐ) *" FontWeight="Bold" Foreground="Red"/>
-            <TextBox x:Name="MaxDiscountBox" PlaceholderText="Nhập số tiền tối đa được giảm" Padding="8"/>
+            <TextBlock Text="Giá trị giảm (0% đến 100%) *" FontWeight="Bold" Foreground="Red"/>
+            <TextBox x:Name="DiscountValueBox" PlaceholderText="Nhập phần trăm giảm" Padding="8"/>
         </StackPanel>
 
         
@@ -94,13 +88,14 @@
             Padding="10,5"
             Grid.Row="8" Grid.Column="1"
             HorizontalAlignment="Right"
-            Click="GenerateVoucher"/>
+            Click="GenerateVoucher"
+            x:Name="AddVoucherButton"/>
         
         <!-- Dialog hiển thị danh sách voucher -->
         <ContentDialog x:Name="VoucherDialog"
                    Title="Danh sách Voucher"
                    CloseButtonText="Đóng">
-            <ListView ItemsSource="{x:Bind VoucherViewModel.vouchers}">
+            <ListView ItemsSource="{x:Bind VoucherViewModel.vouchers, Mode=TwoWay}">
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="model:Voucher">
                         <Border BorderThickness="1" BorderBrush="Gray" Padding="10" CornerRadius="8" Margin="5">
@@ -120,16 +115,16 @@
                                FontSize="18" FontWeight="Bold" Foreground="DarkOrange"/>
 
                                 <TextBlock Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right"
-                                    Text="{x:Bind FormattedDate}" FontSize="14" Foreground="Red"/>
+                                    Text="{x:Bind EndDate}" FontSize="14" Foreground="Red"/>
 
                                 <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Margin="0,5,0,0">
                                     <TextBlock Text="Giảm: " FontWeight="Bold" Margin="0,0,5,0"/>
-                                    <TextBlock Text="{x:Bind FormattedDiscount}" Foreground="Green"/>
+                                    <TextBlock Text="{x:Bind DiscountValue}" Foreground="Green"/>
                                 </StackPanel>
 
                                 <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Margin="0,5,0,0">
                                     <TextBlock Text="Đơn hàng tối thiểu: " FontWeight="Bold" Margin="0,0,5,0"/>
-                                    <TextBlock Text="{x:Bind FormattedMinOrderValue}"/>
+                                    <TextBlock Text="{x:Bind MinOrder}"/>
                                 </StackPanel>
 
 

@@ -36,5 +36,7 @@ namespace App.Model
             PaymentStatus = paymentStatus;
             Notes = notes;
         }
+
+        public Order() { }
     }
 }
