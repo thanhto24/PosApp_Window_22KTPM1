@@ -14,8 +14,9 @@
             <NavigationView.MenuItems>
                 <NavigationViewItem Icon="Shop" Content="Bán hàng" IsExpanded="True">
                     <NavigationViewItem.MenuItems>
-                        <NavigationViewItem Icon="Refresh" Content="Đơn hàng" Tag="CategoriesPage"/>
+                        <NavigationViewItem Icon="Refresh" Content="Đơn hàng" Tag="AllOrdersPage"/>
                         <NavigationViewItem Icon="Refresh" Content="Bán hàng" Tag="HomeScreen"/>
+                        <NavigationViewItem Icon="Refresh" Content="Tạo mã voucher" Tag="VoucherPage"/>
                     </NavigationViewItem.MenuItems>
                 </NavigationViewItem>
 

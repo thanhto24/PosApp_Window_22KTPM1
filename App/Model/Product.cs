@@ -33,5 +33,7 @@ namespace App.Model
 
             autoIncreateCode += 1;
         }
+
+        public Product() { }
     }
 }
