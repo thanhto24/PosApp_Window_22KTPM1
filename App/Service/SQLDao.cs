@@ -112,7 +112,7 @@ namespace App.Service
         //    public IRepository<Voucher> Vouchers { get; set; } = new SQLVoucherRepository();
         /////////////////////
         public IRepository<Product> Categories { get; set; } = new SQLRepository<Product>();
-        public IRepository<Order> Orders { get; set; } = new SQLRepository<Order>();
+        public IRepository<Order_> Orders { get; set; } = new SQLRepository<Order_>();
         public IRepository<Voucher> Vouchers { get; set; } = new SQLRepository<Voucher>();
 
     }

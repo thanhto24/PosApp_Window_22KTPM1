@@ -29,10 +29,16 @@ namespace App.Service
                         T entity = new T();
                         foreach (var prop in typeof(T).GetProperties()) // Lấy danh sách property của T
                         {
-                            if (prop.Name.Equals("Id", StringComparison.OrdinalIgnoreCase))
-                                continue; // Bỏ qua thuộc tính 'Id'
+                            int colIndex;
+                            try
+                            {
+                                colIndex = reader.GetOrdinal(prop.Name); // Lấy cột theo tên property
+                            }
+                            catch (IndexOutOfRangeException)
+                            {
+                                continue; // Bỏ qua nếu không tìm thấy cột
+                            }
 
-                            int colIndex = reader.GetOrdinal(prop.Name); // Lấy cột theo tên property
                             if (!reader.IsDBNull(colIndex))
                             {
                                 if (prop.PropertyType == typeof(DateTimeOffset) || prop.PropertyType == typeof(DateTimeOffset?))
@@ -47,9 +53,9 @@ namespace App.Service
                                 {
                                     prop.SetValue(entity, Convert.ChangeType(reader.GetValue(colIndex), prop.PropertyType));
                                 }
-
                             }
                         }
+
                         list.Add(entity);
                     }
                 }

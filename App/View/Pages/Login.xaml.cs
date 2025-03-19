@@ -85,7 +85,7 @@ namespace App.View.Pages
             {
                 connection.Open();
                 var command = connection.CreateCommand();
-                command.CommandText = "SELECT COUNT(*) FROM Users WHERE Username = @username AND Password = @password";
+                command.CommandText = "SELECT COUNT(*) FROM User WHERE Username = @username AND Password = @password";
                 command.Parameters.AddWithValue("@username", username);
                 command.Parameters.AddWithValue("@password", password);
 

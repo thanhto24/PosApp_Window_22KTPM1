@@ -64,6 +64,22 @@ namespace App
                         DiscountValue REAL NOT NULL
                     );
 
+                    CREATE TABLE IF NOT EXISTS Order_ (
+                        Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        InvoiceCode TEXT NOT NULL,
+                        Customer TEXT NOT NULL,
+                        SaleDateTime TEXT NOT NULL,
+                        Salesperson TEXT NOT NULL,
+                        TotalAmount REAL NOT NULL,
+                        TotalDiscount REAL NOT NULL,
+                        TotalPayment REAL NOT NULL,
+                        TotalCost REAL NOT NULL,
+                        PaymentMethod TEXT NOT NULL,
+                        Status TEXT NOT NULL,
+                        PaymentStatus TEXT NOT NULL,
+                        Notes TEXT
+                    );
+
                 ";
                 command.ExecuteNonQuery();
             }

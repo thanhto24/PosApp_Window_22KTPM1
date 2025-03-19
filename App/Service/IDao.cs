@@ -12,7 +12,7 @@ namespace App.Service
     public interface IDao
     {
         public IRepository<Product> Categories { get; set; }
-        public IRepository<Order> Orders { get; set; }
+        public IRepository<Order_> Orders { get; set; }
         public IRepository<Voucher> Vouchers { get; set; }
     }
 }

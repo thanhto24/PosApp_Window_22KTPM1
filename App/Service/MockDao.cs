@@ -31,41 +31,41 @@ namespace App.Service
         public IRepository<Product> Categories { get; set; } = new MockCategoryRepository();
 
 
-        public class MockOrderRepository : IRepository<Order> {
-            public List<Order> GetAll()
+        public class MockOrderRepository : IRepository<Order_> {
+            public List<Order_> GetAll()
             {
-                return new List<Order>()
+                return new List<Order_>()
                 {
-                    new Order(1, "INV001", "Nguyễn Văn A", DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd HH:mm:ss"),
-                              "Lê Hoàng", "500000", "50000", "450000", "300000", "Tiền mặt",
+                    new Order_(1, "INV001", "Nguyễn Văn A", DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd HH:mm:ss"),
+                              "Lê Hoàng", 500000, 50000, 450000, 300000, "Tiền mặt",
                               "Đã giao", "Đã thanh toán", "Giao hàng thành công"),
 
-                    new Order(2, "INV002", "Trần Thị B", DateTime.Now.AddDays(-2).ToString("yyyy-MM-dd HH:mm:ss"),
-                              "Vũ Minh", "700000", "100000", "600000", "400000", "Chuyển khoản",
+                    new Order_(2, "INV002", "Trần Thị B", DateTime.Now.AddDays(-2).ToString("yyyy-MM-dd HH:mm:ss"),
+                              "Vũ Minh", 700000, 100000, 600000, 400000, "Chuyển khoản",
                               "Chưa giao", "Chờ xác nhận", "Chưa xác nhận thanh toán"),
 
-                    new Order(3, "INV003", "Phạm Văn C", DateTime.Now.AddDays(-3).ToString("yyyy-MM-dd HH:mm:ss"),
-                              "Ngô Thảo", "900000", "200000", "700000", "500000", "Thẻ tín dụng",
+                    new Order_(3, "INV003", "Phạm Văn C", DateTime.Now.AddDays(-3).ToString("yyyy-MM-dd HH:mm:ss"),
+                              "Ngô Thảo", 900000, 200000, 700000, 500000, "Thẻ tín dụng",
                               "Đã giao", "Đã thanh toán", "Khách yêu cầu xuất hóa đơn"),
 
-                    new Order(4, "INV004", "Lý Hữu D", DateTime.Now.AddDays(-4).ToString("yyyy-MM-dd HH:mm:ss"),
-                              "Đinh Phương", "1200000", "150000", "1050000", "700000", "Tiền mặt",
+                    new Order_(4, "INV004", "Lý Hữu D", DateTime.Now.AddDays(-4).ToString("yyyy-MM-dd HH:mm:ss"),
+                              "Đinh Phương", 1200000, 150000, 1050000, 700000, "Tiền mặt",
                               "Đang xử lý", "Chờ thanh toán", "Chờ xác nhận từ quản lý"),
 
-                    new Order(5, "INV005", "Đoàn Thanh E", DateTime.Now.AddDays(-5).ToString("yyyy-MM-dd HH:mm:ss"),
-                              "Trương Linh", "2000000", "500000", "1500000", "1200000", "Ví điện tử",
+                    new Order_(5, "INV005", "Đoàn Thanh E", DateTime.Now.AddDays(-5).ToString("yyyy-MM-dd HH:mm:ss"),
+                              "Trương Linh", 2000000, 500000, 1500000, 1200000, "Ví điện tử",
                               "Đã hủy", "Hoàn tiền", "Khách hàng hủy đơn do thay đổi nhu cầu")
                 };
             }
 
-            public void Insert(Order order)
+            public void Insert(Order_ order)
             {
             }
 
             public void RemoveByQuery(string whereClause, Dictionary<string, object> parameters) { }
             public void UpdateByQuery(Dictionary<string, object> setValues, string whereClause, Dictionary<string, object> whereParams) { }
         }
-        public IRepository<Order> Orders { get; set; } = new MockOrderRepository();
+        public IRepository<Order_> Orders { get; set; } = new MockOrderRepository();
 
         public class MockVoucherRepository : IRepository<Voucher>
         {

@@ -2,7 +2,7 @@
 
 namespace App.Model
 {
-    public class Order : INotifyPropertyChanged
+    public class Order_ : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -11,16 +11,16 @@ namespace App.Model
         public string Customer { get; set; }
         public string SaleDateTime { get; set; }
         public string Salesperson { get; set; }
-        public string TotalAmount { get; set; }
-        public string TotalDiscount { get; set; }
-        public string TotalPayment { get; set; }
-        public string TotalCost { get; set; }
+        public decimal TotalAmount { get; set; }
+        public decimal TotalDiscount { get; set; }
+        public decimal TotalPayment { get; set; }
+        public decimal TotalCost { get; set; }
         public string PaymentMethod { get; set; }
         public string Status { get; set; }
         public string PaymentStatus { get; set; }
         public string Notes { get; set; }
 
-        public Order(int id, string invoiceCode, string customer, string saleDateTime, string salesperson, string totalAmount, string totalDiscount, string totalPayment, string totalCost, string paymentMethod, string status, string paymentStatus, string notes)
+        public Order_(int id, string invoiceCode, string customer, string saleDateTime, string salesperson, decimal totalAmount, decimal totalDiscount, decimal totalPayment, decimal totalCost, string paymentMethod, string status, string paymentStatus, string notes)
         {
             Id = id;
             InvoiceCode = invoiceCode;
@@ -37,6 +37,6 @@ namespace App.Model
             Notes = notes;
         }
 
-        public Order() { }
+        public Order_() { }
     }
 }
