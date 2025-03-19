@@ -14,9 +14,9 @@ namespace App.Service
             public List<Product> GetAll()
             {
                 return new List<Product>() {
-                    new Product ("Hồng Trà Đài Loan", "12,000đ", "ms-appx:///Assets/tea1.jpg"),
-                    new Product ("Trà Xanh Hoa Nhài", "12,000đ", "ms-appx:///Assets/tea2.jpg"),
-                    new Product ("Trà Sữa Lài", "20,000đ", "ms-appx:///Assets/tea3.jpg")
+                    new Product ("Hồng Trà Đài Loan", "12,000đ", "ms-appx:///Assets/tea1.jpg", "Đồ uống", 0, "10.000đ", ""),
+                    new Product ("Trà Xanh Hoa Nhài", "12,000đ", "ms-appx:///Assets/tea2.jpg", "Đồ uống", 0, "10.000đ", ""),
+                    new Product ("Trà Sữa Lài", "20,000đ", "ms-appx:///Assets/tea3.jpg", "Đồ uống", 0, "10.000đ", "")
                 };
             }
 

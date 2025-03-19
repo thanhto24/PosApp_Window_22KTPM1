@@ -13,9 +13,11 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="View\Pages\AllOrdersPage.xaml" />
+    <None Remove="View\Pages\CustomerGroupPage.xaml" />
+    <None Remove="View\Pages\CustomerPage.xaml" />
     <None Remove="View\Pages\Dashboard.xaml" />
-    <None Remove="View\Pages\VoucherPage.xaml" />
+    <None Remove="View\Pages\MenuSetupPage.xaml" />
+    <None Remove="View\Pages\ProductPage.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -59,12 +61,22 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="View\Pages\VoucherPage.xaml">
+    <Page Update="View\Pages\CustomerGroupPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="View\Pages\AllOrdersPage.xaml">
+    <Page Update="View\Pages\CustomerPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="View\Pages\MenuSetupPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="View\Pages\ProductPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
@@ -89,5 +101,6 @@
     <PublishReadyToRun Condition="'$(Configuration)' != 'Debug'">True</PublishReadyToRun>
     <PublishTrimmed Condition="'$(Configuration)' == 'Debug'">False</PublishTrimmed>
     <PublishTrimmed Condition="'$(Configuration)' != 'Debug'">True</PublishTrimmed>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 </Project>
