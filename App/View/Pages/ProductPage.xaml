@@ -8,7 +8,7 @@
     xmlns:model="using:App.Model"
     xmlns:local="using:App.View.Pages"
     mc:Ignorable="d"
-    Background="White">
+    Background="Wheat">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -29,7 +29,8 @@
                 <Button Content="Thuộc tính" Margin="5" Background="DarkGray" Foreground="White" Padding="10,5" BorderThickness="0"/>
                 <Button Content="Tạo mã vạch" Margin="5" Background="DarkGray" Padding="10,5" BorderThickness="0"/>
                 <Button Content="Nhập xuất Excel" Margin="5" Background="DarkGray" Padding="10,5" BorderThickness="0"/>
-                <Button Content="+ Thêm Mới" Margin="5" Background="Orange" Foreground="White" Padding="10,5" BorderThickness="0"/>
+                <!-- Replace the "+ Thêm Mới" button with this -->
+                <Button Content="+ Thêm Mới" Margin="5" Background="Orange" Foreground="White" Padding="10,5" BorderThickness="0" Click="AddNewProduct_Click"/>
             </StackPanel>
             
             
@@ -110,37 +111,41 @@
 
                         <StackPanel Orientation="Horizontal">
                             <!-- Checkbox -->
-                            <TextBlock Text="{x:Bind ID}" Foreground="black" VerticalAlignment="Center"/>
+                            <TextBlock Text="{x:Bind Id}" Foreground="black" VerticalAlignment="Center"/>
 
                             <!-- Hình ảnh -->
                             <Image Source="{x:Bind ImagePath}" Width="100" Height="50" Margin="40, 5, 5, 5"/>
 
                             <!-- Nhóm sản phẩm -->
-                            <TextBlock Text="{x:Bind TypeGroup}" Width="150" Margin="40, 5, 5, 5" Foreground="black" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock Text="{x:Bind TypeGroup}" Width="50" Margin="40, 5, 5, 5" Foreground="black" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
                             <!-- Mã hàng hóa -->
-                            <TextBlock Text="{x:Bind BarCode}" Width="10" Margin="5" Foreground="black"/>
+                            <TextBlock Text="{x:Bind BarCode}" Width="100" Margin="50, 5, 5, 5" Foreground="black" VerticalAlignment="center" HorizontalAlignment="Center"/>
 
                             <!-- Thiết lập bar, bếp lập bar -->
-                            <TextBlock Text="{Binding Printer}" Width="100" Margin="5" Foreground="black"/>
+                            <TextBlock Text="{Binding Printer}" Width="100" Margin="10, 5, 5, 5" Foreground="black" VerticalAlignment="center" HorizontalAlignment="Center"/>
                             
                             <!-- Tên hàng hóa -->
-                            <TextBlock Text="{x:Bind Name}" Width="150" Margin="50, 5, 5, 5" Foreground="black"/>
+                            <TextBlock Text="{x:Bind Name}" Width="100" Margin="40, 5, 5, 5" Foreground="black" VerticalAlignment="center" HorizontalAlignment="Center"/>
 
                             <!-- Giá bán -->
-                            <TextBlock Text="{x:Bind Price}" Width="100" Margin="20, 5, 5, 5" Foreground="black"/>
+                            <TextBlock Text="{x:Bind Price}" Width="70" Margin="40, 5, 5, 5" Foreground="black" VerticalAlignment="center" HorizontalAlignment="Center"/>
 
                             <!-- VAT ban (%) -->
-                            <TextBlock Text="{x:Bind VAT}" Width="100" Margin="10, 5, 5, 5" Foreground="black"/>
+                            <TextBlock Text="{x:Bind VAT}" Width="100" Margin="40, 5, 5, 5" Foreground="black" VerticalAlignment="center" HorizontalAlignment="Center"/>
 
                             <!-- Trạng thái -->
-                            <CheckBox  Foreground="Green" Width="100" HorizontalAlignment="Center" Margin="5"/>
+                            <CheckBox Width="20" Height="20" Foreground="Green" Margin="5" VerticalAlignment="center" HorizontalAlignment="Center"/>
 
                             <!-- Thao tác -->
                             <StackPanel Orientation="Horizontal" Width="200">
-                                <Button Content="✎" Width="20" Height="20" Background="Transparent" BorderThickness="0" Margin="2" />
-                                <Button Content="X" Width="20" Height="20" Background="Transparent" BorderThickness="0" Foreground="Red" Margin="2" />
-                                <Button Content="+" Width="20" Height="20" Background="Transparent" BorderThickness="0" Margin="2" />
+                                <Button Content="✎" Width="40" Height="40" Background="Transparent" BorderThickness="1" BorderBrush="Black" Margin="2" 
+        Click="EditProduct_Click" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <Button Content="X" Width="40" Height="40" Background="Transparent" BorderThickness="1" BorderBrush="Black" Margin="2" 
+        Click="DeleteProduct_Click" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <Button Content="+" Width="40" Height="40" Background="Transparent" BorderThickness="1" BorderBrush="Black" Margin="2" 
+        HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Black" FontSize="20"/>
+
                             </StackPanel>
                         </StackPanel>
                     </DataTemplate>
