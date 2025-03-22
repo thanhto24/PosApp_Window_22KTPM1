@@ -145,5 +145,80 @@ namespace App.Service
             }
         }
 
+        public List<T> GetByQuery(string whereClause, Dictionary<string, object> parameters, string orderByClause = null)
+        {
+            List<T> list = new List<T>();
+
+            using (var connection = new SqliteConnection($"Data Source={DatabasePath}"))
+            {
+                connection.Open();
+                var command = connection.CreateCommand();
+
+                // Build query with WHERE clause and optional ORDER BY
+                string query = $"SELECT * FROM {typeof(T).Name}";
+
+                if (!string.IsNullOrEmpty(whereClause))
+                {
+                    query += $" WHERE {whereClause}";
+                }
+
+                if (!string.IsNullOrEmpty(orderByClause))
+                {
+                    query += $" ORDER BY {orderByClause}";
+                }
+
+                command.CommandText = query;
+
+                // Add parameters
+                if (parameters != null)
+                {
+                    foreach (var param in parameters)
+                    {
+                        command.Parameters.AddWithValue($"@{param.Key}", param.Value ?? DBNull.Value);
+                    }
+                }
+
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        T entity = new T();
+                        foreach (var prop in typeof(T).GetProperties())
+                        {
+                            int colIndex;
+                            try
+                            {
+                                colIndex = reader.GetOrdinal(prop.Name);
+                            }
+                            catch (IndexOutOfRangeException)
+                            {
+                                continue; // Skip if column not found
+                            }
+
+                            if (!reader.IsDBNull(colIndex))
+                            {
+                                if (prop.PropertyType == typeof(DateTimeOffset) || prop.PropertyType == typeof(DateTimeOffset?))
+                                {
+                                    string dateStr = reader.GetString(colIndex);
+                                    if (DateTimeOffset.TryParse(dateStr, out DateTimeOffset dateValue))
+                                    {
+                                        prop.SetValue(entity, dateValue);
+                                    }
+                                }
+                                else
+                                {
+                                    prop.SetValue(entity, Convert.ChangeType(reader.GetValue(colIndex), prop.PropertyType));
+                                }
+                            }
+                        }
+
+                        list.Add(entity);
+                    }
+                }
+            }
+
+            return list;
+        }
+
     }
 }

@@ -20,6 +20,11 @@ namespace App.Service
                 };
             }
 
+            public List<Product> GetByQuery(string whereClause, Dictionary<string, object> parameters, string orderByClause = null)
+            {
+                throw new NotImplementedException();
+            }
+
             public void Insert(Product product)
             {
             }
@@ -58,6 +63,11 @@ namespace App.Service
                 };
             }
 
+            public List<Order_> GetByQuery(string whereClause, Dictionary<string, object> parameters, string orderByClause = null)
+            {
+                throw new NotImplementedException();
+            }
+
             public void Insert(Order_ order)
             {
             }
@@ -75,6 +85,11 @@ namespace App.Service
                     new Voucher("1",DateTime.Now, DateTime.Now, 100, 1, 1, "abc"),
                     new Voucher("2",DateTime.Now, DateTime.Now, 111, 2, 3, "def"),
                 };
+            }
+
+            public List<Voucher> GetByQuery(string whereClause, Dictionary<string, object> parameters, string orderByClause = null)
+            {
+                throw new NotImplementedException();
             }
 
             public void Insert(Voucher voucher)

@@ -12,5 +12,8 @@ namespace App.Service
         void Insert(T entity);
         void RemoveByQuery(string whereClause, Dictionary<string, object> parameters);
         public void UpdateByQuery(Dictionary<string, object> setValues, string whereClause, Dictionary<string, object> whereParams);
+
+        
+        List<T> GetByQuery(string whereClause, Dictionary<string, object> parameters, string orderByClause = null);
     }
 }

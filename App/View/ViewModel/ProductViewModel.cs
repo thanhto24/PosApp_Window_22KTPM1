@@ -241,5 +241,126 @@ namespace App.View.ViewModel
                 return null;
             }
         }
+
+        // Filter products based on search text, product type, group, and status
+public async Task FilterProducts(string searchText, string productType, string productGroup, string status, string sortOrder)
+{
+    try
+    {
+        // Build WHERE clause and parameters
+        List<string> whereConditions = new List<string>();
+        Dictionary<string, object> parameters = new Dictionary<string, object>();
+        
+        // Filter by search text (name, barcode, ID)
+        if (!string.IsNullOrEmpty(searchText))
+        {
+            // Search in multiple fields - name, barcode or ID
+            whereConditions.Add("(Name LIKE @SearchText OR BarCode LIKE @SearchText OR Id LIKE @SearchText)");
+            parameters.Add("SearchText", $"%{searchText}%");
+        }
+        
+        // Filter by product type
+        if (!string.IsNullOrEmpty(productType) && productType != "Tất cả")
+        {
+            // Assuming TypeGroup field stores product type information
+            whereConditions.Add("TypeGroup = @ProductType");
+            parameters.Add("ProductType", productType);
+        }
+        
+        // Filter by product group
+        if (!string.IsNullOrEmpty(productGroup) && productGroup != "Tất cả")
+        {
+            // Add appropriate condition for product group
+            // Assuming there's a field like "Category" or similar
+            whereConditions.Add("TypeGroup = @ProductGroup");
+            parameters.Add("ProductGroup", productGroup);
+        }
+        
+        // Filter by status - this depends on how you're storing status
+        // Assuming you have an "InStock" field or similar to track status
+        if (!string.IsNullOrEmpty(status))
+        {
+            if (status == "Còn hàng")
+            {
+                whereConditions.Add("InStock = @InStock");
+                parameters.Add("InStock", true);
+            }
+            else if (status == "Hết hàng")
+            {
+                whereConditions.Add("InStock = @InStock");
+                parameters.Add("InStock", false);
+            }
+            // "Tất cả" doesn't need a filter
+        }
+        
+        // Combine all conditions with AND
+        string whereClause = whereConditions.Count > 0 
+            ? string.Join(" AND ", whereConditions) 
+            : string.Empty;
+            
+        // Determine sort order
+        string orderByClause = GetSortOrderClause(sortOrder);
+        
+        // Get filtered data from repository
+        List<Product> filteredProducts = _dao.Categories.GetByQuery(
+            whereClause,
+            parameters,
+            orderByClause
+        );
+
+        // Update the observable collection
+        // Phiên bản đơn giản hơn không sử dụng extension method
+        // Update the observable collection - safely use the DispatcherQueue
+        if (_window?.DispatcherQueue != null)
+        {
+            _window.DispatcherQueue.TryEnqueue(() =>
+            {
+                categories.Clear();
+                foreach (var product in filteredProducts)
+                {
+                    categories.Add(product);
+                }
+            });
+        }
+        else
+        {
+            // Fallback if window is not available - update directly
+            // Note: This might cause threading issues if not on UI thread
+            categories.Clear();
+            foreach (var product in filteredProducts)
+            {
+                categories.Add(product);
+            }
+            System.Diagnostics.Debug.WriteLine("Warning: Window not set, updating collection directly");
+        }
+    }
+    catch (Exception ex)
+    {
+        System.Diagnostics.Debug.WriteLine($"Error filtering products: {ex.Message}");
+    }
+}
+
+// Helper method to get ORDER BY clause based on selected sort option
+private string GetSortOrderClause(string sortOption)
+{
+    switch (sortOption)
+    {
+        case "Tên: A => Z":
+            return "Name ASC";
+        case "Tên: Z => A":
+            return "Name DESC";
+        case "Giá: Thấp => Cao":
+            return "Price ASC";
+        case "Giá: Cao => Thấp":
+            return "Price DESC";
+        // Assuming you have a LastUpdated or similar field
+        case "Ngày cập nhật: Cũ nhất":
+            return "LastUpdated ASC";
+        case "Ngày cập nhật: Mới nhất":
+            return "LastUpdated DESC";
+        default:
+            return "Name ASC"; // Default sort
+    }
+}
     }
 }
