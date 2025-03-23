@@ -47,42 +47,53 @@ namespace App
                 connection.Open();
                 var command = connection.CreateCommand();
                 command.CommandText = @"
-                    CREATE TABLE IF NOT EXISTS User (
-                        Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        Username TEXT NOT NULL UNIQUE,
-                        Password TEXT NOT NULL
-                    );
+            CREATE TABLE IF NOT EXISTS User (
+                Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                Username TEXT NOT NULL UNIQUE,
+                Password TEXT NOT NULL
+            );
 
-                    CREATE TABLE IF NOT EXISTS Voucher (
-                        Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        Code TEXT NOT NULL UNIQUE,
-                        StartDate TEXT NOT NULL,
-                        EndDate TEXT NOT NULL,
-                        Quantity INTEGER NOT NULL,
-                        Note TEXT,
-                        MinOrder REAL NOT NULL,
-                        DiscountValue REAL NOT NULL
-                    );
+            CREATE TABLE IF NOT EXISTS Voucher (
+                Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                Code TEXT NOT NULL UNIQUE,
+                StartDate TEXT NOT NULL,
+                EndDate TEXT NOT NULL,
+                Quantity INTEGER NOT NULL,
+                Note TEXT,
+                MinOrder REAL NOT NULL,
+                DiscountValue REAL NOT NULL
+            );
 
-                    CREATE TABLE IF NOT EXISTS Order_ (
-                        Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        InvoiceCode TEXT NOT NULL,
-                        Customer TEXT NOT NULL,
-                        SaleDateTime TEXT NOT NULL,
-                        Salesperson TEXT NOT NULL,
-                        TotalAmount REAL NOT NULL,
-                        TotalDiscount REAL NOT NULL,
-                        TotalPayment REAL NOT NULL,
-                        TotalCost REAL NOT NULL,
-                        PaymentMethod TEXT NOT NULL,
-                        Status TEXT NOT NULL,
-                        PaymentStatus TEXT NOT NULL,
-                        Notes TEXT
-                    );
+            CREATE TABLE IF NOT EXISTS Order_ (
+                Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                InvoiceCode TEXT NOT NULL,
+                Customer TEXT NOT NULL,
+                SaleDateTime TEXT NOT NULL,
+                Salesperson TEXT NOT NULL,
+                TotalAmount REAL NOT NULL,
+                TotalDiscount REAL NOT NULL,
+                TotalPayment REAL NOT NULL,
+                TotalCost REAL NOT NULL,
+                PaymentMethod TEXT NOT NULL,
+                Status TEXT NOT NULL,
+                PaymentStatus TEXT NOT NULL,
+                Notes TEXT
+            );
 
-                ";
+            CREATE TABLE IF NOT EXISTS Product (
+                Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                Name TEXT NOT NULL,
+                Price TEXT NOT NULL,
+                ImagePath TEXT,
+                BarCode TEXT NOT NULL UNIQUE,
+                TypeGroup TEXT NOT NULL,
+                VAT REAL NOT NULL,
+                CostPrice TEXT NOT NULL
+            );
+        ";
                 command.ExecuteNonQuery();
             }
         }
+
     }
 }
