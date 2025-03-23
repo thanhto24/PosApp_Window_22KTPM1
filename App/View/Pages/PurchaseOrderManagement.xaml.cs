@@ -4,6 +4,8 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Input;
 using System.Diagnostics;
+using App.Model;
+using System.Linq;
 
 namespace App.View.Pages
 {
@@ -23,13 +25,21 @@ namespace App.View.Pages
 
             Products = new ObservableCollection<Product>()
             {
-                new Product("SP001", "Sản phẩm A", 10, 50000, 500000),
-                new Product("SP002", "Sản phẩm B", 5, 70000, 350000),
-                new Product("SP003", "Sản phẩm C", 20, 30000, 600000)
+                new Product("SP001", "Sản phẩm A", 10, 10000, "Images/productA.jpg"),
+                new Product("SP002", "Sản phẩm B", 5, 140000, "Images/productB.jpg"),
+                new Product("SP003", "Sản phẩm C", 20, 60000, "Images/productC.jpg")
             };
+
+
 
             this.DataContext = this;
             ProductList.ItemsSource = Products;
+
+            // Cập nhật tổng giá trị tồn kho và tổng số lượng
+            UpdateTotals();
+
+            // Đảm bảo tổng sẽ tự cập nhật khi danh sách thay đổi
+            Products.CollectionChanged += (s, e) => UpdateTotals();
         }
 
         // Hiển thị Flyout khi bấm vào nút chọn ngày
@@ -91,22 +101,26 @@ namespace App.View.Pages
 
         }
 
-        public class Product
+        private async void ResetInventory_Click(object sender, RoutedEventArgs e)
         {
-            public string ProductCode { get; set; }
-            public string ProductName { get; set; }
-            public int Quantity { get; set; }
-            public double AverageCost { get; set; }
-            public double InventoryValue { get; set; }
+            var dialog = new EditProductDialog(Products); // Truyền danh sách sản phẩm
 
-            public Product(string code, string name, int quantity, double cost, double value)
+            // Gán XamlRoot nếu cần thiết để tránh lỗi
+            if (this.XamlRoot != null)
             {
-                ProductCode = code;
-                ProductName = name;
-                Quantity = quantity;
-                AverageCost = cost;
-                InventoryValue = value;
+                dialog.XamlRoot = this.XamlRoot;
             }
+
+            await dialog.ShowAsync();
+        }
+
+        private void UpdateTotals()
+        {
+            int totalQuantity = Products.Sum(p => p.Quantity);
+            decimal totalValue = Products.Sum(p => p.TotalPrice); // Tổng giá trị tồn kho
+
+            TxtTotalQuantity.Text = totalQuantity.ToString();
+            TxtTotalValue.Text = $"{totalValue:N0} đ"; // Định dạng số có dấu chấm phân cách
         }
     }
 }

@@ -33,12 +33,7 @@
                 <NavigationViewItem Icon="Shop" Content="Quản lý Kho" IsExpanded="True"  Tag="Management">
                 </NavigationViewItem>
 
-                <NavigationViewItem Icon="Refresh" Content="Báo cáo" IsExpanded="True">
-                    <NavigationViewItem.MenuItems >
-                        <NavigationViewItem Icon="Refresh" Content="Báo cáo Hàng hóa"/>
-                        <NavigationViewItem Icon="Refresh" Content="Báo cáo Đơn hàng"/>
-                        <NavigationViewItem Icon="Refresh" Content="Báo cáo Doanh thu"/>
-                    </NavigationViewItem.MenuItems>
+                <NavigationViewItem Icon="Refresh" Content="Báo cáo" IsExpanded="True" Tag="Report">
                 </NavigationViewItem>
             </NavigationView.MenuItems>
 

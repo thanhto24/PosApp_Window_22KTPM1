@@ -11,10 +11,10 @@ namespace App.View.Pages
 {
     public sealed partial class Management : Page
     {
-        public ObservableCollection<MenuItem> ItemsInOut { get; set; }
-        public ObservableCollection<MenuItem> ItemsAccess { get; set; }
-        public ObservableCollection<MenuItem> ItemsCheck { get; set; }
-        public ObservableCollection<MenuItem> ItemsOther { get; set; }
+        public ObservableCollection<MenuItem> ItemsInOut { get; set; } = new ObservableCollection<MenuItem>();
+        public ObservableCollection<MenuItem> ItemsAccess { get; set; } = new ObservableCollection<MenuItem>();
+        public ObservableCollection<MenuItem> ItemsCheck { get; set; } = new ObservableCollection<MenuItem>();
+        public ObservableCollection<MenuItem> ItemsOther { get; set; } = new ObservableCollection<MenuItem>();
 
         public Management()
         {

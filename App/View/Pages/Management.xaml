@@ -10,7 +10,7 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid Padding="20">
-        <StackPanel>
+        <StackPanel Margin="20, 0, 0, 0">
             <TextBlock Text="Nhập - xuất hàng" FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
 
             <GridView ItemsSource="{x:Bind ItemsInOut}" SelectionMode="None" IsItemClickEnabled="True" ItemClick="GridView_ItemClick">
