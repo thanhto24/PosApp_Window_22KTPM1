@@ -5,6 +5,8 @@ using Microsoft.UI.Xaml.Navigation;
 using App.View.Pages;
 using Microsoft.Data.Sqlite;
 using System.IO;
+using System.Collections.Generic;
+using Windows.Foundation.Collections;
 namespace App.View.Pages
 {
     /// <summary>
@@ -64,7 +66,7 @@ namespace App.View.Pages
             {
                 connection.Open();
                 var command = connection.CreateCommand();
-                command.CommandText = "INSERT INTO Users (Username, Password) VALUES (@username, @password)";
+                command.CommandText = "INSERT INTO User (Username, Password) VALUES (@username, @password)";
                 command.Parameters.AddWithValue("@username", username);
                 command.Parameters.AddWithValue("@password", password); // Nên mã hóa mật khẩu trước khi lưu
                 command.ExecuteNonQuery();
