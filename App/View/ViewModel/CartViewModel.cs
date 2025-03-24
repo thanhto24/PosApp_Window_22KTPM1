@@ -66,7 +66,7 @@ namespace App.View.ViewModel
 
         public double getTotalAmount()
         {
-            double total = CartItems.Sum(item => int.TryParse(item.Product.CostPrice.ToString(), out int price) ? price * item.Quantity : 0);
+            double total = CartItems.Sum(item => item.Product.Price * item.Quantity);
             return total;
         }
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace App.Service
 {
-    public interface IRepository<T>
+    public interface IRepository<T> 
     {
         List<T> GetAll(); // Phân trang, sắp xếp, Lọc
         void Insert(T entity);
