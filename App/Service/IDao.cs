@@ -16,5 +16,6 @@ namespace App.Service
         public IRepository<Voucher> Vouchers { get; set; }
         public IRepository<Category_> Categories { get; set; }
 
+
     }
 }
