@@ -1,104 +1,105 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Microsoft.UI.Text;
-using Microsoft.UI;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Media;
-using Windows.UI;
 using App.Model;
 using App.View.ViewModel;
+using System.Linq;
+using App.Utils;
+using System.Globalization;
 
 namespace App.View.Pages
 {
     public sealed partial class HomeScreen : Page
     {
-        public ProductViewModel ProductModel { get; set; } = new ProductViewModel();
-        //public ObservableCollection<Product> ProductList { get; set; } = new ()
-        //{
-        //    new("Hồng Trà Đài Loan", "12,000đ", "ms-appx:///Assets/tea1.jpg"),
-        //    new("Trà Xanh Hoa Nhài", "12,000đ", "ms-appx:///Assets/tea2.jpg"),
-        //    new("Trà Sữa Lài", "20,000đ", "ms-appx:///Assets/tea3.jpg")
-        //};
-
-        private List<string> cartItems = new();
-        private double totalAmount = 0;
-        private Button selectedButton = null;
+        public CategoryViewModel CategoryViewModel { get; set; }
+        public ProductViewModel ProductViewModel { get; set; }
+        public CartViewModel CartViewModel { get; set; }
 
         public HomeScreen()
         {
             this.InitializeComponent();
-            cartListView.ItemsSource = new ObservableCollection<string>(cartItems);
+            CategoryViewModel = new CategoryViewModel();
+            ProductViewModel = new ProductViewModel();
+            CartViewModel = new CartViewModel();
+            ApplyDiscount();
         }
 
-        private void MenuButton_Click(object sender, RoutedEventArgs e)
+
+
+        // Xử lý sự kiện khi bấm nút "+"
+        private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button clickedButton)
+            if (sender is Button button && button.DataContext is Product product)
             {
-                HighlightSelectedButton(clickedButton);
+                CartViewModel.AddToCart(product);
+                ApplyDiscount();
             }
         }
 
-        private void HighlightSelectedButton(Button clickedButton)
+        // Xử lý sự kiện khi bấm nút "-"
+        private void RemoveButton_Click(object sender, RoutedEventArgs e)
         {
-            if (selectedButton != null)
+            if (sender is Button button && button.DataContext is Product product)
             {
-                selectedButton.FontWeight = FontWeights.Normal;
-                selectedButton.Background = new SolidColorBrush(Colors.White);
-                selectedButton.Foreground = new SolidColorBrush(Colors.Black);
-            }
-
-            clickedButton.FontWeight = FontWeights.Bold;
-            clickedButton.Background = new SolidColorBrush(Colors.DarkOrange);
-            clickedButton.Foreground = new SolidColorBrush(Colors.White);
-
-            selectedButton = clickedButton;
-        }
-
-        private void AddToCart_Click(object sender, RoutedEventArgs e)
-        {
-            if (sender is Button btn && btn.Parent is StackPanel parent)
-            {
-                if (parent.Children[1] is TextBlock productName && parent.Children[2] is TextBlock productPrice)
-                {
-                    string item = $"1x {productName.Text} - {productPrice.Text}";
-                    cartItems.Add(item);
-
-                    if (double.TryParse(productPrice.Text.Replace(",", "").Replace("đ", ""), out double price))
-                    {
-                        totalAmount += price;
-                        txtTotal.Text = $"Tổng cộng: {totalAmount:N0}đ";
-                    }
-                }
+                CartViewModel.RemoveFromCart(product);
+                ApplyDiscount();
             }
         }
-
-        private async void SaveOrder_Click(object sender, RoutedEventArgs e)
+        private void PromoCodeTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            ContentDialog saveDialog = new()
-            {
-                Title = "Lưu đơn hàng",
-                Content = "Đơn hàng đã được lưu thành công!",
-                CloseButtonText = "OK",
-                XamlRoot = this.XamlRoot
-            };
-            await saveDialog.ShowAsync();
+            ApplyDiscount();
+        }
+
+        private void CustomerCodeTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            ApplyDiscount();
+        }
+
+
+        private void ApplyDiscount()
+        {
+            double total = CartViewModel.getTotalAmount();
+            double discountVc = 0, discountCustomer = 0;
+
+            string promoCode = PromoCodeTextBox.Text.Trim();
+
+            // Áp dụng mã khuyến mãi
+            if (promoCode == "GIAM50") discountVc = total * 0.5;  // Giảm 50%
+            else if (promoCode == "GIAM10") discountVc = total * 0.1;  // Giảm 10%
+            string sdt = CustomerCodeTextBox.Text.Trim();
+            if (sdt == "999") discountCustomer = total * 0.1;
+
+            double finalAmount = total - discountVc - discountCustomer;
+
+            // Hiển thị số tiền trên giao diện
+            TotalAmountTextBlock.Text = $"{total:N0}đ";
+            DiscountAmountTextBlock.Text = $"-{discountVc + discountCustomer:N0}đ";
+            FinalAmountTextBlock.Text = $"{finalAmount:N0}đ";
+        }
+
+        private void ClearCart_Click(object sender, RoutedEventArgs e)
+        {
+            CartViewModel.Clear_();
+            PromoCodeTextBox.Text = "";
+            CustomerCodeTextBox.Text = "";
+            ApplyDiscount();
         }
 
         private async void Checkout_Click(object sender, RoutedEventArgs e)
         {
-            ContentDialog checkoutDialog = new()
+            ApplyDiscount();
+
+            ContentDialog checkoutDialog = new ContentDialog
             {
-                Title = "Thanh toán",
-                Content = $"Bạn đã thanh toán {totalAmount:N0}đ!",
+                Title = "Thông báo",
+                Content = $"Tổng thanh toán: {FinalAmountTextBlock.Text}",
                 CloseButtonText = "OK",
-                XamlRoot = this.XamlRoot
+                XamlRoot = this.Content.XamlRoot
             };
+
             await checkoutDialog.ShowAsync();
-            cartItems.Clear();
-            totalAmount = 0;
-            txtTotal.Text = "Tổng cộng: 0đ";
         }
     }
 }

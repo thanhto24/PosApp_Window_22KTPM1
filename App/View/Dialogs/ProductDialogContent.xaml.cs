@@ -60,11 +60,11 @@ namespace App.View.Dialogs
         private void LoadProductData()
         {
             TxtName.Text = _editingProduct.Name;
-            TxtPrice.Text = _editingProduct.Price;
+            TxtPrice.Text = _editingProduct.Price.ToString();
             TxtBarcode.Text = _editingProduct.BarCode;
             ComboTypeGroup.SelectedItem = _editingProduct.TypeGroup;
             TxtVAT.Text = _editingProduct.VAT.ToString();
-            TxtCostPrice.Text = _editingProduct.CostPrice;
+            TxtCostPrice.Text = _editingProduct.CostPrice.ToString();
 
             // Load image if available
             if (!string.IsNullOrEmpty(_editingProduct.ImagePath))
@@ -135,7 +135,7 @@ namespace App.View.Dialogs
 
             // Update product properties
             _editingProduct.Name = TxtName.Text;
-            _editingProduct.Price = TxtPrice.Text;
+            _editingProduct.Price = int.Parse(TxtPrice.Text);
             _editingProduct.BarCode = TxtBarcode.Text;
             _editingProduct.TypeGroup = (ComboTypeGroup.SelectedItem as ComboBoxItem).Content.ToString();
 
@@ -151,7 +151,7 @@ namespace App.View.Dialogs
                 _editingProduct.VAT = 0;
             }
 
-            _editingProduct.CostPrice = TxtCostPrice.Text;
+            _editingProduct.CostPrice = int.Parse(TxtCostPrice.Text);
 
             return _editingProduct;
         }

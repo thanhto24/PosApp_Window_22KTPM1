@@ -18,7 +18,7 @@ namespace App.View.ViewModel
     public class ProductViewModel
     {
         private readonly IDao _dao;
-        public FullObservableCollection<Product> categories { get; set; }
+        public FullObservableCollection<Product> Products { get; set; }
 
         // Reference to the current window for file pickers
         private Microsoft.UI.Xaml.Window _window;
@@ -26,8 +26,8 @@ namespace App.View.ViewModel
         public ProductViewModel()
         {
             _dao = Services.GetKeyedSingleton<IDao>();
-            List<Product> list_product = _dao.Categories.GetAll();
-            categories = new FullObservableCollection<Product>(list_product);
+            List<Product> list_product = _dao.Products.GetAll();
+            Products = new FullObservableCollection<Product>(list_product);
         }
 
         // Set the current window reference (call this from page's constructor)
@@ -42,7 +42,7 @@ namespace App.View.ViewModel
             try
             {
                 // Set a new ID (get the max ID and add 1)
-                int nextId = categories.Count > 0 ? categories.Max(p => p.Id) + 1 : 1;
+                int nextId = Products.Count > 0 ? Products.Max(p => p.Id) + 1 : 1;
                 product.Id = nextId;
 
                 // Handle image if provided
@@ -53,10 +53,10 @@ namespace App.View.ViewModel
                 }
 
                 // Add to database
-                _dao.Categories.Insert(product);
+                _dao.Products.Insert(product);
 
                 // Add to observable collection
-                categories.Add(product);
+                Products.Add(product);
 
                 return true;
             }
@@ -71,7 +71,7 @@ namespace App.View.ViewModel
         // Read (Get) a product by ID
         public Product GetProductById(int id)
         {
-            return categories.FirstOrDefault(p => p.Id == id);
+            return Products.FirstOrDefault(p => p.Id == id);
         }
 
         // Update an existing product
@@ -80,7 +80,7 @@ namespace App.View.ViewModel
             try
             {
                 // Find the index of the product in the collection
-                int index = categories.IndexOf(categories.FirstOrDefault(p => p.Id == product.Id));
+                int index = Products.IndexOf(Products.FirstOrDefault(p => p.Id == product.Id));
 
                 if (index == -1)
                     return false;
@@ -111,14 +111,14 @@ namespace App.View.ViewModel
                     { "CostPrice", product.CostPrice }
                 };
 
-                _dao.Categories.UpdateByQuery(
+                _dao.Products.UpdateByQuery(
                     updateValues,
                     "ID = @ID",
                     new Dictionary<string, object> { { "ID", product.Id } }
                 );
 
                 // Update in observable collection
-                categories[index] = product;
+                Products[index] = product;
 
                 return true;
             }
@@ -141,13 +141,13 @@ namespace App.View.ViewModel
                 }
 
                 // Delete from database
-                _dao.Categories.RemoveByQuery(
+                _dao.Products.RemoveByQuery(
                     "ID = @ID",
                     new Dictionary<string, object> { { "ID", product.Id } }
                 );
 
                 // Remove from observable collection
-                categories.Remove(product);
+                Products.Remove(product);
 
                 return true;
             }

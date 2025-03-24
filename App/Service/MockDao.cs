@@ -9,14 +9,14 @@ namespace App.Service
 {
     public class MockDao : IDao
     {
-        public class MockCategoryRepository : IRepository<Product>
+        public class MockProductRepository : IRepository<Product>
         {
             public List<Product> GetAll()
             {
                 return new List<Product>() {
-                    new Product ("Hồng Trà Đài Loan", "12,000đ", "ms-appx:///Assets/tea1.jpg", "Đồ uống", 0, "10.000đ", ""),
-                    new Product ("Trà Xanh Hoa Nhài", "12,000đ", "ms-appx:///Assets/tea2.jpg", "Đồ uống", 0, "10.000đ", ""),
-                    new Product ("Trà Sữa Lài", "20,000đ", "ms-appx:///Assets/tea3.jpg", "Đồ uống", 0, "10.000đ", "")
+                    new Product ("Hồng Trà Đài Loan", 12000, "ms-appx:///Assets/tea1.jpg", "Đồ uống", 0, 100000, ""),
+                    new Product ("Trà Xanh Hoa Nhài", 11000, "ms-appx:///Assets/tea2.jpg", "Đồ uống", 0, 20000, ""),
+                    new Product ("Trà Sữa Lài", 10000, "ms-appx:///Assets/tea3.jpg", "Đồ uống", 0, 300, "")
                 };
             }
 
@@ -28,10 +28,11 @@ namespace App.Service
 
         }
 
-        public IRepository<Product> Categories { get; set; } = new MockCategoryRepository();
+        public IRepository<Product> Products { get; set; } = new MockProductRepository();
 
 
-        public class MockOrderRepository : IRepository<Order_> {
+        public class MockOrderRepository : IRepository<Order_>
+        {
             public List<Order_> GetAll()
             {
                 return new List<Order_>()
@@ -86,5 +87,26 @@ namespace App.Service
         }
 
         public IRepository<Voucher> Vouchers { get; set; } = new MockVoucherRepository();
+
+        public class MockCategoryRepository : IRepository<Category_>
+        {
+            public List<Category_> GetAll()
+            {
+                return new List<Category_>() {
+             new Category_ ("Tra sua"),
+             new Category_ ("Tra sua 2"),
+             new Category_ ("Tra sua 3"),
+         };
+            }
+
+            public void Insert(Category_ category)
+            {
+            }
+            public void RemoveByQuery(string whereClause, Dictionary<string, object> parameters) { }
+            public void UpdateByQuery(Dictionary<string, object> setValues, string whereClause, Dictionary<string, object> whereParams) { }
+
+        }
+
+        public IRepository<Category_> Categories { get; set; } = new MockCategoryRepository();
     }
 }

@@ -32,8 +32,8 @@
                 <!-- Replace the "+ Thêm Mới" button with this -->
                 <Button Content="+ Thêm Mới" Margin="5" Background="Orange" Foreground="White" Padding="10,5" BorderThickness="0" Click="AddNewProduct_Click"/>
             </StackPanel>
-            
-            
+
+
 
             <!-- Dropdowns và Thanh Tìm Kiếm -->
             <StackPanel Orientation="Horizontal" Grid.Row="0">
@@ -105,7 +105,7 @@
             </StackPanel>
 
             <!-- ListView -->
-            <ListView Grid.Row="1" Margin="10" ItemsSource="{x:Bind ProductModelPage.categories}">
+            <ListView Grid.Row="1" Margin="10" ItemsSource="{x:Bind ProductModelPage.Products}">
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="model:Product">
 
@@ -124,7 +124,7 @@
 
                             <!-- Thiết lập bar, bếp lập bar -->
                             <TextBlock Text="{Binding Printer}" Width="100" Margin="10, 5, 5, 5" Foreground="black" VerticalAlignment="center" HorizontalAlignment="Center"/>
-                            
+
                             <!-- Tên hàng hóa -->
                             <TextBlock Text="{x:Bind Name}" Width="100" Margin="40, 5, 5, 5" Foreground="black" VerticalAlignment="center" HorizontalAlignment="Center"/>
 

@@ -11,8 +11,10 @@ namespace App.Service
 {
     public interface IDao
     {
-        public IRepository<Product> Categories { get; set; }
+        public IRepository<Product> Products { get; set; }
         public IRepository<Order_> Orders { get; set; }
         public IRepository<Voucher> Vouchers { get; set; }
+        public IRepository<Category_> Categories { get; set; }
+
     }
 }
