@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using App.Service;
 using App.View.ViewModel;
 using System;
+using static App.Service.MockDao;
 
 namespace App.View.Pages
 {
@@ -191,14 +192,34 @@ namespace App.View.Pages
         private void ClearCart_Click(object sender, RoutedEventArgs e)
         {
             CartViewModel.Clear_();
+            OrderedProducts.Clear();
             PromoCodeTextBox.Text = "";
             CustomerCodeTextBox.Text = "";
             ApplyDiscount();
+            UpdateOrderSummary();
         }
 
         private async void Checkout_Click(object sender, RoutedEventArgs e)
         {
             ApplyDiscount();
+            var newOrder = CreateNewOrder();
+
+            if (mockDao.Orders is MockDao.MockOrderRepository orderRepo)
+            {
+                orderRepo.Insert(newOrder);
+                List<Order_> updatedOrders = orderRepo.GetAll();
+
+                Debug.WriteLine("===== Danh sách đơn hàng sau khi thêm mới =====");
+                foreach (var order in updatedOrders)
+                {
+                    Debug.WriteLine($"ID: {order.Id}, Invoice: {order.InvoiceCode}, Khách: {order.Customer}, Tổng tiền: {order.TotalAmount}");
+                    Debug.WriteLine("Sản phẩm đã đặt:");
+                    foreach (var product in order.OrderedProducts)
+                    {
+                        Debug.WriteLine($"- {product.Name}: {product.Quantity} x {product.Price:N0}đ");
+                    }
+                }
+            }
 
             ContentDialog checkoutDialog = new ContentDialog
             {
@@ -209,6 +230,72 @@ namespace App.View.Pages
             };
 
             await checkoutDialog.ShowAsync();
+
+            ClearCart_Click(null, null);
+            Frame.Navigate(typeof(AllOrdersPage));
         }
+
+
+
+        private Order_ CreateNewOrder()
+        {
+            // Lấy danh sách đơn hàng từ MockOrderRepository
+            MockOrderRepository orderRepo = new MockOrderRepository();
+            List<Order_> orders = orderRepo.GetAll();
+
+            // Xác định ID mới dựa trên ID lớn nhất hiện có
+            int newId = (orders.Count > 0) ? orders.Max(o => o.Id) + 1 : 1;
+            string invoiceId = $"INV{newId:D3}"; // Mã hóa đơn tăng dần
+
+            // Lấy tên khách hàng từ TextBox
+            string customerName = string.IsNullOrWhiteSpace(CustomerName.Text) ? "Khách vãng lai" : CustomerName.Text.Trim();
+            List<Product> orderedProductsList = OrderedProducts.ToList();
+            decimal totalAmount = (decimal)CartViewModel.getTotalAmount();
+            decimal discount = decimal.Parse(DiscountAmountTextBlock.Text.Replace("đ", "").Replace("-", "").Trim());
+            decimal finalAmount = totalAmount - discount;
+            decimal cashReceived = finalAmount;
+
+            return new Order_(
+                id: newId,
+                invoiceCode: invoiceId,
+                customer: customerName,
+                saleDateTime: DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                orderedProducts: orderedProductsList,
+                totalAmount: totalAmount,
+                totalDiscount: discount,
+                totalPayment: finalAmount,
+                totalCost: cashReceived,
+                paymentMethod: "Tiền mặt",
+                status: "Đã giao",
+                paymentStatus: "Đã thanh toán",
+                notes: "Giao hàng thành công"
+            );
+        }
+
+
+        private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            Debug.WriteLine($"New Height: {e.NewSize.Height}");
+
+            if (e.NewSize.Height < 450)
+            {
+                OrderScrollViewer.MaxHeight = 30;
+                TongTien.Margin = new Thickness(0, 5, 0, 0);
+                TienGiam.Margin = new Thickness(0, 5, 0, 0);
+                TienTra.Margin = new Thickness(0, 5, 0, 0);
+
+            }
+            else
+            {
+                OrderScrollViewer.MaxHeight = 180;
+                TongTien.Margin = new Thickness(0, 25, 0, 0);
+                TienGiam.Margin = new Thickness(0, 25, 0, 0);
+                TienTra.Margin = new Thickness(0, 25, 0, 0);
+            }
+
+            Debug.WriteLine($"OrderScrollViewer MaxHeight: {OrderScrollViewer.MaxHeight}");
+        }
+
+
     }
 }
