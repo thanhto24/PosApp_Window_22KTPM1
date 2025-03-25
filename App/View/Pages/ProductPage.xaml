@@ -110,8 +110,6 @@
                     <DataTemplate x:DataType="model:Product">
 
                         <StackPanel Orientation="Horizontal">
-                            <!-- Checkbox -->
-                            <TextBlock Text="{x:Bind Id}" Foreground="black" VerticalAlignment="Center"/>
 
                             <!-- Hình ảnh -->
                             <Image Source="{x:Bind ImagePath}" Width="100" Height="50" Margin="40, 5, 5, 5"/>

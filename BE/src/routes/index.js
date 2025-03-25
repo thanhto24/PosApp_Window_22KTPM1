@@ -7,6 +7,11 @@ function validateModelName(req, res, next) {
     if (!req.modelName) {
         return res.status(400).json({ error: "Model name is required!" });
     }
+    //Viet hoa chu dau trong req.body
+    req.body = Object.keys(req.body).reduce((result, key) => {
+        result[key.charAt(0).toUpperCase() + key.slice(1)] = req.body[key];
+        return result;
+    }, {});
     next();
 }
 
