@@ -17,8 +17,13 @@ namespace App.Service
         public MongoRepository()
         {
             _modelName = typeof(T).Name.ToLower(); // Chuyển model thành chữ thường
-            _httpClient.BaseAddress = new Uri(BaseUrl);
-            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            if (_httpClient.BaseAddress == null)
+            {
+                _httpClient.BaseAddress = new Uri(BaseUrl);
+                _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            }
+            //_httpClient.BaseAddress = new Uri(BaseUrl);
+            //_httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
         public List<T> GetAll()

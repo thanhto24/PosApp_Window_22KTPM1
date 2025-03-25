@@ -138,7 +138,7 @@
                             <!-- Thao tác -->
                             <StackPanel Orientation="Horizontal" Width="200">
                                 <Button Content="✎" Width="40" Height="40" Background="Transparent" BorderThickness="1" BorderBrush="Black" Margin="2" 
-        Click="EditProduct_Click" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        Click="EditProduct_Click" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" CommandParameter="{x:Bind BarCode}" />
                                 <Button Content="X" Width="40" Height="40" Background="Transparent" BorderThickness="1" BorderBrush="Black" Margin="2" 
         Click="DeleteProduct_Click" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 <Button Content="+" Width="40" Height="40" Background="Transparent" BorderThickness="1" BorderBrush="Black" Margin="2" 

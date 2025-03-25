@@ -15,7 +15,7 @@ namespace App.Model
         public int Price { get; set; }
         public string ImagePath { get; set; }
         public string BarCode { get; set; }
-        public int Id { get; set; }
+        //public int Id { get; set; }
         public string TypeGroup { get; set; }
         public float VAT { get; set; }
         public int CostPrice { get; set; }
