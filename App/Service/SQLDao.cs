@@ -11,10 +11,10 @@ namespace App.Service
 {
     public class SQLDao : IDao
     {
-        
-        public IRepository<Product> Categories { get; set; } = new SQLRepository<Product>();
+        public IRepository<Product> Products { get; set; } = new SQLRepository<Product>();
         public IRepository<Order_> Orders { get; set; } = new SQLRepository<Order_>();
         public IRepository<Voucher> Vouchers { get; set; } = new SQLRepository<Voucher>();
+        public IRepository<Category_> Categories { get; set; } = new SQLRepository<Category_>();
 
     }
 }

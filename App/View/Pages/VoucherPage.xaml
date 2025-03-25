@@ -9,7 +9,7 @@
     xmlns:model="using:App.Model"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid Padding="20">
+    <Grid Padding="20" Background="Wheat">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -77,8 +77,8 @@
             <TextBox x:Name="DiscountValueBox" PlaceholderText="Nhập phần trăm giảm" Padding="8"/>
         </StackPanel>
 
-        
-        
+
+
         <!--Tạo mã-->
         <Button Content="Tạo mã giảm giá"
             Margin="0,30,0,0"
@@ -90,7 +90,7 @@
             HorizontalAlignment="Right"
             Click="GenerateVoucher"
             x:Name="AddVoucherButton"/>
-        
+
         <!-- Dialog hiển thị danh sách voucher -->
         <ContentDialog x:Name="VoucherDialog"
                    Title="Danh sách Voucher"

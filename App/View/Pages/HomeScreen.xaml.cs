@@ -1,104 +1,214 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using Microsoft.UI.Text;
-using Microsoft.UI;
+﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Media;
-using Windows.UI;
 using App.Model;
+using System.Linq;
+using System.Collections.Generic;
+using App.Service;
 using App.View.ViewModel;
+using System;
 
 namespace App.View.Pages
 {
     public sealed partial class HomeScreen : Page
     {
-        public ProductViewModel ProductModel { get; set; } = new ProductViewModel();
-        //public ObservableCollection<Product> ProductList { get; set; } = new ()
-        //{
-        //    new("Hồng Trà Đài Loan", "12,000đ", "ms-appx:///Assets/tea1.jpg"),
-        //    new("Trà Xanh Hoa Nhài", "12,000đ", "ms-appx:///Assets/tea2.jpg"),
-        //    new("Trà Sữa Lài", "20,000đ", "ms-appx:///Assets/tea3.jpg")
-        //};
+        public ObservableCollection<Product> Products { get; set; } = new ObservableCollection<Product>();
+        public ObservableCollection<Product> OrderedProducts { get; set; } = new ObservableCollection<Product>();
+        public ObservableCollection<Category_> Categories { get; set; } = new ObservableCollection<Category_>();
 
-        private List<string> cartItems = new();
-        private double totalAmount = 0;
-        private Button selectedButton = null;
+        private readonly MockDao mockDao = new MockDao();
+        private Dictionary<string, List<Product>> categoryProducts = new();
+        public CategoryViewModel CategoryViewModel { get; set; }
+        public ProductViewModel ProductViewModel { get; set; }
+        public CartViewModel CartViewModel { get; set; }
+
+        private string currentCategory = "Cà phê";
 
         public HomeScreen()
         {
             this.InitializeComponent();
-            cartListView.ItemsSource = new ObservableCollection<string>(cartItems);
+            this.DataContext = this;
+
+            CategoryViewModel = new CategoryViewModel();
+            ProductViewModel = new ProductViewModel();
+            CartViewModel = new CartViewModel();
+            ApplyDiscount();
+
+            foreach (var category in mockDao.Categories.GetAll())
+            {
+                Categories.Add(category);
+            }
+
+            LoadProductsByCategory(currentCategory);
         }
 
-        private void MenuButton_Click(object sender, RoutedEventArgs e)
+        private void DrinkCategoryList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (sender is Button clickedButton)
+            if (DrinkCategoryList.SelectedItem is Category_ selectedCategory)
             {
-                HighlightSelectedButton(clickedButton);
+                string selectedTypeGroup = selectedCategory.Name;
+                Debug.WriteLine($"Chọn danh mục: {selectedTypeGroup}");
+
+                SaveProductQuantities(currentCategory);
+                currentCategory = selectedTypeGroup;
+                RestoreProductQuantities(selectedTypeGroup);
             }
         }
 
-        private void HighlightSelectedButton(Button clickedButton)
+        private void IncreaseQuantity_Click(object sender, RoutedEventArgs e)
         {
-            if (selectedButton != null)
+            if (sender is Button button && button.DataContext is Product product)
             {
-                selectedButton.FontWeight = FontWeights.Normal;
-                selectedButton.Background = new SolidColorBrush(Colors.White);
-                selectedButton.Foreground = new SolidColorBrush(Colors.Black);
+                product.Quantity++;
+                UpdateOrderSummary();
+                CartViewModel.AddToCart(product);
+                UpdateOrderList(product);
+
             }
-
-            clickedButton.FontWeight = FontWeights.Bold;
-            clickedButton.Background = new SolidColorBrush(Colors.DarkOrange);
-            clickedButton.Foreground = new SolidColorBrush(Colors.White);
-
-            selectedButton = clickedButton;
         }
 
-        private void AddToCart_Click(object sender, RoutedEventArgs e)
+
+        private void DecreaseQuantity_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button btn && btn.Parent is StackPanel parent)
+            if (sender is Button button && button.DataContext is Product product)
             {
-                if (parent.Children[1] is TextBlock productName && parent.Children[2] is TextBlock productPrice)
+                if (product.Quantity > 0)
                 {
-                    string item = $"1x {productName.Text} - {productPrice.Text}";
-                    cartItems.Add(item);
-
-                    if (double.TryParse(productPrice.Text.Replace(",", "").Replace("đ", ""), out double price))
-                    {
-                        totalAmount += price;
-                        txtTotal.Text = $"Tổng cộng: {totalAmount:N0}đ";
-                    }
+                    product.Quantity--;
+                    CartViewModel.RemoveFromCart(product);
+                    UpdateOrderSummary();
+                    UpdateOrderList(product);
                 }
             }
         }
 
-        private async void SaveOrder_Click(object sender, RoutedEventArgs e)
+
+        private void UpdateOrderList(Product product)
         {
-            ContentDialog saveDialog = new()
+            var existingProduct = OrderedProducts.FirstOrDefault(p => p.ProductCode == product.ProductCode);
+
+            if (product.Quantity > 0)
             {
-                Title = "Lưu đơn hàng",
-                Content = "Đơn hàng đã được lưu thành công!",
-                CloseButtonText = "OK",
-                XamlRoot = this.XamlRoot
-            };
-            await saveDialog.ShowAsync();
+                if (existingProduct == null)
+                {
+                    OrderedProducts.Add(product);
+                }
+                else
+                {
+                    existingProduct.Quantity = product.Quantity;
+                }
+            }
+            else
+            {
+                if (existingProduct != null)
+                {
+                    OrderedProducts.Remove(existingProduct);
+                }
+            }
+            UpdateOrderSummary();
+        }
+
+        private void UpdateOrderSummary()
+        {
+            int totalItems = OrderedProducts.Sum(p => p.Quantity);
+            OrderSummaryText.Text = $"Các món order ({totalItems} món)";
+            ApplyDiscount();
+        }
+
+        private void SaveProductQuantities(string category)
+        {
+            if (!categoryProducts.ContainsKey(category))
+            {
+                categoryProducts[category] = new List<Product>();
+            }
+
+            categoryProducts[category] = Products.Select(p =>
+                new Product(p.ProductCode, p.Name, p.Quantity, p.Price, p.TotalPrice, p.ImagePath, p.TypeGroup, p.VAT, p.CostPrice, p.BarCode)).ToList();
+        }
+
+        private void RestoreProductQuantities(string category)
+        {
+            Products.Clear();
+            if (categoryProducts.TryGetValue(category, out var savedProducts))
+            {
+                foreach (var product in savedProducts)
+                {
+                    Products.Add(product);
+                }
+            }
+            else
+            {
+                LoadProductsByCategory(category);
+            }
+        }
+
+        private void LoadProductsByCategory(string typeGroup)
+        {
+            Products.Clear();
+
+            if (mockDao.Products is MockDao.MockProductRepository productRepo)
+            {
+                var filteredProducts = productRepo.GetProductsByCategory(typeGroup);
+                foreach (var product in filteredProducts)
+                {
+                    Products.Add(product);
+                }
+            }
+        }
+
+        private void PromoCodeTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            ApplyDiscount();
+        }
+
+        private void CustomerCodeTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            ApplyDiscount();
+        }
+
+        private void ApplyDiscount()
+        {
+            double total = CartViewModel.getTotalAmount();
+            double discountVc = 0, discountCustomer = 0;
+
+            string promoCode = PromoCodeTextBox.Text.Trim();
+
+            // Áp dụng mã khuyến mãi
+            if (promoCode == "GIAM50") discountVc = total * 0.5;  // Giảm 50%
+            else if (promoCode == "GIAM10") discountVc = total * 0.1;  // Giảm 10%
+            string sdt = CustomerCodeTextBox.Text.Trim();
+            if (sdt == "999") discountCustomer = total * 0.1;
+
+            double finalAmount = total - discountVc - discountCustomer;
+
+            // Hiển thị số tiền trên giao diện
+            TotalAmountTextBlock.Text = $"{total:N0}đ";
+            DiscountAmountTextBlock.Text = $"-{discountVc + discountCustomer:N0}đ";
+            FinalAmountTextBlock.Text = $"{finalAmount:N0}đ";
+        }
+
+        private void ClearCart_Click(object sender, RoutedEventArgs e)
+        {
+            CartViewModel.Clear_();
+            PromoCodeTextBox.Text = "";
+            CustomerCodeTextBox.Text = "";
+            ApplyDiscount();
         }
 
         private async void Checkout_Click(object sender, RoutedEventArgs e)
         {
-            ContentDialog checkoutDialog = new()
+            ApplyDiscount();
+
+            ContentDialog checkoutDialog = new ContentDialog
             {
-                Title = "Thanh toán",
-                Content = $"Bạn đã thanh toán {totalAmount:N0}đ!",
+                Title = "Thông báo",
+                Content = $"Tổng thanh toán: {FinalAmountTextBlock.Text}",
                 CloseButtonText = "OK",
-                XamlRoot = this.XamlRoot
+                XamlRoot = this.Content.XamlRoot
             };
+
             await checkoutDialog.ShowAsync();
-            cartItems.Clear();
-            totalAmount = 0;
-            txtTotal.Text = "Tổng cộng: 0đ";
         }
     }
 }
