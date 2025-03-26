@@ -133,7 +133,7 @@
                             <TextBlock Text="{x:Bind Price}" Width="70" Margin="40, 5, 5, 5" Foreground="black" VerticalAlignment="center" HorizontalAlignment="Center"/>
 
                             <!-- VAT ban (%) -->
-                            <TextBlock Text="{x:Bind VAT}" Width="100" Margin="40, 5, 5, 5" Foreground="black" VerticalAlignment="center" HorizontalAlignment="Center"/>
+                            <TextBlock Text="{x:Bind Vat}" Width="100" Margin="40, 5, 5, 5" Foreground="black" VerticalAlignment="center" HorizontalAlignment="Center"/>
 
                             <!-- Trạng thái -->
                             <CheckBox Width="20" Height="20" Foreground="Green" Margin="5" VerticalAlignment="center" HorizontalAlignment="Center"/>

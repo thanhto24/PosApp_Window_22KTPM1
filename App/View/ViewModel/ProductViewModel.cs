@@ -114,7 +114,7 @@ namespace App.View.ViewModel
                     { "Price", product.Price },
                     { "ImagePath", product.ImagePath },
                     { "TypeGroup", product.TypeGroup },
-                    { "VAT", product.VAT },
+                    { "Vat", product.Vat },
                     { "CostPrice", product.CostPrice }
                 };
 

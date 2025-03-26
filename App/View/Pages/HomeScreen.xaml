@@ -57,7 +57,7 @@
                             <TextBlock Text="{x:Bind CostPrice}" Foreground="DarkGreen" 
                                FontSize="14" HorizontalAlignment="Center" Margin="0,3"/>
                             <!-- VAT -->
-                            <TextBlock Text="{x:Bind VAT}" Foreground="DarkRed" 
+                            <TextBlock Text="{x:Bind Vat}" Foreground="DarkRed" 
                                FontSize="14" HorizontalAlignment="Center" Margin="0,3"/>
                             <!-- Nút "+" và "-" -->
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">

@@ -26,7 +26,7 @@ namespace App.Model
             Price = price;
             ImagePath = image;
             TypeGroup = typeGroup;
-            VAT = vAT;
+            Vat = vAT;
             CostPrice = costPrice;
             BarCode = barCode;
         }
