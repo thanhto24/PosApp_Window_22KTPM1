@@ -6,7 +6,7 @@ const ProductSchema = new mongoose.Schema({
     ImagePath: { type: String, required: false },
     BarCode: { type: String, required: true, unique: true },
     TypeGroup: { type: String, required: true },
-    VAT: { type: Number, required: true },
+    Vat: { type: Number, required: true },
     CostPrice: { type: Number, required: true }
 });
 
