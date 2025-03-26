@@ -5,12 +5,17 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Input;
 using System.Diagnostics;
 using App.Model;
+using App.Service;
+using System.Linq;
+
 namespace App.View.Pages
 {
     public sealed partial class OverviewReport : Page
     {
         public ObservableCollection<string> PresetDates { get; set; }
         public ObservableCollection<Product> Products { get; set; }
+        public ObservableCollection<ReportData> Reports { get; set; } = new ObservableCollection<ReportData>();
+        private readonly MockDao mockDao = new MockDao();
 
         public OverviewReport()
         {
@@ -21,14 +26,8 @@ namespace App.View.Pages
                 "Tháng trước", "30 ngày qua", "Trong quý", "Năm trước"
             };
 
-            Products = new ObservableCollection<Product>()
-            {
-                new Product("CF001", "Espresso", 0, 32000, 0, "ms-appx:///Assets/espresso.jpg", "Cà phê", 0.1f, 25000, "8938503270012"),
-                new Product("CF002", "Cappuccino", 0, 35000, 0, "ms-appx:///Assets/cappuccino.jpg", "Cà phê", 0.1f, 27000, "8938503270029"),
-                new Product("CF003", "Latte", 0, 40000, 0, "ms-appx:///Assets/latte.jpg", "Cà phê", 0.1f, 30000, "8938503270036"),
-            };
-
             this.DataContext = this;
+            LoadReportData();
         }
 
         // Hiển thị Flyout khi bấm vào nút chọn ngày
@@ -89,5 +88,58 @@ namespace App.View.Pages
         {
 
         }
+
+        private void LoadReportData()
+        {
+            CalculateSummary(); // Gọi tính toán và chèn report mới
+
+            // Lấy danh sách cập nhật sau khi insert
+            var reports = mockDao.Reports.GetAll();
+
+            // Xóa dữ liệu cũ và cập nhật mới
+            Reports.Clear();
+            foreach (var report in reports)
+            {
+                Reports.Add(report);
+                Debug.WriteLine($"[DEBUG] Report: Orders = {report.TotalOrders}, Revenue = {report.TotalRevenue}, Profit = {report.TotalProfit}");
+            }
+
+            UpdateReportUI();
+        }
+
+        private void UpdateReportUI()
+        {
+            if (Reports.Count > 0)
+            {
+                var latestReport = Reports[^1]; // Lấy báo cáo mới nhất
+                OrdersCountText.Text = latestReport.TotalOrders.ToString();
+                RevenueText.Text = $"{latestReport.TotalRevenue:N0}đ";
+                ProfitText.Text = $"{latestReport.TotalProfit:N0}đ";
+            }
+        }
+
+        private void CalculateSummary()
+        {
+            var orders = mockDao.Orders.GetAll();
+
+            int totalOrders = orders.Count;
+            decimal totalRevenue = orders.Sum(o => o.TotalAmount); // Tổng tiền của tất cả đơn hàng
+            decimal totalCost = orders.Sum(o => o.TotalCost); // Tổng chiết khấu của tất cả đơn hàng
+            decimal totalProfit = totalRevenue - totalCost; // Tổng lợi nhuận
+
+            // Debug để kiểm tra từng giá trị
+            foreach (var o in orders)
+            {
+                Debug.WriteLine($"[DEBUG] Order: TotalAmount = {o.TotalAmount}, TotalDiscount = {o.TotalDiscount}");
+            }
+
+            Debug.WriteLine($"[DEBUG] Summary: Orders = {totalOrders}, Revenue = {totalRevenue}, TotalDiscount = {totalCost}, Profit = {totalProfit}");
+
+            var report = new ReportData(totalOrders, totalRevenue, totalProfit);
+            mockDao.Reports.Insert(report);
+        }
+
+
+
     }
 }

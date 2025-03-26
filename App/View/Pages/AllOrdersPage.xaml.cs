@@ -6,6 +6,8 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using System;
+using App.Service;
+using System.Diagnostics;
 
 namespace App.View.Pages
 {
@@ -16,6 +18,11 @@ namespace App.View.Pages
         private string lastSortedColumn = "";
         private int currentPage = -1;
         private int maxPage = -1;
+
+        private int totalOrders;
+        private double totalRevenue;
+        private double totalProfit;
+
         public AllOrdersPage()
         {
             this.InitializeComponent();
@@ -127,5 +134,7 @@ namespace App.View.Pages
             }
         }
 
+
     }
+
 }

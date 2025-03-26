@@ -96,5 +96,23 @@ namespace App.Service
             public void UpdateByQuery(Dictionary<string, object> setValues, string whereClause, Dictionary<string, object> whereParams) { }
         }
         public IRepository<Category_> Categories { get; set; } = new MockCategoryRepository();
+
+        public class MockReportRepository : IRepository<ReportData>
+        {
+            private ReportData report = new ReportData(0, 0, 0);
+
+            public List<ReportData> GetAll() => new List<ReportData> { report };
+
+            public void Insert(ReportData newReport)
+            {
+                report = newReport;
+            }
+
+            public void RemoveByQuery(string whereClause, Dictionary<string, object> parameters) { }
+            public void UpdateByQuery(Dictionary<string, object> setValues, string whereClause, Dictionary<string, object> whereParams) { }
+        }
+
+        public IRepository<ReportData> Reports { get; set; } = new MockReportRepository();
+
     }
 }

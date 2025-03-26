@@ -209,16 +209,26 @@ namespace App.View.Pages
                 orderRepo.Insert(newOrder);
                 List<Order_> updatedOrders = orderRepo.GetAll();
 
-                Debug.WriteLine("===== Danh sách đơn hàng sau khi thêm mới =====");
-                foreach (var order in updatedOrders)
-                {
-                    Debug.WriteLine($"ID: {order.Id}, Invoice: {order.InvoiceCode}, Khách: {order.Customer}, Tổng tiền: {order.TotalAmount}");
-                    Debug.WriteLine("Sản phẩm đã đặt:");
-                    foreach (var product in order.OrderedProducts)
-                    {
-                        Debug.WriteLine($"- {product.Name}: {product.Quantity} x {product.Price:N0}đ");
-                    }
-                }
+                //Debug.WriteLine("===== Danh sách đơn hàng sau khi thêm mới =====");
+                //foreach (var order in updatedOrders)
+                //{
+                //    Debug.WriteLine($"ID: {order.Id}, Invoice: {order.InvoiceCode}, Khách: {order.Customer}, Tổng tiền: {order.TotalAmount}");
+                //    Debug.WriteLine("Sản phẩm đã đặt:");
+
+                //    foreach (var product in order.OrderedProducts)
+                //    {
+                //        Debug.WriteLine($"- Mã sản phẩm: {product.ProductCode}");
+                //        Debug.WriteLine($"  Tên: {product.Name}");
+                //        Debug.WriteLine($"  Số lượng: {product.Quantity}");
+                //        Debug.WriteLine($"  Đơn giá: {product.Price:N0}đ");
+                //        Debug.WriteLine($"  Thành tiền: {product.TotalPrice:N0}đ");
+                //        Debug.WriteLine($"  Đường dẫn ảnh: {product.ImagePath}");
+                //        Debug.WriteLine($"  Nhóm: {product.TypeGroup}");
+                //        Debug.WriteLine($"  VAT: {product.VAT}");
+                //        Debug.WriteLine($"  Giá vốn: {product.CostPrice}");
+                //        Debug.WriteLine($"  Mã vạch: {product.BarCode}");
+                //    }
+                //}
             }
 
             ContentDialog checkoutDialog = new ContentDialog
@@ -236,7 +246,6 @@ namespace App.View.Pages
         }
 
 
-
         private Order_ CreateNewOrder()
         {
             // Lấy danh sách đơn hàng từ MockOrderRepository
@@ -245,7 +254,7 @@ namespace App.View.Pages
 
             // Xác định ID mới dựa trên ID lớn nhất hiện có
             int newId = (orders.Count > 0) ? orders.Max(o => o.Id) + 1 : 1;
-            string invoiceId = $"INV{newId:D3}"; // Mã hóa đơn tăng dần
+            string invoiceId = $"INV{newId:D3}";
 
             // Lấy tên khách hàng từ TextBox
             string customerName = string.IsNullOrWhiteSpace(CustomerName.Text) ? "Khách vãng lai" : CustomerName.Text.Trim();
@@ -253,7 +262,8 @@ namespace App.View.Pages
             decimal totalAmount = (decimal)CartViewModel.getTotalAmount();
             decimal discount = decimal.Parse(DiscountAmountTextBlock.Text.Replace("đ", "").Replace("-", "").Trim());
             decimal finalAmount = totalAmount - discount;
-            decimal cashReceived = finalAmount;
+            decimal totalCost = OrderedProducts.Sum(p => (decimal)p.CostPrice * p.Quantity);
+
 
             return new Order_(
                 id: newId,
@@ -264,7 +274,7 @@ namespace App.View.Pages
                 totalAmount: totalAmount,
                 totalDiscount: discount,
                 totalPayment: finalAmount,
-                totalCost: cashReceived,
+                totalCost: totalCost,
                 paymentMethod: "Tiền mặt",
                 status: "Đã giao",
                 paymentStatus: "Đã thanh toán",
@@ -275,7 +285,7 @@ namespace App.View.Pages
 
         private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            Debug.WriteLine($"New Height: {e.NewSize.Height}");
+            //Debug.WriteLine($"New Height: {e.NewSize.Height}");
 
             if (e.NewSize.Height < 450)
             {
@@ -293,7 +303,7 @@ namespace App.View.Pages
                 TienTra.Margin = new Thickness(0, 25, 0, 0);
             }
 
-            Debug.WriteLine($"OrderScrollViewer MaxHeight: {OrderScrollViewer.MaxHeight}");
+            //Debug.WriteLine($"OrderScrollViewer MaxHeight: {OrderScrollViewer.MaxHeight}");
         }
 
 

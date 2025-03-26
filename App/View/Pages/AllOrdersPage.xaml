@@ -6,6 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model="using:App.Model"
     mc:Ignorable="d"
+    RequestedTheme="Light"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid Padding="20" Background="Wheat">
@@ -113,7 +114,7 @@
                             <TextBlock Foreground="Black" Text="{x:Bind SaleDateTime}" Grid.Column="3" Padding="5" 
                             TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"/>
                             <Button Content="Chi tiết" Click="ShowOrderDetails_Click"
-                            Grid.Column="4" Padding="5" HorizontalAlignment="Center"/>
+                            Grid.Column="4" Padding="5" HorizontalAlignment="Center" Background="Gray"/>
                             <TextBlock Foreground="Black" Text="{x:Bind TotalAmount}" Grid.Column="5" Padding="5" 
                             TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"/>
                             <TextBlock Foreground="Black" Text="{x:Bind TotalDiscount}" Grid.Column="6" Padding="5" 
@@ -142,7 +143,7 @@
                 <Button Content="Previous"
                     Click="PreviousPage_Click"
                     Width="100" Margin="5, 5, 20, 5"
-                    x:Name="PrevOrderBtn" Background="Gray" Foreground="White"/>
+                    x:Name="PrevOrderBtn" Background="Gray" Foreground="White" IsEnabled="True"/>
 
                 <TextBlock x:Name="PageBlock"
                        VerticalAlignment="Center" FontSize="16" Foreground="Black"/>
@@ -150,7 +151,7 @@
                 <Button Content="Next"
                     Click="NextPage_Click"
                     Width="100" Margin="20, 5, 5, 5"
-                    x:Name="NextOrderBtn" Background="Gray" Foreground="White"/>
+                    x:Name="NextOrderBtn" Background="Gray" Foreground="White" IsEnabled="True"/>
             </StackPanel>
 
     </Grid>
