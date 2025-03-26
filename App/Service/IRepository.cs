@@ -12,5 +12,7 @@ namespace App.Service
         void Insert(T entity);
         void RemoveByQuery(string whereClause, Dictionary<string, object> parameters);
         void UpdateByQuery(Dictionary<string, object> setValues, string whereClause, Dictionary<string, object> whereParams);
+
+        public List<T> GetFiltered( string searchText = "", string productType = "Tất cả", string productGroup = "Tất cả", string status = "Tất cả", string sortOrder = "Tên: A => Z");
     }
 }

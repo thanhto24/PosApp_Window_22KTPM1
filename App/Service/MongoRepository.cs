@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
@@ -132,6 +133,44 @@ namespace App.Service
             catch (Exception ex)
             {
                 Console.WriteLine($"[UpdateByQuery] Error: {ex.Message}");
+            }
+        }
+
+        public List<T> GetFiltered(string searchText = "", string productType = "Tất cả", string productGroup = "Tất cả", string status = "Tất cả", string sortOrder = "Tên: A => Z")
+        {
+            try
+            {
+                Debug.WriteLine("MongoRepository", $"Filters: {searchText}, {productType}, {productGroup}, {status}, {sortOrder}");
+                string url = $"filtered/{_modelName}";
+                Console.WriteLine($"[GetFiltered] Calling API: {url}");
+
+                var payload = new
+                {
+                    searchText,
+                    productType,
+                    productGroup,
+                    status,
+                    sortOrder
+                };
+
+                var response = _httpClient.PostAsJsonAsync(url, payload).Result;
+                Console.WriteLine($"[GetFiltered] Response: {(int)response.StatusCode} - {response.ReasonPhrase}");
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    Console.WriteLine($"[GetFiltered] API Error: {response.ReasonPhrase}");
+                    return new List<T>();
+                }
+
+                var jsonString = response.Content.ReadAsStringAsync().Result;
+                var jsonData = JsonSerializer.Deserialize<List<T>>(jsonString, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+                return jsonData ?? new List<T>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[GetFiltered] Error: {ex.Message}");
+                return new List<T>();
             }
         }
     }

@@ -20,6 +20,11 @@ namespace App.Service
                 };
             }
 
+            public List<Product> GetFiltered(string searchText = "", string productType = "Tất cả", string productGroup = "Tất cả", string status = "Tất cả", string sortOrder = "Tên: A => Z")
+            {
+                throw new NotImplementedException();
+            }
+
             public void Insert(Product product)
             {
             }
@@ -59,6 +64,11 @@ namespace App.Service
                 };
             }
 
+            public List<Order_> GetFiltered(string searchText = "", string productType = "Tất cả", string productGroup = "Tất cả", string status = "Tất cả", string sortOrder = "Tên: A => Z")
+            {
+                throw new NotImplementedException();
+            }
+
             public void Insert(Order_ order)
             {
             }
@@ -76,6 +86,11 @@ namespace App.Service
                     new Voucher("1",DateTime.Now, DateTime.Now, 100, 1, 1, "abc"),
                     new Voucher("2",DateTime.Now, DateTime.Now, 111, 2, 3, "def"),
                 };
+            }
+
+            public List<Voucher> GetFiltered(string searchText = "", string productType = "Tất cả", string productGroup = "Tất cả", string status = "Tất cả", string sortOrder = "Tên: A => Z")
+            {
+                throw new NotImplementedException();
             }
 
             public void Insert(Voucher voucher)
@@ -97,6 +112,11 @@ namespace App.Service
              new Category_ ("Tra sua 2"),
              new Category_ ("Tra sua 3"),
          };
+            }
+
+            public List<Category_> GetFiltered(string searchText = "", string productType = "Tất cả", string productGroup = "Tất cả", string status = "Tất cả", string sortOrder = "Tên: A => Z")
+            {
+                throw new NotImplementedException();
             }
 
             public void Insert(Category_ category)

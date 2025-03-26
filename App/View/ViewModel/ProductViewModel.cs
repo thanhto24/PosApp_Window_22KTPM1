@@ -248,5 +248,32 @@ namespace App.View.ViewModel
                 return null;
             }
         }
+
+        public async Task FilterProducts(string searchText, string productType, string productGroup, string status, string sortOrder)
+        {
+            try
+            {
+                //Debug.WriteLine("ProductViewModel", $"Filters: {searchText}, {productType}, {productGroup}, {status}, {sortOrder}");
+                // Use the new GetFiltered method from repository
+                List<Product> filteredProducts = _productRepository.GetFiltered(
+                    searchText,
+                    productType,
+                    productGroup,
+                    status,
+                    sortOrder
+                );
+
+                // Clear and update the collection
+                Products.Clear();
+                foreach (var product in filteredProducts)
+                {
+                    Products.Add(product);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error filtering products: {ex.Message}");
+            }
+        }
     }
 }

@@ -17,7 +17,7 @@ namespace App.Model
         public string BarCode { get; set; }
         //public int Id { get; set; }
         public string TypeGroup { get; set; }
-        public float VAT { get; set; }
+        public float Vat { get; set; }
         public int CostPrice { get; set; }
 
         public Product(string name, int price, string image, string typeGroup, float vAT, int costPrice, string barCode)
