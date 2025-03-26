@@ -20,5 +20,6 @@ router.post("/:modelName", validateModelName, controller.insert);         // Th�
 router.get("/:modelName", validateModelName, controller.getAll);          // Lấy toàn bộ
 router.delete("/rmByQuery/:modelName", validateModelName, controller.removeByQuery);  // Xóa theo điều kiện
 router.put("/updateByQuery/:modelName", validateModelName, controller.updateByQuery); // Cập nhật theo điều kiện
+router.post("/filtered/:modelName", validateModelName, controller.getAllFiltered);
 
 module.exports = router;

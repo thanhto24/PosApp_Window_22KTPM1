@@ -133,3 +133,68 @@ const parseString = (WhereClause, WhereParams) => {
     })),
   };
 };
+
+// 🟢 Lấy danh sách với hỗ trợ filter, sort
+exports.getAllFiltered = async (req, res) => {
+  try {
+    const { modelName } = req.params;
+    const { 
+      SearchText, 
+      ProductType, 
+      ProductGroup, 
+      Status, 
+      SortOrder 
+    } = req.body;
+
+    console.log("CHECK req body filter: ", SearchText, ProductType, ProductGroup, Status, SortOrder);
+
+    const Model = getModel(modelName);
+    
+    // Xây dựng điều kiện query
+    let query = {};
+
+    // Tìm kiếm theo text
+    if (SearchText) {
+      query.$or = [
+        { Name: { $regex: SearchText, $options: 'i' } },
+        { BarCode: { $regex: SearchText, $options: 'i' } },
+        { Id: { $regex: SearchText, $options: 'i' } }
+      ];
+    }
+
+    // Lọc theo loại sản phẩm
+    if (ProductType && ProductType !== "Tất cả") {
+      query.TypeGroup = ProductType;
+    }
+
+    // Lọc theo nhóm sản phẩm
+    if (ProductGroup && ProductGroup !== "Tất cả") {
+      query.TypeGroup = ProductGroup;
+    }
+
+    // Lọc theo trạng thái
+    if (Status && Status !== "Tất cả") {
+      query.InStock = Status === "Còn hàng" ? true : false;
+    }
+
+    console.log("CHECK QUERY: ", query);
+
+    // Xác định sort
+    let sort = { Name: 1 }; // Mặc định sắp xếp theo tên A-Z
+    switch(SortOrder) {
+      case "Tên: A => Z": sort = { Name: 1 }; break;
+      case "Tên: Z => A": sort = { Name: -1 }; break;
+      case "Giá: Thấp => Cao": sort = { Price: 1 }; break;
+      case "Giá: Cao => Thấp": sort = { Price: -1 }; break;
+      case "Ngày cập nhật: Cũ nhất": sort = { LastUpdated: 1 }; break;
+      case "Ngày cập nhật: Mới nhất": sort = { LastUpdated: -1 }; break;
+    }
+
+    // Thực hiện query
+    const data = await Model.find(query).sort(sort);
+    
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
