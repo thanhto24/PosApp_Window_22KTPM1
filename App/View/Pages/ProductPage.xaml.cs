@@ -8,24 +8,18 @@ using App.View.Dialogs;
 using App.View.ViewModel;
 using App.Model;
 using App.Utils;
+using System.Collections.Generic;
 
 namespace App.View.Pages
 {
     public sealed partial class ProductPage : Page
     {
-        public ProductViewModel ProductModelPage { get; set; } = new ProductViewModel();
-        private Microsoft.UI.Xaml.Window _window;
+        public ProductViewModel ProductModelPage { get; set; }
 
         public ProductPage()
         {
             this.InitializeComponent();
-            this.DataContext = ProductModelPage;
-
-            // Get the current window
-            _window = App.m_window; // You'll need to expose MainWindow from your App.xaml.cs
-            ProductModelPage.SetWindow(_window);
-
-            Debug.WriteLine("ProductPage initialized");
+            ProductModelPage = new ProductViewModel();
         }
 
         // Add New Product Button Click
@@ -179,7 +173,52 @@ namespace App.View.Pages
             //Debug.WriteLine("ProductPage", $"Filters: {searchText}, {productType}, {productGroup}, {status}, {sortOrder}");
 
             // Use the new filter method from ViewModel
-            await ProductModelPage.FilterProducts(searchText, productType, productGroup, status, sortOrder);
+            //await ProductModelPage.FilterProducts(searchText, productType, productGroup, status, sortOrder);
+
+            var filter = new Dictionary<string, object>
+            {
+                {"Name", searchText + "%" }
+            };
+
+            // Chỉ thêm TypeGroup nếu productType không phải là "Tất cả"
+            if (productType != "Tất cả")
+                filter.Add("TypeGroup", productType);
+
+
+            // Điều kiện OR
+            //var or = new Dictionary<string, object>
+            //{
+            //    { "name", "Alice" },
+            //    { "city", "New York" }
+            //};
+            // Điều kiện sắp xếp
+            Dictionary<string, int> sort = new Dictionary<string, int> { { "Name", 1 } }; // Mặc định sắp xếp theo tên A-Z
+
+            switch (sortOrder)
+            {
+                case "Tên: A => Z":
+                    sort = new Dictionary<string, int> { { "Name", 1 } };
+                    break;
+                case "Tên: Z => A":
+                    sort = new Dictionary<string, int> { { "Name", -1 } };
+                    break;
+                case "Giá: Thấp => Cao":
+                    sort = new Dictionary<string, int> { { "Price", 1 } };
+                    break;
+                case "Giá: Cao => Thấp":
+                    sort = new Dictionary<string, int> { { "Price", -1 } };
+                    break;
+                case "Ngày cập nhật: Cũ nhất":
+                    sort = new Dictionary<string, int> { { "LastUpdated", 1 } };
+                    break;
+                case "Ngày cập nhật: Mới nhất":
+                    sort = new Dictionary<string, int> { { "LastUpdated", -1 } };
+                    break;
+            }
+
+            var sortQuery = sort;
+
+            ProductModelPage.NewFilter(filter, sortQuery);
         }
         private async void SearchTextBox_KeyUp(object sender, Microsoft.UI.Xaml.Input.KeyRoutedEventArgs e)
         {
@@ -188,5 +227,7 @@ namespace App.View.Pages
                 await ApplyFilters();
             }
         }
+
+
     }
 }
