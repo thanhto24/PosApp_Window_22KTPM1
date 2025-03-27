@@ -128,5 +128,26 @@ namespace App.Service
 
         public IRepository<ReportData> Reports { get; set; } = new MockReportRepository();
 
+        public class MockCustomerRepository : IRepository<Customer>
+        {
+            public List<Customer> GetAll()
+            {
+                return new List<Customer>() {
+                    new Customer("Thanh", "070", 1, 2, "new"),
+                    new Customer("Bao", "123", 3, 4, "gold"),
+                };
+            }
+            public List<Customer> GetFiltered(string searchText = "", string productType = "Tất cả", string productGroup = "Tất cả", string status = "Tất cả", string sortOrder = "Tên: A => Z")
+            {
+                throw new NotImplementedException();
+            }
+            public void Insert(Customer customer)
+            {
+            }
+            public void RemoveByQuery(string whereClause, Dictionary<string, object> parameters) { }
+            public void UpdateByQuery(Dictionary<string, object> setValues, string whereClause, Dictionary<string, object> whereParams) { }
+
+        }
+        public IRepository<Customer> Customers { get; set; } = new MockCustomerRepository();
     }
 }

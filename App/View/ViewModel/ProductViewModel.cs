@@ -255,14 +255,14 @@ namespace App.View.ViewModel
             {
                 //Debug.WriteLine("ProductViewModel", $"Filters: {searchText}, {productType}, {productGroup}, {status}, {sortOrder}");
                 // Use the new GetFiltered method from repository
-                List<Product> filteredProducts = _productRepository.GetFiltered(
-                    searchText,
-                    productType,
-                    productGroup,
-                    status,
-                    sortOrder
-                );
-
+                //List<Product> filteredProducts = _productRepository.GetFiltered(
+                //    searchText,
+                //    productType,
+                //    productGroup,
+                //    status,
+                //    sortOrder
+                //);
+                List<Product> filteredProducts = new List<Product>();
                 // Clear and update the collection
                 Products.Clear();
                 foreach (var product in filteredProducts)

@@ -119,13 +119,13 @@ namespace App.View.Pages
 
         private void SaveProductQuantities(string category)
         {
-            if (!categoryProducts.ContainsKey(category))
-            {
-                categoryProducts[category] = new List<Product>();
-            }
+            //    if (!categoryProducts.ContainsKey(category))
+            //    {
+            //        categoryProducts[category] = new List<Product>();
+            //    }
 
-            categoryProducts[category] = Products.Select(p =>
-                new Product(p.ProductCode, p.Name, p.Quantity, p.Price, p.TotalPrice, p.ImagePath, p.TypeGroup, p.VAT, p.CostPrice, p.BarCode)).ToList();
+            //    categoryProducts[category] = Products.Select(p =>
+            //        new Product(p.ProductCode, p.Name, p.Quantity, p.Price, p.TotalPrice, p.ImagePath, p.TypeGroup, p.VAT, p.CostPrice, p.BarCode)).ToList();
         }
 
         private void RestoreProductQuantities(string category)

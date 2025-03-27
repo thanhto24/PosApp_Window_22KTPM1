@@ -23,7 +23,6 @@
                 <NavigationViewItem Icon="Shop" Content="Đối tác" IsExpanded="True">
                     <NavigationViewItem.MenuItems>
                         <NavigationViewItem Icon="Refresh" Content="Khách hàng" Tag="CustomerPage"/>
-                        <NavigationViewItem Icon="Refresh" Content="Nhóm Khách hàng" Tag="CustomerGroupPage"/>
                     </NavigationViewItem.MenuItems>
                 </NavigationViewItem>
 

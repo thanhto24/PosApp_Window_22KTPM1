@@ -13,5 +13,7 @@ namespace App.Service
         public IRepository<Order_> Orders { get; set; } = new MongoRepository<Order_>();
         public IRepository<Voucher> Vouchers { get; set; } = new MongoRepository<Voucher>();
         public IRepository<Category_> Categories { get; set; } = new MongoRepository<Category_>();
+        public IRepository<Customer> Customers { get; set; } = new MongoRepository<Customer>();
+
     }
 }
