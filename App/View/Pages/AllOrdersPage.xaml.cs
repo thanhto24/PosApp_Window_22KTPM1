@@ -6,6 +6,8 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using System;
+using App.Service;
+using System.Diagnostics;
 
 namespace App.View.Pages
 {
@@ -16,6 +18,11 @@ namespace App.View.Pages
         private string lastSortedColumn = "";
         private int currentPage = -1;
         private int maxPage = -1;
+
+        private int totalOrders;
+        private double totalRevenue;
+        private double totalProfit;
+
         public AllOrdersPage()
         {
             this.InitializeComponent();
@@ -107,5 +114,27 @@ namespace App.View.Pages
             else
                 NextOrderBtn.IsEnabled = true;
         }
-    }   
+
+        private async void ShowOrderDetails_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && button.DataContext is Order_ order)
+            {
+                string orderDetails = string.Join("\n", order.OrderedProducts.Select(p =>
+                    $"{p.Name}: {p.Quantity} x {p.Price:N0}đ"));
+
+                ContentDialog detailsDialog = new ContentDialog
+                {
+                    Title = "Chi tiết đơn",
+                    Content = new TextBlock { Text = orderDetails, TextWrapping = TextWrapping.Wrap },
+                    CloseButtonText = "Đóng",
+                    XamlRoot = this.Content.XamlRoot
+                };
+
+                await detailsDialog.ShowAsync();
+            }
+        }
+
+
+    }
+
 }
