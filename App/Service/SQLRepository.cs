@@ -64,6 +64,11 @@ namespace App.Service
             return list;
         }
 
+        public List<T> GetFiltered(string searchText = "", string productType = "Tất cả", string productGroup = "Tất cả", string status = "Tất cả", string sortOrder = "Tên: A => Z")
+        {
+            throw new NotImplementedException();
+        }
+
         public void Insert(T entity)
         {
             using (var connection = new SqliteConnection($"Data Source={DatabasePath}"))

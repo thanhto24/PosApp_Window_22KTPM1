@@ -7,6 +7,8 @@ using Microsoft.Data.Sqlite;
 using System.IO;
 using System.Collections.Generic;
 using Windows.Foundation.Collections;
+using App.Service;
+using App.Model;
 namespace App.View.Pages
 {
     /// <summary>
@@ -19,6 +21,11 @@ namespace App.View.Pages
         public Login()
         {
             this.InitializeComponent();
+
+            //IDao _dao;
+            //_dao = Services.GetKeyedSingleton<IDao>();
+            //List<Category_> cat = _dao.Categories.GetAll();
+            //testblock.Text = cat[0].name + cat[1].name;
         }
 
         private void Login_Click(object sender, RoutedEventArgs e)
@@ -97,5 +104,7 @@ namespace App.View.Pages
                 return count > 0;
             }
         }
+
+
     }
 }

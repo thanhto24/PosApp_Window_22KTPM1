@@ -44,9 +44,9 @@ namespace App.Model
 
         public string ImagePath { get; set; }
         public string BarCode { get; set; }
-        public int Id { get; set; }
+        //public int Id { get; set; }
         public string TypeGroup { get; set; }
-        public float VAT { get; set; }
+        public float Vat { get; set; }
         public int CostPrice { get; set; }
 
         public Product(string productCode, string name, int quantity, int price, int totalPrice, string image, string typeGroup, float vAT, int costPrice, string barCode)
@@ -57,7 +57,7 @@ namespace App.Model
             _price = price;
             ImagePath = image;
             TypeGroup = typeGroup;
-            VAT = vAT;
+            Vat = vAT;
             CostPrice = costPrice;
             BarCode = barCode;
         }

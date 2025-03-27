@@ -63,7 +63,7 @@ namespace App.View.Dialogs
             TxtPrice.Text = _editingProduct.Price.ToString();
             TxtBarcode.Text = _editingProduct.BarCode;
             ComboTypeGroup.SelectedItem = _editingProduct.TypeGroup;
-            TxtVAT.Text = _editingProduct.VAT.ToString();
+            TxtVAT.Text = _editingProduct.Vat.ToString();
             TxtCostPrice.Text = _editingProduct.CostPrice.ToString();
 
             // Load image if available
@@ -144,11 +144,11 @@ namespace App.View.Dialogs
             // Parse VAT value
             if (float.TryParse(TxtVAT.Text, out float vat))
             {
-                _editingProduct.VAT = vat;
+                _editingProduct.Vat = vat;
             }
             else
             {
-                _editingProduct.VAT = 0;
+                _editingProduct.Vat = 0;
             }
 
             _editingProduct.CostPrice = int.Parse(TxtCostPrice.Text);

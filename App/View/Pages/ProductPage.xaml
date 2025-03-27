@@ -37,7 +37,7 @@
 
             <!-- Dropdowns và Thanh Tìm Kiếm -->
             <StackPanel Orientation="Horizontal" Grid.Row="0">
-                <ComboBox Width="200" Margin="5" Foreground="Black" BorderThickness="1" BorderBrush="Black" SelectedIndex="0">
+                <ComboBox x:Name="ProductTypeComboBox" Width="200" Margin="5" Foreground="Black" BorderThickness="1" BorderBrush="Black" SelectionChanged="Filter_SelectionChanged" SelectedIndex="0">
                     <ComboBox.Header>
                         <TextBlock Text="Loại sản phẩm" Foreground="Gray" />
                     </ComboBox.Header>
@@ -45,7 +45,7 @@
                     <ComboBoxItem Content="Tất cả"/>
                     <ComboBoxItem Content="Combo"/>
                 </ComboBox>
-                <ComboBox Width="100" Margin="5" Foreground="Black" BorderThickness="1" BorderBrush="Black" SelectedIndex="0" >
+                <ComboBox x:Name="ProductGroupComboBox" Width="100" Margin="5" Foreground="Black" BorderThickness="1" BorderBrush="Black" SelectionChanged="Filter_SelectionChanged" SelectedIndex="0" >
                     <ComboBox.Header>
                         <TextBlock Text="Nhóm sản phẩm" Foreground="Gray" />
                     </ComboBox.Header>
@@ -54,16 +54,16 @@
                     <ComboBoxItem Content="Đồ uống"/>
                     <ComboBoxItem Content="Đồ ăn"/>
                 </ComboBox>
-                <ComboBox Width="100" Margin="5" Foreground="Black" BorderThickness="1" BorderBrush="Black" SelectedIndex="0">
+                <ComboBox x:Name="StatusComboBox" Width="100" Margin="5" Foreground="Black" BorderThickness="1" BorderBrush="Black" SelectionChanged="Filter_SelectionChanged" SelectedIndex="0">
                     <ComboBox.Header>
                         <TextBlock Text="Trạng thái" Foreground="Gray" />
                     </ComboBox.Header>
 
+                    <ComboBoxItem Content="Tất cả"/>
                     <ComboBoxItem Content="Còn hàng"/>
                     <ComboBoxItem Content="Hết hàng"/>
-                    <ComboBoxItem Content="Tất cả"/>
                 </ComboBox>
-                <ComboBox Width="150" Margin="5" Foreground="Black" BorderThickness="1" BorderBrush="Black" SelectedIndex="0">
+                <ComboBox x:Name="SortOrderComboBox" Width="150" Margin="5" Foreground="Black" BorderThickness="1" BorderBrush="Black" SelectionChanged="Filter_SelectionChanged" SelectedIndex="0">
                     <ComboBox.Header>
                         <TextBlock Text="Sắp xếp" Foreground="Gray" />
                     </ComboBox.Header>
@@ -77,8 +77,11 @@
                 </ComboBox>
 
                 <Grid Width="200" Margin="5">
-                    <TextBox Text="Tìm theo tên/mã/barcode sản phẩm" Padding="5" BorderBrush="Gray" BorderThickness="1"/>
-                    <Button Foreground="Black" Content="🔍" Width="20" Height="20" HorizontalAlignment="Right" Margin="0,0,5,0" Background="Transparent" BorderThickness="0"/>
+                    <TextBox x:Name="SearchTextBox" PlaceholderText="Tìm theo tên/mã/barcode" Padding="5" BorderBrush="Gray" 
+     BorderThickness="1" KeyUp="SearchTextBox_KeyUp"/>
+                    <Button Content="🔍" Width="20" Height="20" HorizontalAlignment="Right" 
+    Margin="0,0,5,0" Background="Transparent" BorderThickness="0" 
+    Click="SearchButton_Click" Foreground="Black"/>
                 </Grid>
             </StackPanel>
         </Grid>
@@ -110,8 +113,6 @@
                     <DataTemplate x:DataType="model:Product">
 
                         <StackPanel Orientation="Horizontal">
-                            <!-- Checkbox -->
-                            <TextBlock Text="{x:Bind Id}" Foreground="black" VerticalAlignment="Center"/>
 
                             <!-- Hình ảnh -->
                             <Image Source="{x:Bind ImagePath}" Width="100" Height="50" Margin="40, 5, 5, 5"/>
@@ -132,7 +133,7 @@
                             <TextBlock Text="{x:Bind Price}" Width="70" Margin="40, 5, 5, 5" Foreground="black" VerticalAlignment="center" HorizontalAlignment="Center"/>
 
                             <!-- VAT ban (%) -->
-                            <TextBlock Text="{x:Bind VAT}" Width="100" Margin="40, 5, 5, 5" Foreground="black" VerticalAlignment="center" HorizontalAlignment="Center"/>
+                            <TextBlock Text="{x:Bind Vat}" Width="100" Margin="40, 5, 5, 5" Foreground="black" VerticalAlignment="center" HorizontalAlignment="Center"/>
 
                             <!-- Trạng thái -->
                             <CheckBox Width="20" Height="20" Foreground="Green" Margin="5" VerticalAlignment="center" HorizontalAlignment="Center"/>
@@ -140,7 +141,7 @@
                             <!-- Thao tác -->
                             <StackPanel Orientation="Horizontal" Width="200">
                                 <Button Content="✎" Width="40" Height="40" Background="Transparent" BorderThickness="1" BorderBrush="Black" Margin="2" 
-        Click="EditProduct_Click" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        Click="EditProduct_Click" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" CommandParameter="{x:Bind BarCode}" />
                                 <Button Content="X" Width="40" Height="40" Background="Transparent" BorderThickness="1" BorderBrush="Black" Margin="2" 
         Click="DeleteProduct_Click" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 <Button Content="+" Width="40" Height="40" Background="Transparent" BorderThickness="1" BorderBrush="Black" Margin="2" 

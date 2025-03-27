@@ -132,5 +132,61 @@ namespace App.View.Pages
 
             await errorDialog.ShowAsync();
         }
+
+        private async void Filter_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            await ApplyFilters();
+        }
+
+        private async void SearchButton_Click(object sender, RoutedEventArgs e)
+        {
+            await ApplyFilters();
+        }
+
+        // Apply all filters
+        private async Task ApplyFilters()
+        {
+            string searchText;
+            if (SearchTextBox != null && !string.IsNullOrEmpty(SearchTextBox.Text))
+            {
+                searchText = SearchTextBox.Text;
+            }
+            else
+            {
+                searchText = "";
+            }
+            string productType = "Tất cả";
+            if (ProductTypeComboBox != null && (ProductTypeComboBox.SelectedItem is ComboBoxItem typeItem))
+            {
+                productType = typeItem.Content.ToString();
+            }
+            string productGroup = "Tất cả";
+            if (ProductGroupComboBox != null && (ProductGroupComboBox.SelectedItem is ComboBoxItem groupItem))
+            {
+                productGroup = groupItem.Content.ToString();
+            }
+            string status = "Tất cả";
+            if (StatusComboBox != null && (StatusComboBox.SelectedItem is ComboBoxItem statusItem))
+            {
+                status = statusItem.Content.ToString();
+            }
+            string sortOrder = "Tên: A => Z";
+            if (SortOrderComboBox != null && (SortOrderComboBox.SelectedItem is ComboBoxItem sortItem))
+            {
+                sortOrder = sortItem.Content.ToString();
+            }
+
+            //Debug.WriteLine("ProductPage", $"Filters: {searchText}, {productType}, {productGroup}, {status}, {sortOrder}");
+
+            // Use the new filter method from ViewModel
+            await ProductModelPage.FilterProducts(searchText, productType, productGroup, status, sortOrder);
+        }
+        private async void SearchTextBox_KeyUp(object sender, Microsoft.UI.Xaml.Input.KeyRoutedEventArgs e)
+        {
+            if (e.Key == Windows.System.VirtualKey.Enter)
+            {
+                await ApplyFilters();
+            }
+        }
     }
 }

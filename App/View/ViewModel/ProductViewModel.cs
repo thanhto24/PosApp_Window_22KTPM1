@@ -1,10 +1,10 @@
 ﻿using App.Model;
 using App.Service;
 using App.Utils;
-using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media.Imaging;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,7 +17,7 @@ namespace App.View.ViewModel
 {
     public class ProductViewModel
     {
-        private readonly IDao _dao;
+        private readonly IRepository<Product> _productRepository;
         public FullObservableCollection<Product> Products { get; set; }
 
         // Reference to the current window for file pickers
@@ -25,9 +25,12 @@ namespace App.View.ViewModel
 
         public ProductViewModel()
         {
-            _dao = Services.GetKeyedSingleton<IDao>();
-            List<Product> list_product = _dao.Products.GetAll();
-            Products = new FullObservableCollection<Product>(list_product);
+            // Use MongoRepository<Product> through the IRepository interface
+            _productRepository = new MongoRepository<Product>();
+
+            // Load all products from the repository
+            List<Product> listProduct = _productRepository.GetAll();
+            Products = new FullObservableCollection<Product>(listProduct);
         }
 
         // Set the current window reference (call this from page's constructor)
@@ -41,10 +44,6 @@ namespace App.View.ViewModel
         {
             try
             {
-                // Set a new ID (get the max ID and add 1)
-                int nextId = Products.Count > 0 ? Products.Max(p => p.Id) + 1 : 1;
-                product.Id = nextId;
-
                 // Handle image if provided
                 if (imageFile != null)
                 {
@@ -52,8 +51,9 @@ namespace App.View.ViewModel
                     product.ImagePath = imagePath;
                 }
 
-                // Add to database
-                _dao.Products.Insert(product);
+                Debug.WriteLine("CHECK PRODUCT BEFRORE CALL API: ", product.ToString());
+                // Add to database using repository
+                _productRepository.Insert(product);
 
                 // Add to observable collection
                 Products.Add(product);
@@ -68,10 +68,18 @@ namespace App.View.ViewModel
             }
         }
 
-        // Read (Get) a product by ID
-        public Product GetProductById(int id)
+        // Read (Get) a product by BarCode
+        public Product GetProductByBarCode(string barCode)
         {
-            return Products.FirstOrDefault(p => p.Id == id);
+            // Use UpdateByQuery to query by BarCode
+            var parameters = new Dictionary<string, object> { { "BarCode", barCode } };
+
+            // Modify RemoveByQuery to support querying
+            var results = _productRepository.GetAll()
+                .Where(p => p.BarCode == barCode)
+                .ToList();
+
+            return results.FirstOrDefault();
         }
 
         // Update an existing product
@@ -80,7 +88,7 @@ namespace App.View.ViewModel
             try
             {
                 // Find the index of the product in the collection
-                int index = Products.IndexOf(Products.FirstOrDefault(p => p.Id == product.Id));
+                int index = Products.IndexOf(Products.FirstOrDefault(p => p.BarCode == product.BarCode));
 
                 if (index == -1)
                     return false;
@@ -99,22 +107,22 @@ namespace App.View.ViewModel
                     product.ImagePath = imagePath;
                 }
 
-                // Update in database
+                // Prepare update values
                 var updateValues = new Dictionary<string, object>
                 {
                     { "Name", product.Name },
                     { "Price", product.Price },
                     { "ImagePath", product.ImagePath },
-                    { "BarCode", product.BarCode },
                     { "TypeGroup", product.TypeGroup },
-                    { "VAT", product.VAT },
+                    { "Vat", product.Vat },
                     { "CostPrice", product.CostPrice }
                 };
 
-                _dao.Products.UpdateByQuery(
+                // Update in database using repository
+                _productRepository.UpdateByQuery(
                     updateValues,
-                    "ID = @ID",
-                    new Dictionary<string, object> { { "ID", product.Id } }
+                    "BarCode = @BarCode",
+                    new Dictionary<string, object> { { "BarCode", product.BarCode } }
                 );
 
                 // Update in observable collection
@@ -140,10 +148,10 @@ namespace App.View.ViewModel
                     await DeleteProductImage(product.ImagePath);
                 }
 
-                // Delete from database
-                _dao.Products.RemoveByQuery(
-                    "ID = @ID",
-                    new Dictionary<string, object> { { "ID", product.Id } }
+                // Delete from database using repository
+                _productRepository.RemoveByQuery(
+                    "BarCode = @BarCode",
+                    new Dictionary<string, object> { { "BarCode", product.BarCode } }
                 );
 
                 // Remove from observable collection
@@ -157,7 +165,6 @@ namespace App.View.ViewModel
                 return false;
             }
         }
-
         // Helper method to pick an image file
         public async Task<StorageFile> PickProductImage()
         {
@@ -239,6 +246,33 @@ namespace App.View.ViewModel
             {
                 System.Diagnostics.Debug.WriteLine($"Error loading image: {ex.Message}");
                 return null;
+            }
+        }
+
+        public async Task FilterProducts(string searchText, string productType, string productGroup, string status, string sortOrder)
+        {
+            try
+            {
+                //Debug.WriteLine("ProductViewModel", $"Filters: {searchText}, {productType}, {productGroup}, {status}, {sortOrder}");
+                // Use the new GetFiltered method from repository
+                //List<Product> filteredProducts = _productRepository.GetFiltered(
+                //    searchText,
+                //    productType,
+                //    productGroup,
+                //    status,
+                //    sortOrder
+                //);
+                List<Product> filteredProducts = new List<Product>();
+                // Clear and update the collection
+                Products.Clear();
+                foreach (var product in filteredProducts)
+                {
+                    Products.Add(product);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error filtering products: {ex.Message}");
             }
         }
     }

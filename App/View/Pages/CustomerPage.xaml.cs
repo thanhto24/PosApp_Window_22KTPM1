@@ -1,31 +1,38 @@
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
+using App.View.ViewModel;
+using App.Model;
 using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
-
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
+using Microsoft.UI.Xaml.Documents;
+using System.Collections.Generic;
+using App.Utils;
 
 namespace App.View.Pages
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class CustomerPage : Page
     {
+        public CustomerViewModel CustomerViewModel { get; set; }
+
         public CustomerPage()
         {
             this.InitializeComponent();
+            CustomerViewModel = new CustomerViewModel();
         }
+
+        private async void OnSearchClick(object sender, RoutedEventArgs e)
+        {
+            string phone = SearchBox.Text;
+            CustomerViewModel.findByPhone(phone);
+
+
+            //await FakeAPI()
+        }
+
+        private void OnResetClick(object sender, RoutedEventArgs e)
+        {
+            CustomerViewModel.resetClick();
+        }
+
     }
 }
