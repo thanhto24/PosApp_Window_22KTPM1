@@ -33,7 +33,16 @@ namespace App.Service
 
             public List<Product> GetAll() => products;
             public List<Product> GetProductsByCategory(string category) => products.Where(p => p.TypeGroup == category).ToList();
-            public List<Product> GetByQuery(Dictionary<string, object> filter, Dictionary<string, object>? or = null, Dictionary<string, int>? sort = null) => products;
+            public List<Product> GetByQuery(Dictionary<string, object> filter, Dictionary<string, object>? or = null, Dictionary<string, int>? sort = null)
+            {
+                if (filter.TryGetValue("TypeGroup", out object? categoryObj) && categoryObj is string TypeGroup)
+                {
+                    return products.Where(p => p.TypeGroup == TypeGroup).ToList();
+                }
+
+                return products;
+            }
+
             public void Insert(Product product) { }
             public void RemoveByQuery(string whereClause, Dictionary<string, object> parameters) { }
             public void UpdateByQuery(Dictionary<string, object> setValues, string whereClause, Dictionary<string, object> whereParams) { }
@@ -46,8 +55,11 @@ namespace App.Service
             private static List<Order_> orders = new List<Order_>()
             {
                     new Order_(1, "INV001", "Nguyễn Văn A", DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd HH:mm:ss"),
-                              new List<Product> { new Product("CF001", "Espresso", 1, 32000, 0, "", "Cà phê", 0.1f, 25000, ""), new Product("ST001", "Sinh tố bơ", 1, 45000, 0, "", "Sinh tố", 0.05f, 38000, "") }, 500000, 50000, 450000, 300000, "Tiền mặt",
-                              "Đã giao", "Đã thanh toán", "Giao hàng thành công"),
+                        new List<Product> { new Product("CF001", "Espresso", 1, 32000, 0, "", "Cà phê", 0.1f, 25000, ""),
+                                            new Product("ST001", "Sinh tố bơ", 1, 45000, 0, "", "Sinh tố", 0.05f, 38000, "") },
+                        500000, 50000, 450000, 300000, "Tiền mặt",
+                        "Đã giao", "Đã thanh toán", "Giao hàng thành công")
+                    ,
 
                     new Order_(2, "INV002", "Trần Thị B", DateTime.Now.AddDays(-2).ToString("yyyy-MM-dd HH:mm:ss"),
                               new List<Product> { new Product("TS002", "Hồng trà", 2, 40000, 0, "", "Trà sữa", 0.07f, 34000, "") }, 700000, 100000, 600000, 400000, "Chuyển khoản",

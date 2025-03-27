@@ -12,13 +12,14 @@ namespace App.View.ViewModel
     public class CartViewModel
     {
         public FullObservableCollection<CartItem> CartItems { get; set; }
-        private Dictionary<string, int> cart;  // Khởi tạo từ điển lưu số lượng sản phẩm
-
+        private Dictionary<string, int> cart;
+        private IDao _dao;
+        public double totalDiscount;
         public CartViewModel()
         {
+            _dao = Services.GetKeyedSingleton<IDao>();
             CartItems = new FullObservableCollection<CartItem>();
             cart = new Dictionary<string, int>();
-
         }
 
         public void AddToCart(Product product)
@@ -70,10 +71,49 @@ namespace App.View.ViewModel
             return total;
         }
 
+        public int getTotalQuantity()
+        {
+            int total = CartItems.Sum(item => item.Quantity);
+            return total;
+        }
+
         public void Clear_()
         {
             CartItems.Clear();
             cart.Clear();
+        }
+
+
+        public void CreateNewOrder(double totalDiscount)
+        {
+            int newId = 1;
+            string invoiceId = "INV001";
+
+            string customerName = "Khách vãng lai";
+            List<Product> orderedProductsList = CartItems.Select(ci => ci.Product).ToList();
+            decimal totalAmount = (decimal)getTotalAmount();
+            decimal discount = (decimal)totalDiscount;
+            decimal finalAmount = totalAmount - discount;
+            decimal totalCost = CartItems.Sum(p => (decimal)p.Product.CostPrice * p.Quantity);
+
+
+            var order = new Order_(
+                id: newId,
+                invoiceCode: invoiceId,
+                customer: customerName,
+                saleDateTime: DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                orderedProducts: orderedProductsList,
+                totalAmount: totalAmount,
+                totalDiscount: discount,
+                totalPayment: finalAmount,
+                totalCost: totalCost,
+                paymentMethod: "Tiền mặt",
+                status: "Đã giao",
+                paymentStatus: "Đã thanh toán",
+                notes: "Giao hàng thành công"
+            );
+
+            _dao.Orders.Insert(order);
         }
     }
 }

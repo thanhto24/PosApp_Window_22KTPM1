@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using App.Model;
 using App.Service;
@@ -9,13 +11,14 @@ namespace App.View.ViewModel
     public class OrderViewModel
     {
         private IDao _dao;
-        private const int ItemsPerPage = 5; // Số lượng đơn hàng trên mỗi trang
+        private const int ItemsPerPage = 5;
 
         public FullObservableCollection<Order_> orders { get; set; }
         public FullObservableCollection<Order_> DisplayedOrders { get; set; }
-
+        public CartViewModel CartViewModel { get; set; }
         public int CurrentPage { get; private set; } = 1;
         public int TotalPages => (int)System.Math.Ceiling((double)orders.Count / ItemsPerPage);
+
 
         public OrderViewModel()
         {

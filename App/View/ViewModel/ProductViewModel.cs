@@ -276,5 +276,16 @@ namespace App.View.ViewModel
                 System.Diagnostics.Debug.WriteLine($"Error filtering products: {ex.Message}");
             }
         }
+
+        public void LoadProductsByCategory(string TypeGroup)
+        {
+            Products.Clear();
+
+            var filteredProducts = _dao.Products.GetByQuery(new Dictionary<string, object> { { "TypeGroup", TypeGroup } });
+            foreach (var product in filteredProducts)
+            {
+                Products.Add(product);
+            }
+        }
     }
 }
