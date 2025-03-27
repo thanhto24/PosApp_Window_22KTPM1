@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 
 namespace App.Service
 {
-    public interface IRepository<T> 
+    public interface IRepository<T>
     {
         List<T> GetAll(); // Phân trang, sắp xếp, Lọc
         void Insert(T entity);
         void RemoveByQuery(string whereClause, Dictionary<string, object> parameters);
         void UpdateByQuery(Dictionary<string, object> setValues, string whereClause, Dictionary<string, object> whereParams);
+
+        List<T> GetByQuery(Dictionary<string, object> filter, Dictionary<string, object>? or = null, Dictionary<string, int>? sort = null);
 
         // public List<T> GetFiltered( string searchText = "", string productType = "Tất cả", string productGroup = "Tất cả", string status = "Tất cả", string sortOrder = "Tên: A => Z");
     }

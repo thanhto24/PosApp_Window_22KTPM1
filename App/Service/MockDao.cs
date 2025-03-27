@@ -33,6 +33,7 @@ namespace App.Service
 
             public List<Product> GetAll() => products;
             public List<Product> GetProductsByCategory(string category) => products.Where(p => p.TypeGroup == category).ToList();
+            public List<Product> GetByQuery(Dictionary<string, object> filter, Dictionary<string, object>? or = null, Dictionary<string, int>? sort = null) => products;
             public void Insert(Product product) { }
             public void RemoveByQuery(string whereClause, Dictionary<string, object> parameters) { }
             public void UpdateByQuery(Dictionary<string, object> setValues, string whereClause, Dictionary<string, object> whereParams) { }
@@ -66,6 +67,7 @@ namespace App.Service
             };
 
             public List<Order_> GetAll() => orders;
+            public List<Order_> GetByQuery(Dictionary<string, object> filter, Dictionary<string, object>? or = null, Dictionary<string, int>? sort = null) => orders;
             public void Insert(Order_ order) { orders.Add(order); }
             public void RemoveByQuery(string whereClause, Dictionary<string, object> parameters) { }
             public void UpdateByQuery(Dictionary<string, object> setValues, string whereClause, Dictionary<string, object> whereParams) { }
@@ -82,11 +84,11 @@ namespace App.Service
                 };
             }
 
-            public List<Voucher> GetFiltered(string searchText = "", string productType = "Tất cả", string productGroup = "Tất cả", string status = "Tất cả", string sortOrder = "Tên: A => Z")
+
+            public List<Voucher> GetByQuery(Dictionary<string, object> filter, Dictionary<string, object>? or = null, Dictionary<string, int>? sort = null)
             {
                 throw new NotImplementedException();
             }
-
             public void Insert(Voucher voucher)
             {
             }
@@ -105,6 +107,10 @@ namespace App.Service
                 new Category_("Trà sữa"),
                 new Category_("Đồ ăn vặt")
             };
+            public List<Category_> GetByQuery(Dictionary<string, object> filter, Dictionary<string, object>? or = null, Dictionary<string, int>? sort = null)
+            {
+                throw new NotImplementedException();
+            }
             public void Insert(Category_ category) { }
             public void RemoveByQuery(string whereClause, Dictionary<string, object> parameters) { }
             public void UpdateByQuery(Dictionary<string, object> setValues, string whereClause, Dictionary<string, object> whereParams) { }
@@ -116,6 +122,10 @@ namespace App.Service
             private ReportData report = new ReportData(0, 0, 0);
 
             public List<ReportData> GetAll() => new List<ReportData> { report };
+            public List<ReportData> GetByQuery(Dictionary<string, object> filter, Dictionary<string, object>? or = null, Dictionary<string, int>? sort = null)
+            {
+                throw new NotImplementedException();
+            }
 
             public void Insert(ReportData newReport)
             {
@@ -137,7 +147,7 @@ namespace App.Service
                     new Customer("Bao", "123", 3, 4, "gold"),
                 };
             }
-            public List<Customer> GetFiltered(string searchText = "", string productType = "Tất cả", string productGroup = "Tất cả", string status = "Tất cả", string sortOrder = "Tên: A => Z")
+            public List<Customer> GetByQuery(Dictionary<string, object> filter, Dictionary<string, object>? or = null, Dictionary<string, int>? sort = null)
             {
                 throw new NotImplementedException();
             }

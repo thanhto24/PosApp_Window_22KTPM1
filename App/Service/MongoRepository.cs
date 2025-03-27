@@ -136,42 +136,71 @@ namespace App.Service
             }
         }
 
-        public List<T> GetFiltered(string searchText = "", string productType = "Tất cả", string productGroup = "Tất cả", string status = "Tất cả", string sortOrder = "Tên: A => Z")
+        public List<T> GetByQuery(Dictionary<string, object> filter, Dictionary<string, object>? or = null, Dictionary<string, int>? sort = null)
         {
             try
             {
-                Debug.WriteLine("MongoRepository", $"Filters: {searchText}, {productType}, {productGroup}, {status}, {sortOrder}");
-                string url = $"filtered/{_modelName}";
-                Console.WriteLine($"[GetFiltered] Calling API: {url}");
+                string url = $"getByQuery/{_modelName}"; // API mới dùng GET /getByQuery/:modelName
+                Console.WriteLine($"[GetByQuery] Calling API: {url}");
 
-                var payload = new
-                {
-                    searchText,
-                    productType,
-                    productGroup,
-                    status,
-                    sortOrder
-                };
-
+                var payload = new { filter, or, sort };
                 var response = _httpClient.PostAsJsonAsync(url, payload).Result;
-                Console.WriteLine($"[GetFiltered] Response: {(int)response.StatusCode} - {response.ReasonPhrase}");
+                Console.WriteLine($"[GetByQuery] Response: {(int)response.StatusCode} - {response.ReasonPhrase}");
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    Console.WriteLine($"[GetFiltered] API Error: {response.ReasonPhrase}");
-                    return new List<T>();
+                    Console.WriteLine($"[GetByQuery] API Error: {response.ReasonPhrase}");
+                    return new List<T>(); // Trả về danh sách rỗng nếu có lỗi
                 }
 
-                var jsonString = response.Content.ReadAsStringAsync().Result;
-                var jsonData = JsonSerializer.Deserialize<List<T>>(jsonString, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-
-                return jsonData ?? new List<T>();
+                var data = response.Content.ReadFromJsonAsync<List<T>>().Result;
+                return data ?? new List<T>(); // Tránh lỗi null reference
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[GetFiltered] Error: {ex.Message}");
+                Console.WriteLine($"[GetByQuery] Error: {ex.Message}");
                 return new List<T>();
             }
         }
+
+
+        //    public List<T> GetFiltered(string searchText = "", string productType = "Tất cả", string productGroup = "Tất cả", string status = "Tất cả", string sortOrder = "Tên: A => Z")
+        //    {
+        //        try
+        //        {
+        //            Debug.WriteLine("MongoRepository", $"Filters: {searchText}, {productType}, {productGroup}, {status}, {sortOrder}");
+        //            string url = $"filtered/{_modelName}";
+        //            Console.WriteLine($"[GetFiltered] Calling API: {url}");
+
+        //            var payload = new
+        //            {
+        //                searchText,
+        //                productType,
+        //                productGroup,
+        //                status,
+        //                sortOrder
+        //            };
+
+        //            var response = _httpClient.PostAsJsonAsync(url, payload).Result;
+        //            Console.WriteLine($"[GetFiltered] Response: {(int)response.StatusCode} - {response.ReasonPhrase}");
+
+        //            if (!response.IsSuccessStatusCode)
+        //            {
+        //                Console.WriteLine($"[GetFiltered] API Error: {response.ReasonPhrase}");
+        //                return new List<T>();
+        //            }
+
+        //            var jsonString = response.Content.ReadAsStringAsync().Result;
+        //            var jsonData = JsonSerializer.Deserialize<List<T>>(jsonString, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+        //            return jsonData ?? new List<T>();
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            Console.WriteLine($"[GetFiltered] Error: {ex.Message}");
+        //            return new List<T>();
+        //        }
+        //    }
+
     }
 }

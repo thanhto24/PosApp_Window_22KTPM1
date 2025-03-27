@@ -198,3 +198,60 @@ exports.getAllFiltered = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+exports.getByQuery = async (req, res) => {   
+  try {     
+      const { modelName } = req.params;     
+      const query = req.body;     
+      const Model = getModel(modelName);     
+      console.log("Query: ", query);
+
+      // Kiểm tra filter
+      let mongoQuery = {};
+      if (query.Filter && Object.keys(query.Filter).length > 0) {
+          mongoQuery = convertToMongoQuery(query.Filter);
+      }
+
+      // Xử lý điều kiện OR nếu có
+      if (query.Or && Object.keys(query.Or).length > 0) {
+          const orConditions = Object.entries(query.Or).map(([key, value]) => {
+              return convertToMongoQuery({ [key]: value });
+          });
+
+          mongoQuery["$or"] = orConditions;
+      }
+
+      // Thêm sắp xếp nếu có
+      let sortOptions = {};
+      if (query.Sort && Object.keys(query.Sort).length > 0) {
+          sortOptions = query.Sort;
+      }
+
+      console.log("Mongo Query: ", JSON.stringify(mongoQuery, null, 2));
+
+      // Thực thi truy vấn
+      const result = await Model.find(mongoQuery).sort(sortOptions);
+      console.log("Result: ", result);
+      res.json(result);
+  } catch (error) {     
+      res.status(500).json({ error: error.message });   
+  } 
+};
+
+function convertToMongoQuery(filter) {
+  let mongoQuery = {};
+
+  for (let key in filter) {
+      let value = filter[key];
+
+      // Chuyển `%` thành regex MongoDB
+      if (typeof value === "string" && value.includes("%")) {
+          let regexPattern = value.replace(/%/g, ".*"); // `%` thành `.*`
+          mongoQuery[key] = { $regex: regexPattern, $options: "i" }; // Không phân biệt hoa thường
+      } else {
+          mongoQuery[key] = value;
+      }
+  }
+
+  return mongoQuery;
+}

@@ -150,5 +150,9 @@ namespace App.Service
             }
         }
 
+        public List<T> GetByQuery(Dictionary<string, object> filter, Dictionary<string, object>? or = null, Dictionary<string, int>? sort = null)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

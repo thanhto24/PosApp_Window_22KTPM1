@@ -17,26 +17,27 @@ namespace App.View.ViewModel
 {
     public class ProductViewModel
     {
-        private readonly IRepository<Product> _productRepository;
+        private IDao _dao;
+
         public FullObservableCollection<Product> Products { get; set; }
 
-        // Reference to the current window for file pickers
         private Microsoft.UI.Xaml.Window _window;
 
         public ProductViewModel()
         {
-            // Use MongoRepository<Product> through the IRepository interface
-            _productRepository = new MongoRepository<Product>();
-
-            // Load all products from the repository
-            List<Product> listProduct = _productRepository.GetAll();
-            Products = new FullObservableCollection<Product>(listProduct);
+            _dao = Services.GetKeyedSingleton<IDao>();
+            List<Product> products = _dao.Products.GetAll();
+            Products = new FullObservableCollection<Product>(products);
         }
 
-        // Set the current window reference (call this from page's constructor)
-        public void SetWindow(Microsoft.UI.Xaml.Window window)
+        public void NewFilter(Dictionary<string, object> filter, Dictionary<string, int>? sort = null)
         {
-            _window = window;
+            List<Product> filteredProduct = _dao.Products.GetByQuery(filter, null, sort);
+            Products.Clear();
+            foreach (Product product in filteredProduct)
+            {
+                Products.Add(product);
+            }
         }
 
         // Create (Add) a new product
@@ -53,7 +54,7 @@ namespace App.View.ViewModel
 
                 Debug.WriteLine("CHECK PRODUCT BEFRORE CALL API: ", product.ToString());
                 // Add to database using repository
-                _productRepository.Insert(product);
+                _dao.Products.Insert(product);
 
                 // Add to observable collection
                 Products.Add(product);
@@ -75,7 +76,7 @@ namespace App.View.ViewModel
             var parameters = new Dictionary<string, object> { { "BarCode", barCode } };
 
             // Modify RemoveByQuery to support querying
-            var results = _productRepository.GetAll()
+            var results = _dao.Products.GetAll()
                 .Where(p => p.BarCode == barCode)
                 .ToList();
 
@@ -119,7 +120,7 @@ namespace App.View.ViewModel
                 };
 
                 // Update in database using repository
-                _productRepository.UpdateByQuery(
+                _dao.Products.UpdateByQuery(
                     updateValues,
                     "BarCode = @BarCode",
                     new Dictionary<string, object> { { "BarCode", product.BarCode } }
@@ -149,7 +150,7 @@ namespace App.View.ViewModel
                 }
 
                 // Delete from database using repository
-                _productRepository.RemoveByQuery(
+                _dao.Products.RemoveByQuery(
                     "BarCode = @BarCode",
                     new Dictionary<string, object> { { "BarCode", product.BarCode } }
                 );
