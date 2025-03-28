@@ -21,7 +21,9 @@ namespace App.View.Pages
         public CartViewModel CartViewModel { get; set; }
         public OrderViewModel OrderViewModel { get; set; }
 
-
+        public VoucherViewModel VoucherViewModel { get; set; }
+        public CustomerViewModel CustomerViewModel { get; set; }
+        private double finalAmount = 0;
         public HomeScreen()
         {
             this.InitializeComponent();
@@ -30,6 +32,8 @@ namespace App.View.Pages
             CartViewModel = new CartViewModel();
             OrderViewModel = new OrderViewModel();
 
+            VoucherViewModel = new VoucherViewModel();
+            CustomerViewModel = new CustomerViewModel();
 
             ApplyDiscount();
             ProductViewModel.LoadProductsByCategory(CategoryViewModel.categories[0].Name);
@@ -56,7 +60,7 @@ namespace App.View.Pages
                 ApplyDiscount();
             }
         }
-        
+
         // Xử lý sự kiện khi bấm nút "-"
         private void RemoveButton_Click(object sender, RoutedEventArgs e)
         {
@@ -86,14 +90,13 @@ namespace App.View.Pages
             double discountVc = 0, discountCustomer = 0;
 
             string promoCode = PromoCodeTextBox.Text.Trim();
+            string phone = CustomerCodeTextBox.Text.Trim();
 
             // Áp dụng mã khuyến mãi
-            if (promoCode == "GIAM50") discountVc = total * 0.5;  // Giảm 50%
-            else if (promoCode == "GIAM10") discountVc = total * 0.1;  // Giảm 10%
-            string sdt = CustomerCodeTextBox.Text.Trim();
-            if (sdt == "999") discountCustomer = total * 0.1;
+            discountVc = total * VoucherViewModel.ApplyVoucher(promoCode);
+            discountCustomer = total * CustomerViewModel.ApplyCusPhone(phone);
 
-            double finalAmount = total - discountVc - discountCustomer;
+            finalAmount = total - discountVc - discountCustomer;
             CartViewModel.totalDiscount = discountVc + discountCustomer;
 
             // Hiển thị số tiền trên giao diện
@@ -115,6 +118,13 @@ namespace App.View.Pages
         {
             ApplyDiscount();
             CartViewModel.CreateNewOrder(CartViewModel.totalDiscount);
+
+            string phone = CustomerCodeTextBox.Text.Trim();
+            string name = CustomerName.Text.Trim();
+            CustomerViewModel.storeData(phone, name, finalAmount);
+
+            string promoCode = PromoCodeTextBox.Text.Trim();
+            VoucherViewModel.des(promoCode);
 
             ContentDialog checkoutDialog = new ContentDialog
             {
@@ -151,7 +161,7 @@ namespace App.View.Pages
 
             //Debug.WriteLine($"OrderScrollViewer MaxHeight: {OrderScrollViewer.MaxHeight}");
         }
-        
+
 
     }
 }

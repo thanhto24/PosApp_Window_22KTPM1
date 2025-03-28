@@ -40,7 +40,7 @@ namespace App.Service
                     return products.Where(p => p.TypeGroup == TypeGroup).ToList();
                 }
 
-                return products;
+                return null;
             }
 
             public void Insert(Product product) { }
@@ -88,24 +88,71 @@ namespace App.Service
 
         public class MockVoucherRepository : IRepository<Voucher>
         {
+            private List<Voucher> vouchers = new List<Voucher>() {
+                                                new Voucher("GIAM50", DateTime.Now, DateTime.Now, 10, 50, 1, "abc"),
+                                                new Voucher("2", DateTime.Now, DateTime.Now, 11, 20, 3, "def"),
+                                                new Voucher("3", DateTime.Now, DateTime.Now, 12, 20, 3, "hihi"),
+                                            };
             public List<Voucher> GetAll()
             {
-                return new List<Voucher>() {
-                    new Voucher("1",DateTime.Now, DateTime.Now, 100, 1, 1, "abc"),
-                    new Voucher("2",DateTime.Now, DateTime.Now, 111, 2, 3, "def"),
-                };
+                return vouchers;
             }
 
 
             public List<Voucher> GetByQuery(Dictionary<string, object> filter, Dictionary<string, object>? or = null, Dictionary<string, int>? sort = null)
             {
-                throw new NotImplementedException();
+                if (filter.TryGetValue("Code", out object? obj) && obj is string code_)
+                {
+                    return vouchers.Where(x => x.Code == code_).ToList();
+                }
+                return new List<Voucher>();
             }
             public void Insert(Voucher voucher)
             {
             }
-            public void RemoveByQuery(string whereClause, Dictionary<string, object> parameters) { }
-            public void UpdateByQuery(Dictionary<string, object> setValues, string whereClause, Dictionary<string, object> whereParams) { }
+            public void RemoveByQuery(string whereClause, Dictionary<string, object> parameters)
+            {
+                string code = parameters["code"].ToString();
+                var voucher = vouchers.FirstOrDefault(v => v.Code == code);
+
+                if (voucher == null) return;
+                if (voucher != null)
+                {
+                    vouchers.Remove(voucher);
+                    System.Diagnostics.Debug.WriteLine($"[Mock Remove] Voucher {code} removed successfully.");
+                }
+            }
+            public void UpdateByQuery(Dictionary<string, object> setValues, string whereClause, Dictionary<string, object> whereParams)
+            {
+
+                string code = whereParams["code"].ToString();
+                var voucher = vouchers.FirstOrDefault(v => v.Code == code);
+
+                if (voucher == null) return;
+
+                // Dynamically update voucher properties
+                if (setValues.TryGetValue("StartDate", out object? newStartDate) && newStartDate is DateTimeOffset startDate)
+                    voucher.StartDate = startDate;
+
+                if (setValues.TryGetValue("EndDate", out object? newEndDate) && newEndDate is DateTimeOffset endDate)
+                    voucher.EndDate = endDate;
+
+                if (setValues.TryGetValue("Quantity", out object? newQuantity) && newQuantity is int quantity)
+                    voucher.Quantity = quantity;
+
+                if (setValues.TryGetValue("MinOrder", out object? newMinOrder) && newMinOrder is decimal minOrder)
+                    voucher.MinOrder = minOrder;
+
+                if (setValues.TryGetValue("DiscountValue", out object? newDiscountValue) && newDiscountValue is decimal discountValue)
+                    voucher.DiscountValue = discountValue;
+
+                if (setValues.TryGetValue("Note", out object? newNote) && newNote is string note)
+                    voucher.Note = note;
+
+                // Log the update for debugging
+                System.Diagnostics.Debug.WriteLine($"[Mock Update] Voucher {code} updated successfully.");
+            }
+
         }
         public IRepository<Voucher> Vouchers { get; set; } = new MockVoucherRepository();
 
@@ -152,22 +199,46 @@ namespace App.Service
 
         public class MockCustomerRepository : IRepository<Customer>
         {
+            private List<Customer> customers = new List<Customer>() {
+                                                    new Customer("Thanh", "070", 1, 2, "New User"),
+                                                    new Customer("Bao", "123", 3, 4, "Gold"),
+                                                };
             public List<Customer> GetAll()
             {
-                return new List<Customer>() {
-                    new Customer("Thanh", "070", 1, 2, "new"),
-                    new Customer("Bao", "123", 3, 4, "gold"),
-                };
+                return customers;
             }
             public List<Customer> GetByQuery(Dictionary<string, object> filter, Dictionary<string, object>? or = null, Dictionary<string, int>? sort = null)
             {
-                throw new NotImplementedException();
+                if (filter.TryGetValue("phone_num", out object? obj) && obj is string phone_num)
+                {
+                    return customers.Where(x => x.phone_num == phone_num).ToList();
+                }
+                return new List<Customer>();
             }
             public void Insert(Customer customer)
             {
+                customers.Add(customer);
             }
             public void RemoveByQuery(string whereClause, Dictionary<string, object> parameters) { }
-            public void UpdateByQuery(Dictionary<string, object> setValues, string whereClause, Dictionary<string, object> whereParams) { }
+            public void UpdateByQuery(Dictionary<string, object> setValues, string whereClause, Dictionary<string, object> whereParams)
+            {
+                // Tìm khách hàng dựa vào `phone`
+                string phone = whereParams["phone"].ToString();
+                var customer = customers.FirstOrDefault(c => c.phone_num == phone);
+
+                if (customer == null) return;
+
+                // Cập nhật từng thuộc tính theo `setValues`
+                foreach (var key in setValues.Keys)
+                {
+                    var prop = typeof(Customer).GetProperty(key);
+                    if (prop != null)
+                    {
+                        prop.SetValue(customer, setValues[key]);
+                    }
+                }
+            }
+
 
         }
         public IRepository<Customer> Customers { get; set; } = new MockCustomerRepository();

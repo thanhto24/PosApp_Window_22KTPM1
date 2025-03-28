@@ -102,7 +102,7 @@ namespace App.View.ViewModel
                 invoiceCode: invoiceId,
                 customer: customerName,
                 saleDateTime: DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
-                orderedProducts: orderedProductsList,
+                orderedProducts_: orderedProductsList,
                 totalAmount: totalAmount,
                 totalDiscount: discount,
                 totalPayment: finalAmount,
