@@ -144,7 +144,7 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Text="Số tiền được giảm:" Foreground="Black" FontSize="14" Grid.Column="0"/>
+                    <TextBlock Text="Tiền được giảm:" Foreground="Black" FontSize="14" Grid.Column="0"/>
                     <TextBlock x:Name="DiscountAmountTextBlock" Foreground="Green" FontSize="15" FontWeight="Bold" HorizontalAlignment="Right" Grid.Column="1"/>
                 </Grid>
 

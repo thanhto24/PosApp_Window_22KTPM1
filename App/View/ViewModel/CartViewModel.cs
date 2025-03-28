@@ -84,12 +84,12 @@ namespace App.View.ViewModel
         }
 
 
-        public void CreateNewOrder(double totalDiscount)
+        public void CreateNewOrder(double totalDiscount, string nameCustomer)
         {
-            int newId = 1;
-            string invoiceId = "INV001";
+            int newId = _dao.Orders.GetAll().Count + 1;
+            string invoiceId = $"INV{newId:D3}";
 
-            string customerName = "Khách vãng lai";
+            string customerName = nameCustomer;
             List<Product> orderedProductsList = CartItems.Select(ci => ci.Product).ToList();
             decimal totalAmount = (decimal)getTotalAmount();
             decimal discount = (decimal)totalDiscount;
