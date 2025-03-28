@@ -21,7 +21,7 @@ namespace App.Model
         public string PaymentStatus { get; set; }
         public string Notes { get; set; }
 
-        public Order_(int id, string invoiceCode, string customer, string saleDateTime, List<Product> orderedProducts_, decimal totalAmount, decimal totalDiscount, decimal totalPayment, decimal totalCost, string paymentMethod, string status, string paymentStatus, string notes)
+        public Order_(int id, string invoiceCode, string customer, string saleDateTime, List<Product> orderedProducts, decimal totalAmount, decimal totalDiscount, decimal totalPayment, decimal totalCost, string paymentMethod, string status, string paymentStatus, string notes)
         {
             Id = id;
             InvoiceCode = invoiceCode;
