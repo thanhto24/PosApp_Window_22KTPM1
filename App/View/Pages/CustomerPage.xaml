@@ -61,11 +61,11 @@
                                 <ColumnDefinition Width="1*"/>
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock Text="{x:Bind name}" Grid.Column="0" HorizontalAlignment="Center"/>
-                            <TextBlock Text="{x:Bind phone_num}" Grid.Column="1" HorizontalAlignment="Center"/>
-                            <TextBlock Text="{x:Bind rank}" Grid.Column="2" HorizontalAlignment="Center"/>
-                            <TextBlock Text="{x:Bind amountOrder}" Grid.Column="3" HorizontalAlignment="Center"/>
-                            <TextBlock Text="{x:Bind totalPaid}" Grid.Column="4" HorizontalAlignment="Center"/>
+                            <TextBlock Text="{x:Bind Name}" Grid.Column="0" HorizontalAlignment="Center"/>
+                            <TextBlock Text="{x:Bind Phone_num}" Grid.Column="1" HorizontalAlignment="Center"/>
+                            <TextBlock Text="{x:Bind Rank}" Grid.Column="2" HorizontalAlignment="Center"/>
+                            <TextBlock Text="{x:Bind AmountOrder}" Grid.Column="3" HorizontalAlignment="Center"/>
+                            <TextBlock Text="{x:Bind TotalPaid}" Grid.Column="4" HorizontalAlignment="Center"/>
                         </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>

@@ -11,19 +11,19 @@ namespace App.Model
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public string name { get; set; }
-        public string phone_num { get; set; }
-        public int amountOrder { get; set; }
-        public decimal totalPaid { get; set; }
-        public string rank { get; set; }
+        public string Name { get; set; }
+        public string Phone_num { get; set; }
+        public int AmountOrder { get; set; }
+        public decimal TotalPaid { get; set; }
+        public string Rank { get; set; }
 
-        public Customer(string name, string phone_num, int amountOrder, decimal totalPaid, string rank)
+        public Customer(string name, string Phone_num, int amountOrder, decimal totalPaid, string rank)
         {
-            this.name = name;
-            this.phone_num = phone_num;
-            this.amountOrder = amountOrder;
-            this.totalPaid = totalPaid;
-            this.rank = rank;
+            this.Name = name;
+            this.Phone_num = Phone_num;
+            this.AmountOrder = amountOrder;
+            this.TotalPaid = totalPaid;
+            this.Rank = rank;
         }
 
         public Customer() { }

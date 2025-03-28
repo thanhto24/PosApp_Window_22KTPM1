@@ -26,7 +26,7 @@ namespace App.View.ViewModel
         {
             displayCustomers.Clear();
 
-            var foundCustomer = customers.FirstOrDefault(c => c.phone_num == phone);
+            var foundCustomer = customers.FirstOrDefault(c => c.Phone_num == phone);
             if (foundCustomer != null)
             {
                 displayCustomers.Add(foundCustomer);
@@ -44,13 +44,13 @@ namespace App.View.ViewModel
 
         public double ApplyCusPhone(string phone)
         {
-            var filter = new Dictionary<string, object> { { "phone_num", phone } };
+            var filter = new Dictionary<string, object> { { "Phone_num", phone } };
             var cus = _dao.Customers.GetByQuery(filter);
 
             if (cus == null || !cus.Any())
                 return 0;
 
-            return cus[0].rank switch
+            return cus[0].Rank switch
             {
                 "New User" => 0.1,
                 "Silver" => 0.2,
@@ -63,7 +63,7 @@ namespace App.View.ViewModel
         {
             //System.Diagnostics.Debug.WriteLine(("Call store new cus" + phone));
 
-            var filter = new Dictionary<string, object> { { "phone_num", phone } };
+            var filter = new Dictionary<string, object> { { "Phone_num", phone } };
             var cus = _dao.Customers.GetByQuery(filter);
 
             if (cus == null || !cus.Any())
@@ -80,10 +80,10 @@ namespace App.View.ViewModel
             else
             {
                 var foundCustomer = cus[0];
-                int newAmount = foundCustomer.amountOrder + 1;
-                decimal newTotalPaid = foundCustomer.totalPaid + (decimal)totalAmount;
+                int newAmount = foundCustomer.AmountOrder + 1;
+                decimal newTotalPaid = foundCustomer.TotalPaid + (decimal)totalAmount;
 
-                string newRank = foundCustomer.rank;
+                string newRank = foundCustomer.Rank;
                 if (newAmount >= 10)
                     newRank = "Gold";
                 else if (newAmount >= 5)
@@ -91,17 +91,17 @@ namespace App.View.ViewModel
 
                 var updateValues = new Dictionary<string, object>
                 {
-                    { "phone", phone },
-                    { "amountOrder", newAmount },
-                    { "totalPaid", newTotalPaid },
-                    { "rank", newRank }
+                    { "Phone_num", phone },
+                    { "AmountOrder", newAmount },
+                    { "TotalPaid", newTotalPaid },
+                    { "Rank", newRank }
                 };
                 if (name != "")
                 {
-                    if (foundCustomer.name == "Unknown")
-                        updateValues.Add("name", name);
+                    if (foundCustomer.Name == "Unknown")
+                        updateValues.Add("Name", name);
                 }
-                _dao.Customers.UpdateByQuery(updateValues, "phone_num = @phone", new Dictionary<string, object> { { "phone", phone } });
+                _dao.Customers.UpdateByQuery(updateValues, "Phone_num = @phone", new Dictionary<string, object> { { "phone", phone } });
 
                 customers.Remove(foundCustomer);
                 customers.Add(new Customer(name, phone, newAmount, newTotalPaid, newRank));

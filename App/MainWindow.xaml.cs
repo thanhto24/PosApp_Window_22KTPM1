@@ -32,7 +32,7 @@ namespace App
         {
             this.InitializeComponent();
 
-            InitializeDatabase();
+            //InitializeDatabase();
 
             // Điều hướng đến Login.xaml khi ứng dụng khởi động
             MainFrame.Navigate(typeof(Dashboard));

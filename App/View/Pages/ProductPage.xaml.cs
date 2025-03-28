@@ -218,7 +218,6 @@ namespace App.View.Pages
 
             var sortQuery = sort;
 
-            ProductModelPage.NewFilter(filter, sortQuery);
         }
         private async void SearchTextBox_KeyUp(object sender, Microsoft.UI.Xaml.Input.KeyRoutedEventArgs e)
         {

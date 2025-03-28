@@ -209,9 +209,9 @@ namespace App.Service
             }
             public List<Customer> GetByQuery(Dictionary<string, object> filter, Dictionary<string, object>? or = null, Dictionary<string, int>? sort = null)
             {
-                if (filter.TryGetValue("phone_num", out object? obj) && obj is string phone_num)
+                if (filter.TryGetValue("Phone_num", out object? obj) && obj is string Phone_num)
                 {
-                    return customers.Where(x => x.phone_num == phone_num).ToList();
+                    return customers.Where(x => x.Phone_num == Phone_num).ToList();
                 }
                 return new List<Customer>();
             }
@@ -224,7 +224,7 @@ namespace App.Service
             {
                 // Tìm khách hàng dựa vào `phone`
                 string phone = whereParams["phone"].ToString();
-                var customer = customers.FirstOrDefault(c => c.phone_num == phone);
+                var customer = customers.FirstOrDefault(c => c.Phone_num == phone);
 
                 if (customer == null) return;
 
