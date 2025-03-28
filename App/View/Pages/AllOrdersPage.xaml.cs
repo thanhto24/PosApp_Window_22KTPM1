@@ -114,25 +114,24 @@ namespace App.View.Pages
                 NextOrderBtn.IsEnabled = true;
         }
 
-        //private async void ShowOrderDetails_Click(object sender, RoutedEventArgs e)
-        //{
-        //    if (sender is Button button && button.DataContext is Order_ order)
-        //    {
-        //        string orderDetails = string.Join("\n", order.orderedProducts.Select(p =>
-        //            $"{p.Name}: {p.Quantity} x {p.Price:N0}đ"));
+        private async void ShowOrderDetails_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && button.DataContext is Order_ order)
+            {
+                string orderDetails = string.Join("\n", order.OrderedProducts.Select(p =>
+                $"{p.Name}: {p.Quantity} x {p.Price:N0}đ"));
 
-        //        ContentDialog detailsDialog = new ContentDialog
-        //        {
-        //            Title = "Chi tiết đơn",
-        //            Content = new TextBlock { Text = orderDetails, TextWrapping = TextWrapping.Wrap },
-        //            CloseButtonText = "Đóng",
-        //            XamlRoot = this.Content.XamlRoot
-        //        };
 
-        //        await detailsDialog.ShowAsync();
-        //    }
-        //}
+                ContentDialog detailsDialog = new ContentDialog
+                {
+                    Title = "Chi tiết đơn",
+                    Content = new TextBlock { Text = orderDetails, TextWrapping = TextWrapping.Wrap },
+                    CloseButtonText = "Đóng",
+                    XamlRoot = this.Content.XamlRoot
+                };
 
+                await detailsDialog.ShowAsync();
+            }
+        }
     }
-
 }

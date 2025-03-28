@@ -113,7 +113,7 @@
                             TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"/>
                             <TextBlock Foreground="Black" Text="{x:Bind SaleDateTime}" Grid.Column="3" Padding="5" 
                             TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"/>
-                            <Button Content="Chi tiết" 
+                            <Button Content="Chi tiết" Click="ShowOrderDetails_Click"
                             Grid.Column="4" Padding="5" HorizontalAlignment="Center" Background="Gray"/>
                             <TextBlock Foreground="Black" Text="{x:Bind TotalAmount}" Grid.Column="5" Padding="5" 
                             TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"/>

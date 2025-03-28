@@ -117,7 +117,9 @@ namespace App.View.Pages
         private async void Checkout_Click(object sender, RoutedEventArgs e)
         {
             ApplyDiscount();
-            CartViewModel.CreateNewOrder(CartViewModel.totalDiscount);
+            string customerName = string.IsNullOrWhiteSpace(CustomerName.Text) ? "Khách vãng lai" : CustomerName.Text;
+            CartViewModel.CreateNewOrder(CartViewModel.totalDiscount, customerName);
+
 
             string phone = CustomerCodeTextBox.Text.Trim();
             string name = CustomerName.Text.Trim();
@@ -165,55 +167,3 @@ namespace App.View.Pages
 
     }
 }
-
-
-//private async void Checkout_Click(object sender, RoutedEventArgs e)
-//{
-//    ApplyDiscount();
-//    var newOrder = CreateNewOrder();
-
-//    if (mockDao.Orders is MockDao.MockOrderRepository orderRepo)
-//    {
-//        orderRepo.Insert(newOrder);
-//        List<Order_> updatedOrders = orderRepo.GetAll();
-
-
-//    }
-
-//    ContentDialog checkoutDialog = new ContentDialog
-//    {
-//        Title = "Thông báo",
-//        Content = $"Tổng thanh toán: {FinalAmountTextBlock.Text}",
-//        CloseButtonText = "OK",
-//        XamlRoot = this.Content.XamlRoot
-//    };
-
-//    await checkoutDialog.ShowAsync();
-
-//    ClearCart_Click(null, null);
-//    Frame.Navigate(typeof(AllOrdersPage));
-//}
-
-
-
-
-//                //Debug.WriteLine("===== Danh sách đơn hàng sau khi thêm mới =====");
-//                //foreach (var order in updatedOrders)
-//                //{
-//                //    Debug.WriteLine($"ID: {order.Id}, Invoice: {order.InvoiceCode}, Khách: {order.Customer}, Tổng tiền: {order.TotalAmount}");
-//                //    Debug.WriteLine("Sản phẩm đã đặt:");
-
-//                //    foreach (var product in order.OrderedProducts)
-//                //    {
-//                //        Debug.WriteLine($"- Mã sản phẩm: {product.ProductCode}");
-//                //        Debug.WriteLine($"  Tên: {product.Name}");
-//                //        Debug.WriteLine($"  Số lượng: {product.Quantity}");
-//                //        Debug.WriteLine($"  Đơn giá: {product.Price:N0}đ");
-//                //        Debug.WriteLine($"  Thành tiền: {product.TotalPrice:N0}đ");
-//                //        Debug.WriteLine($"  Đường dẫn ảnh: {product.ImagePath}");
-//                //        Debug.WriteLine($"  Nhóm: {product.TypeGroup}");
-//                //        Debug.WriteLine($"  VAT: {product.VAT}");
-//                //        Debug.WriteLine($"  Giá vốn: {product.CostPrice}");
-//                //        Debug.WriteLine($"  Mã vạch: {product.BarCode}");
-//                //    }
-//                //}

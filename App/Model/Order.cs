@@ -11,7 +11,7 @@ namespace App.Model
         public string InvoiceCode { get; set; }
         public string Customer { get; set; }
         public string SaleDateTime { get; set; }
-        public List<Product> orderedProducts { get; set; }
+        public List<Product> OrderedProducts { get; set; }
         public decimal TotalAmount { get; set; }
         public decimal TotalDiscount { get; set; }
         public decimal TotalPayment { get; set; }
@@ -27,7 +27,7 @@ namespace App.Model
             InvoiceCode = invoiceCode;
             Customer = customer;
             SaleDateTime = saleDateTime;
-            orderedProducts = orderedProducts_;
+            OrderedProducts = orderedProducts;
             TotalAmount = totalAmount;
             TotalDiscount = totalDiscount;
             TotalPayment = totalPayment;
