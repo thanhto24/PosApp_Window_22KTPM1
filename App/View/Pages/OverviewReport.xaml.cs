@@ -88,11 +88,6 @@ namespace App.View.Pages
             CbCategory.IsDropDownOpen = true; // Open ComboBox dropdown
         }
 
-        private void TxtCategoryWare_PointerPressed(object sender, PointerRoutedEventArgs e)
-        {
-            CbCategoryWare.IsDropDownOpen = true; // Open ComboBox dropdown
-        }
-
         private void SearchButton_Click(object sender, RoutedEventArgs e)
         {
 

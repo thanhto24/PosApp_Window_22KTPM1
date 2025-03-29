@@ -55,14 +55,7 @@
                     <!-- Bộ chọn ngày -->
                     <StackPanel>
                         <TextBlock Text="Thời gian" FontSize="12" Foreground="Gray" Margin="0, 0, 0, 10"/>
-                        <Button x:Name="DatePickerButton"
-                HorizontalAlignment="Left"
-                BorderBrush="Gray"
-                BorderThickness="1"
-                Padding="10"
-                Width="280"
-                Background="White"
-                Click="DatePickerButton_Click">
+                        <Button x:Name="DatePickerButton" HorizontalAlignment="Left" BorderBrush="Gray" BorderThickness="1" Padding="10" Width="280" Background="White" Click="DatePickerButton_Click">
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Spacing="10">
                                 <TextBlock x:Name="SelectedDateText" Text="16/03/2025 - 16/03/2025" FontSize="14" Foreground="Black"/>
                                 <FontIcon Glyph="&#xE787;" FontSize="16" Foreground="Black"/>

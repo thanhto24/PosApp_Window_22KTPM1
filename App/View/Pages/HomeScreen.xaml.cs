@@ -22,6 +22,7 @@ namespace App.View.Pages
 
         public VoucherViewModel VoucherViewModel { get; set; }
         public CustomerViewModel CustomerViewModel { get; set; }
+
         private double finalAmount = 0;
         public HomeScreen()
         {
@@ -138,30 +139,5 @@ namespace App.View.Pages
 
             await checkoutDialog.ShowAsync();
         }
-
-        private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            //Debug.WriteLine($"New Height: {e.NewSize.Height}");
-
-            if (e.NewSize.Height < 450)
-            {
-                OrderScrollViewer.MaxHeight = 30;
-                TongTien.Margin = new Thickness(0, 5, 0, 0);
-                TienGiam.Margin = new Thickness(0, 5, 0, 0);
-                TienTra.Margin = new Thickness(0, 5, 0, 0);
-
-            }
-            else
-            {
-                OrderScrollViewer.MaxHeight = 180;
-                TongTien.Margin = new Thickness(0, 25, 0, 0);
-                TienGiam.Margin = new Thickness(0, 25, 0, 0);
-                TienTra.Margin = new Thickness(0, 25, 0, 0);
-            }
-
-            //Debug.WriteLine($"OrderScrollViewer MaxHeight: {OrderScrollViewer.MaxHeight}");
-        }
-
-
     }
 }
