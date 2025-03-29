@@ -19,7 +19,6 @@ namespace App.View.Pages
         public CategoryViewModel CategoryViewModel { get; set; }
         public ProductViewModel ProductViewModel { get; set; }
         public CartViewModel CartViewModel { get; set; }
-        public OrderViewModel OrderViewModel { get; set; }
 
 
         public HomeScreen()
@@ -28,7 +27,6 @@ namespace App.View.Pages
             CategoryViewModel = new CategoryViewModel();
             ProductViewModel = new ProductViewModel();
             CartViewModel = new CartViewModel();
-            OrderViewModel = new OrderViewModel();
 
 
             ApplyDiscount();
