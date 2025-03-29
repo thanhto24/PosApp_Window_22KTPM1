@@ -112,9 +112,7 @@ const parseString = (WhereClause, WhereParams) => {
   // Thay thế tất cả @param bằng giá trị từ WhereParams
   let replacedClause = WhereClause.replace(/@\w+/g, (match) => {
     const paramName = match.substring(1);
-    return WhereParams?.hasOwnProperty(paramName)
-      ? WhereParams[paramName]
-      : match;
+    return WhereParams?.hasOwnProperty(paramName) ? WhereParams[paramName] : match;
   });
 
   console.log("Replaced WhereClause:", replacedClause);
@@ -124,7 +122,9 @@ const parseString = (WhereClause, WhereParams) => {
 
   for (let part of parts) {
     let [key, value] = part.split("=").map((str) => str.trim());
-    conditions[key] = isNaN(value) ? value : Number(value);
+
+    // Nếu giá trị bắt đầu bằng '0', giữ nguyên dưới dạng chuỗi
+    conditions[key] = /^0\d+$/.test(value) ? value : Number(value);
   }
 
   return {

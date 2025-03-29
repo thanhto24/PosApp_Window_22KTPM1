@@ -28,16 +28,20 @@ namespace App.View.ViewModel
             _dao = Services.GetKeyedSingleton<IDao>();
             List<Product> products = _dao.Products.GetAll();
             Products = new FullObservableCollection<Product>(products);
+            //_window = new Microsoft.UI.Xaml.Window();
         }
 
         public void NewFilter(Dictionary<string, object> filter, Dictionary<string, int>? sort = null)
         {
-            List<Product> filteredProduct = _dao.Products.GetByQuery(filter, null, sort);
-            Products.Clear();
-            foreach (Product product in filteredProduct)
-            {
-                Products.Add(product);
-            }
+            //List<Product> filteredProduct = _dao.Products.GetByQuery(filter, null, sort);
+            //if (filteredProduct != null)
+            //{
+            //    Products.Clear();
+            //    foreach (Product product in filteredProduct)
+            //    {
+            //        Products.Add(product);
+            //    }
+            //}
         }
 
         // Create (Add) a new product

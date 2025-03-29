@@ -52,7 +52,6 @@
                                         <TextBlock Text="{x:Bind Price}" FontSize="16" Foreground="Gray" HorizontalAlignment="Center"/>
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0" Padding="5" Background="Black">
                                             <Button Content="-" Width="30" Click="RemoveButton_Click"/>
-                                            <TextBlock Text="{x:Bind Quantity}" FontSize="16" Margin="10, 4, 10, 0"/>
                                             <Button Content="+" Width="32" Click="AddButton_Click"/>
                                         </StackPanel>
                                     </StackPanel>

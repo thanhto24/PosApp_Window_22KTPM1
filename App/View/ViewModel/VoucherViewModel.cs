@@ -9,7 +9,7 @@ using App.Utils;
 
 namespace App.View.ViewModel
 {
-    public class VoucherViewModel 
+    public class VoucherViewModel
     {
         private IDao _dao;
 
@@ -34,7 +34,6 @@ namespace App.View.ViewModel
 
         public void CreateVoucher(string code, DateTimeOffset? startDate, DateTimeOffset? endDate, int quantity, decimal minOrder, decimal discountValue, string note)
         {
-            _dao = Services.GetKeyedSingleton<IDao>();
             var newVoucher = new Voucher(code, startDate, endDate, quantity, minOrder, discountValue, note);
             _dao.Vouchers.Insert(newVoucher); // Chèn vào database
             Add(newVoucher); // Cập nhật UI
@@ -43,7 +42,6 @@ namespace App.View.ViewModel
 
         public void RemoveVoucher(string code)
         {
-            _dao = Services.GetKeyedSingleton<IDao>();
             _dao.Vouchers.RemoveByQuery("Code = @code", new Dictionary<string, object>
             {
                 { "code", code }
@@ -57,14 +55,13 @@ namespace App.View.ViewModel
 
         public void UpdateVoucher(Voucher oldVoucher, string code, DateTimeOffset? startDate, DateTimeOffset? endDate, int quantity, decimal minOrder, decimal discountValue, string note)
         {
-            
-            Voucher item = new Voucher(code, startDate, endDate, quantity, minOrder, discountValue, note);
 
-            _dao = Services.GetKeyedSingleton<IDao>();
+            Voucher item = new Voucher(code, startDate, endDate, quantity, minOrder, discountValue, note);
 
 
             if (oldVoucher == null)
             {
+                System.Diagnostics.Debug.WriteLine("Khong ton tai vc");
                 throw new Exception("Voucher không tồn tại.");
             }
 
@@ -107,7 +104,56 @@ namespace App.View.ViewModel
             // Cập nhật danh sách vouchers
             vouchers.Remove(oldVoucher);
             vouchers.Add(item);
+            System.Diagnostics.Debug.WriteLine("Update vc thanh cong");
+
         }
 
+        public double ApplyVoucher(string code)
+        {
+            var filter = new Dictionary<string, object>
+            {
+                {"Code", code },
+            };
+            var voucher = _dao.Vouchers.GetByQuery(filter);
+            if (voucher != null && voucher.Any())
+            {
+                return (double)voucher[0].DiscountValue / 100;
+            }
+            return 0;
+        }
+
+        public void des(string code)
+        {
+            var filter = new Dictionary<string, object>
+            {
+                {"Code", code },
+            };
+            var voucher = _dao.Vouchers.GetByQuery(filter);
+            if (voucher != null && voucher.Any())
+            {
+                Voucher old_vc = voucher[0];
+                int new_amount = old_vc.Quantity - 1;
+                Voucher new_vc = voucher[0];
+                new_vc.Quantity = new_amount;
+                if (new_amount > 0)
+                {
+                    var updateValues = new Dictionary<string, object>
+                    {
+                        { "Quantity", new_amount },
+                    };
+                    _dao.Vouchers.UpdateByQuery(updateValues,
+                                                "Code = @code",
+                                                new Dictionary<string, object> { { "code", code } });
+                    vouchers.Remove(old_vc);
+                    vouchers.Add(new_vc);
+                }
+                else
+                {
+                    _dao.Vouchers.RemoveByQuery("Code = @code",
+                                                new Dictionary<string, object> { { "code", code } });
+                    vouchers.Remove(old_vc);
+                }
+            }
+        }
     }
 }
