@@ -121,7 +121,7 @@ namespace App.View.Pages
             if (sender is Button button && button.DataContext is Order_ order)
             {
                 string orderDetails = string.Join("\n", order.OrderedProducts.Select(p =>
-                    $"{p.Name}: {p.Quantity} x {p.Price:N0}đ"));
+                    $"{p.name}: {p.quantity} x {p.price:N0}đ"));
 
                 ContentDialog detailsDialog = new ContentDialog
                 {

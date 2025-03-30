@@ -11,17 +11,17 @@ namespace App.Model
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public string ProductCode { get; set; }
-        public string Name { get; set; }
-        public int Quantity { get; set; }
-        public decimal Price { get; set; }
+        public string productCode { get; set; }
+        public string name { get; set; }
+        public int quantity { get; set; }
+        public decimal price { get; set; }
 
-        public OrderedProduct(string productCode, string name, int quantity, decimal price)
+        public OrderedProduct(string ProductCode, string Name, int Quantity, decimal Price)
         {
-            ProductCode = productCode;
-            Name = name;
-            Quantity = quantity;
-            Price = price;
+            productCode = ProductCode;
+            name = Name;
+            quantity = Quantity;
+            price = Price;
         }
 
         public OrderedProduct() { }
