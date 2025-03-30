@@ -8,6 +8,8 @@ using Microsoft.UI.Xaml.Input;
 using System;
 using App.Service;
 using System.Diagnostics;
+using Microsoft.UI.Xaml.Media;
+
 
 namespace App.View.Pages
 {
@@ -131,6 +133,71 @@ namespace App.View.Pages
                 };
 
                 await detailsDialog.ShowAsync();
+            }
+        }
+
+        private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            double width = e.NewSize.Width;
+            double fontSize;
+
+            if (width < 670)
+                fontSize = 8;
+            else if (width < 700)
+                fontSize = 10;
+            else if (width < 800)
+                fontSize = 11;
+            else if (width < 1000)
+                fontSize = 12;
+            else if (width < 1100)
+                fontSize = 14;
+            else
+                fontSize = 16;
+
+            Debug.WriteLine($"Current Width: {width}, Font Size: {fontSize}");
+
+            // Cập nhật font size của header và các phần tử trong danh sách
+            UpdateFontSize(GridRoot, fontSize);
+            UpdateListViewFontSize(fontSize);
+        }
+
+        private void UpdateListViewFontSize(double fontSize)
+        {
+            Debug.WriteLine("=== Danh sách đơn hàng trước khi cập nhật FontSize ===");
+    
+            foreach (var item in OrderListView.Items)
+            {
+                Debug.WriteLine($"Order: {item}");
+
+                if (OrderListView.ContainerFromItem(item) is ListViewItem listViewItem)
+                {
+                    UpdateFontSize(listViewItem, fontSize);
+                }
+                else
+                {
+                    Debug.WriteLine("Không tìm thấy ListViewItem cho đơn hàng này!");
+                }
+            }
+    
+            Debug.WriteLine("=== Hoàn thành cập nhật FontSize ===");
+        }
+
+
+
+        private void UpdateFontSize(DependencyObject parent, double fontSize)
+        {
+            int count = VisualTreeHelper.GetChildrenCount(parent);
+
+            for (int i = 0; i < count; i++)
+            {
+                var child = VisualTreeHelper.GetChild(parent, i);
+
+                if (child is TextBlock textBlock)
+                {
+                    textBlock.FontSize = fontSize;
+                }
+
+                UpdateFontSize(child, fontSize);
             }
         }
     }

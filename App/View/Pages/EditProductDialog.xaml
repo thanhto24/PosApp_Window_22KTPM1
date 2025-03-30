@@ -8,23 +8,25 @@
     PrimaryButtonClick="SaveEditProduct"
     SecondaryButtonClick="CancelEditProduct">
 
-    <StackPanel Padding="10" Spacing="10">
-        <TextBlock Text="Mã sản phẩm" FontWeight="Bold"/>
-        <ComboBox x:Name="CbProductCode" Width="250" SelectionChanged="ProductSelectionChanged">
-            <ComboBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding ProductCode}"/>
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
-        </ComboBox>
+    <ScrollViewer VerticalScrollMode="Auto" HorizontalScrollMode="Auto">
+        <StackPanel Padding="10" Spacing="10">
+            <TextBlock Text="Mã sản phẩm" FontWeight="Bold"/>
+            <ComboBox x:Name="CbProductCode" Width="250" SelectionChanged="ProductSelectionChanged">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding ProductCode}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
 
-        <TextBlock Text="Tên sản phẩm" FontWeight="Bold"/>
-        <TextBox x:Name="TxtProductName" Width="250"/>
+            <TextBlock Text="Tên sản phẩm" FontWeight="Bold"/>
+            <TextBox x:Name="TxtProductName" Width="250"/>
 
-        <TextBlock Text="Số lượng" FontWeight="Bold"/>
-        <TextBox x:Name="TxtQuantity" Width="250" InputScope="Number"/>
+            <TextBlock Text="Số lượng" FontWeight="Bold"/>
+            <TextBox x:Name="TxtQuantity" Width="250" InputScope="Number"/>
 
-        <TextBlock Text="Giá sản phẩm" FontWeight="Bold"/>
-        <TextBox x:Name="TxtPrice" Width="250" InputScope="Number"/>
-    </StackPanel>
+            <TextBlock Text="Giá sản phẩm" FontWeight="Bold"/>
+            <TextBox x:Name="TxtPrice" Width="250" InputScope="Number"/>
+        </StackPanel>
+    </ScrollViewer>
 </ContentDialog>

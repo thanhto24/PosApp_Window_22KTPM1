@@ -7,9 +7,10 @@
     xmlns:model="using:App.Model"
     mc:Ignorable="d"
     RequestedTheme="Light"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    SizeChanged="Page_SizeChanged">
 
-    <Grid Padding="20" Background="Wheat">
+    <Grid Padding="20" Background="Wheat" x:Name="GridRoot">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -24,7 +25,7 @@
                    Margin="10"/>
 
 
-            <!-- Danh sách đơn hàng -->
+        <!-- Danh sách đơn hàng -->
         <ListView x:Name="OrderListView" Grid.Row="1" BorderThickness="1" BorderBrush="Gray"
                   HorizontalAlignment="Stretch" Width="Auto"
                   ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemsSource="{x:Bind OrderViewModel.DisplayedOrders}">
