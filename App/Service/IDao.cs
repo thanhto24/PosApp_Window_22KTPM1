@@ -17,5 +17,6 @@ namespace App.Service
         public IRepository<Category_> Categories { get; set; }
         public IRepository<Customer> Customers { get; set; }
 
+        public IRepository<ReportData> Reports { get; set; }
     }
 }

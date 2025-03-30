@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace App.Model
 {
-    public class ReportData
+    public class ReportData : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler? PropertyChanged;
         public int TotalOrders { get; set; }
         public decimal TotalRevenue { get; set; }
         public decimal TotalProfit { get; set; }
@@ -18,6 +20,7 @@ namespace App.Model
             TotalRevenue = totalRevenue;
             TotalProfit = totalProfit;
         }
-    }
 
+        public ReportData() { }
+    }
 }

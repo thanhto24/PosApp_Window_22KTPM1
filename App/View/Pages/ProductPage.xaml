@@ -26,10 +26,11 @@
 
             <!-- Nút Hành Động -->
             <StackPanel Orientation="Horizontal" Grid.Row="1">
-                <Button Content="Thuộc tính" Margin="5" Background="DarkGray" Foreground="White" Padding="10,5" BorderThickness="0"/>
-                <Button Content="Tạo mã vạch" Margin="5" Background="DarkGray" Padding="10,5" BorderThickness="0"/>
-                <Button Content="Nhập xuất Excel" Margin="5" Background="DarkGray" Padding="10,5" BorderThickness="0"/>
-                <Button Content="+ Thêm Mới" Margin="5" Background="Orange" Foreground="White" Padding="10,5" BorderThickness="0" Click="AddNewProduct_Click"/>
+                <Button Content="Thuộc tính" Margin="5" Background="DarkGray" Foreground="Black" Padding="10,5" BorderThickness="0"/>
+                <Button Content="Tạo mã vạch" Margin="5" Background="DarkGray" Foreground="Black" Padding="10,5" BorderThickness="0"/>
+                <Button Content="Nhập xuất Excel" Margin="5" Background="DarkGray" Foreground="Black" Padding="10,5" BorderThickness="0"/>
+                <!-- Replace the "+ Thêm Mới" button with this -->
+                <Button Content="+ Thêm Mới" Margin="5" Background="Orange" Foreground="Black" Padding="10,5" BorderThickness="0" Click="AddNewProduct_Click"/>
             </StackPanel>
 
             <!-- Dropdowns và Thanh Tìm Kiếm -->
@@ -75,7 +76,7 @@
 
                 <Grid Width="200" Margin="5">
                     <TextBox x:Name="SearchTextBox" PlaceholderText="Tìm theo tên/mã/barcode" Padding="5" BorderBrush="Gray" 
-                    BorderThickness="1" KeyUp="SearchTextBox_KeyUp"/>
+     BorderThickness="1" KeyUp="SearchTextBox_KeyUp" Background="#8D6E63" Height="34" VerticalAlignment="Bottom"/>
                     <Button Content="🔍" Width="20" Height="20" HorizontalAlignment="Right" 
                     Margin="0,0,5,0" Background="Transparent" BorderThickness="0" 
                     Click="SearchButton_Click" Foreground="Black"/>
@@ -87,68 +88,91 @@
         <Grid Grid.Row="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
+                <!-- Header cố định -->
                 <RowDefinition Height="*"/>
+                <!-- Nội dung có thể cuộn -->
             </Grid.RowDefinitions>
 
-            <!-- Header cho ListView -->
-            <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="10,0,10,0" Background="#F0F0F0">
-                <TextBlock Text="#" Width="50" Margin="5" FontWeight="Bold" VerticalAlignment="Center" Foreground="DarkGray"/>
-                <TextBlock Text="Hình đại diện" Width="100" Margin="5" FontWeight="Bold" VerticalAlignment="Center" Foreground="DarkGray"/>
-                <TextBlock Text="Nhóm sản phẩm" Width="150" Margin="5" FontWeight="Bold" VerticalAlignment="Center" Foreground="DarkGray"/>
-                <TextBlock Text="Mã hàng hóa" Width="100" Margin="5" FontWeight="Bold" VerticalAlignment="Center" Foreground="DarkGray"/>
-                <TextBlock Text="Mã vạch" Width="100" Margin="5" FontWeight="Bold" VerticalAlignment="Center" Foreground="DarkGray"/>
-                <TextBlock Text="Tên hàng hóa" Width="150" Margin="5" FontWeight="Bold" VerticalAlignment="Center" Foreground="DarkGray"/>
-                <TextBlock Text="Giá bán" Width="100" Margin="5" FontWeight="Bold" VerticalAlignment="Center" Foreground="DarkGray"/>
-                <TextBlock Text="VAT" Width="100" Margin="5" FontWeight="Bold" VerticalAlignment="Center" Foreground="DarkGray"/>
-                <TextBlock Text="Trạng thái" Width="100" Margin="5" FontWeight="Bold" VerticalAlignment="Center" Foreground="DarkGray"/>
-                <TextBlock Text="Thao tác" Width="200" Margin="5" FontWeight="Bold" VerticalAlignment="Center" Foreground="DarkGray"/>
-            </StackPanel>
+            <!-- Header -->
+            <Grid Background="Gray" Padding="5" Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <!-- # -->
+                    <ColumnDefinition Width="2*"/>
+                    <!-- Hình đại diện -->
+                    <ColumnDefinition Width="2*"/>
+                    <!-- Nhóm sản phẩm -->
+                    <ColumnDefinition Width="2*"/>
+                    <!-- Mã hàng hóa -->
+                    <ColumnDefinition Width="2*"/>
+                    <!-- Mã vạch -->
+                    <ColumnDefinition Width="3*"/>
+                    <!-- Tên hàng hóa -->
+                    <ColumnDefinition Width="2*"/>
+                    <!-- Giá bán -->
+                    <ColumnDefinition Width="2*"/>
+                    <!-- VAT -->
+                    <ColumnDefinition Width="2*"/>
+                    <!-- Trạng thái -->
+                    <ColumnDefinition Width="3*"/>
+                    <!-- Thao tác -->
+                </Grid.ColumnDefinitions>
 
-            <!-- ListView -->
-            <ListView Grid.Row="1" Margin="10" ItemsSource="{x:Bind ProductModelPage.Products}">
-                <ListView.ItemTemplate>
-                    <DataTemplate x:DataType="model:Product">
-                        <StackPanel Orientation="Horizontal">
-                            <!-- # (Index) -->
-                            <TextBlock Text="" Width="50" Margin="5" VerticalAlignment="Center"/>
+                <TextBlock Text="#" Grid.Column="0" FontWeight="Bold" Foreground="White" Margin="5"/>
+                <TextBlock Text="Hình đại diện" Grid.Column="1" FontWeight="Bold" Foreground="White" Margin="5"/>
+                <TextBlock Text="Nhóm sản phẩm" Grid.Column="2" FontWeight="Bold" Foreground="White" Margin="5"/>
+                <TextBlock Text="Mã hàng hóa" Grid.Column="3" FontWeight="Bold" Foreground="White" Margin="5"/>
+                <TextBlock Text="Mã vạch" Grid.Column="4" FontWeight="Bold" Foreground="White" Margin="5"/>
+                <TextBlock Text="Tên hàng hóa" Grid.Column="5" FontWeight="Bold" Foreground="White" Margin="5"/>
+                <TextBlock Text="Giá bán" Grid.Column="6" FontWeight="Bold" Foreground="White" Margin="5"/>
+                <TextBlock Text="VAT" Grid.Column="7" FontWeight="Bold" Foreground="White" Margin="5"/>
+                <TextBlock Text="Trạng thái" Grid.Column="8" FontWeight="Bold" Foreground="White" Margin="5"/>
+                <TextBlock Text="Thao tác" Grid.Column="9" FontWeight="Bold" Foreground="White" Margin="5"/>
+            </Grid>
 
-                            <!-- Hình ảnh -->
-                            <Image Source="{x:Bind ImagePath}" Width="100" Height="50" Margin="5"/>
+            <!-- ListView Cuộn -->
+            <ScrollViewer Grid.Row="1" VerticalScrollMode="Auto" VerticalScrollBarVisibility="Auto">
+                <ListView ItemsSource="{x:Bind ProductModelPage.Products}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="model:Product">
+                            <Grid Padding="5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="2.5*"/>
+                                    <ColumnDefinition Width="1.5*"/>
+                                    <ColumnDefinition Width="1.9*"/>
+                                    <ColumnDefinition Width="2.5*"/>
+                                    <ColumnDefinition Width="2.3*"/>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="2.1*"/>
+                                    <ColumnDefinition Width="2.4*"/>
+                                </Grid.ColumnDefinitions>
 
-                            <!-- Nhóm sản phẩm -->
-                            <TextBlock Text="{x:Bind TypeGroup}" Width="150" Margin="5" Foreground="Black" VerticalAlignment="Center"/>
+                                <Image Source="{x:Bind ImagePath}" Width="100" Stretch="UniformToFill" Grid.Column="1" Margin="5" HorizontalAlignment="Left"/>
+                                <TextBlock Text="{x:Bind TypeGroup}" Grid.Column="2" Margin="5" Foreground="Black" VerticalAlignment="Center"/>
+                                <TextBlock Text="{x:Bind BarCode}" Grid.Column="3" Margin="5" Foreground="Black" VerticalAlignment="Center"/>
+                                <TextBlock Text="{x:Bind BarCode}" Grid.Column="4" Margin="5" Foreground="Black" VerticalAlignment="Center"/>
+                                <TextBlock Text="{x:Bind Name}" Grid.Column="5" Margin="5" Foreground="Black" VerticalAlignment="Center"/>
+                                <TextBlock Text="{x:Bind Price}" Grid.Column="6" Margin="5" Foreground="Black" VerticalAlignment="Center"/>
+                                <TextBlock Text="{x:Bind Vat}" Grid.Column="7" Margin="5" Foreground="Black" VerticalAlignment="Center"/>
+                                <CheckBox Grid.Column="8" VerticalAlignment="Center" HorizontalAlignment="Right"/>
 
-                            <!-- Mã hàng hóa -->
-                            <TextBlock Text="{x:Bind BarCode}" Width="100" Margin="5" Foreground="Black" VerticalAlignment="Center"/>
-
-                            <!-- Mã vạch -->
-                            <TextBlock Text="abcd" Width="100" Margin="5" Foreground="Black" VerticalAlignment="Center"/>
-
-                            <!-- Tên hàng hóa -->
-                            <TextBlock Text="{x:Bind Name}" Width="150" Margin="5" Foreground="Black" VerticalAlignment="Center"/>
-
-                            <!-- Giá bán -->
-                            <TextBlock Text="{x:Bind Price}" Width="100" Margin="5" Foreground="Black" VerticalAlignment="Center"/>
-
-                            <!-- VAT ban (%) -->
-                            <TextBlock Text="{x:Bind Vat}" Width="100" Margin="5" Foreground="Black" VerticalAlignment="Center"/>
-
-                            <!-- Trạng thái -->
-                            <CheckBox IsChecked="True" Width="100" Margin="5" VerticalAlignment="Center"/>
-
-                            <!-- Thao tác -->
-                            <StackPanel Orientation="Horizontal" Width="200" Margin="5">
-                                <Button Content="✎" Width="40" Height="40" Background="Transparent" BorderThickness="1" BorderBrush="Black" Margin="2" 
-                                Click="EditProduct_Click" Foreground="Black" CommandParameter="{x:Bind BarCode}" />
-                                <Button Content="X" Width="40" Height="40" Background="Transparent" BorderThickness="1" BorderBrush="Black" Margin="2" 
-                                Click="DeleteProduct_Click" Foreground="Black"/>
-                                <Button Content="+" Width="40" Height="40" Background="Transparent" BorderThickness="1" BorderBrush="Black" Margin="2" 
-                                Foreground="Black" FontSize="20"/>
-                            </StackPanel>
-                        </StackPanel>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                                <StackPanel Orientation="Horizontal" Grid.Column="9" HorizontalAlignment="Left">
+                                    <Button Content="✎" Width="40" Height="40" Background="Transparent" BorderThickness="1"
+                                    BorderBrush="Black" Margin="2" Click="EditProduct_Click" Foreground="Black"
+                                    CommandParameter="{x:Bind BarCode}"/>
+                                    <Button Content="X" Width="40" Height="40" Background="Transparent" BorderThickness="1"
+                                    BorderBrush="Black" Margin="2" Click="DeleteProduct_Click" Foreground="Black"/>
+                                    <Button Content="+" Width="40" Height="40" Background="Transparent" BorderThickness="1"
+                                    BorderBrush="Black" Margin="2" Foreground="Black" FontSize="20"/>
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </ScrollViewer>
         </Grid>
+
     </Grid>
 </Page>

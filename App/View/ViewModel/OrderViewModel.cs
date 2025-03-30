@@ -62,5 +62,6 @@ namespace App.View.ViewModel
             orders.Add(item);
             UpdateDisplayedOrders(); // Cập nhật danh sách hiển thị sau khi thêm
         }
+
     }
 }

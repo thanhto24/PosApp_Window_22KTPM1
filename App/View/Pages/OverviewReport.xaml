@@ -129,19 +129,6 @@
                             <ComboBoxItem Content="Anime Cafe"/>
                         </ComboBox>
                     </StackPanel>
-
-                    <!-- Bộ chọn số chỉ mục -->
-                    <StackPanel>
-                        <TextBlock Text="Số chỉ mục được hiển thị" FontSize="12" Foreground="Gray" Margin="5,0,0,10"/>
-                        <ComboBox x:Name="CbCategoryWare" Width="250" PlaceholderText="4" FontSize="14">
-                            <ComboBoxItem Content="4" IsSelected="True"/>
-                            <ComboBoxItem Content="5"/>
-                            <ComboBoxItem Content="6"/>
-                            <ComboBoxItem Content="7"/>
-                            <ComboBoxItem Content="8"/>
-                        </ComboBox>
-                    </StackPanel>
-                
                 </StackPanel>
             </StackPanel>
 
