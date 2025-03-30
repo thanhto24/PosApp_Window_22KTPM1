@@ -21,6 +21,7 @@ namespace App.Service
             if (_httpClient.BaseAddress == null)
             {
                 _httpClient.BaseAddress = new Uri(BaseUrl);
+                _httpClient.DefaultRequestHeaders.Accept.Clear(); // Clear first
                 _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             }
             //_httpClient.BaseAddress = new Uri(BaseUrl);
