@@ -20,8 +20,20 @@ namespace App.View.Pages
         public ProductPage()
         {
             this.InitializeComponent();
-            ProductModelPage = new ProductViewModel();
+
+            try
+            {
+                //// Get the Window instance and pass it to ViewModel
+                //var window = WindowHelper.GetWindowForElement(this);
+                ProductModelPage = new ProductViewModel();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error initializing ProductPage: {ex.Message}");
+                ProductModelPage = new ProductViewModel(); // Fallback without window
+            }
         }
+
 
         // Add New Product Button Click
         private async void AddNewProduct_Click(object sender, RoutedEventArgs e)
@@ -104,6 +116,8 @@ namespace App.View.Pages
                         if (productToEdit == null)
                         {
                             // Add new product
+                            Debug.WriteLine("CHECK PRODUCT BEFORE ADD: " + product.Name + " " + imageFile.ToString());
+                            if (imageFile == null) Debug.WriteLine("CHECK IMAGE FILE IS NULL: ", imageFile);
                             success = await ProductModelPage.AddProduct(product, imageFile);
                         }
                         else
@@ -138,13 +152,14 @@ namespace App.View.Pages
             await errorDialog.ShowAsync();
         }
 
-        private void SearchButton_Click(object sender, RoutedEventArgs e)
+        private async void SearchButton_Click(object sender, RoutedEventArgs e)
         {
-            ApplyFilters();
+            if (ProductModelPage != null)
+               ApplyFilters();
         }
 
         // Apply all filters
-        private void ApplyFilters()
+        private async void ApplyFilters()
         {
             return;
 
@@ -180,11 +195,16 @@ namespace App.View.Pages
 
             var filter = new Dictionary<string, object>();
 
-            // Add search text filter if not empty
-            if (!string.IsNullOrEmpty(searchText))
-            {
+            // Use the new filter method from ViewModel
+            //await ProductModelPage.FilterProducts(searchText, productType, productGroup, status, sortOrder);
+
+            //var filter = new Dictionary<string, object>
+            //{
+            //    {"Name", searchText + "%" }
+            //};
+
+            if (searchText != "")
                 filter.Add("Name", searchText + "%");
-            }
 
             // Add TypeGroup filter if not "Tất cả"
             if (productType != "Tất cả")
@@ -233,8 +253,13 @@ namespace App.View.Pages
                     break;
             }
 
-            // Apply the filters and sorting
-            ProductModelPage.NewFilter(filter, sort);
+            var sortQuery = sort;
+            if (ProductModelPage == null)
+            {
+                //ProductModelPage = new ProductViewModel();
+                Debug.WriteLine("ProductPage", "ProductModelPage is null");
+            }
+            await ProductModelPage.NewFilter(filter, sort);
         }
 
         private void SearchTextBox_KeyUp(object sender, Microsoft.UI.Xaml.Input.KeyRoutedEventArgs e)

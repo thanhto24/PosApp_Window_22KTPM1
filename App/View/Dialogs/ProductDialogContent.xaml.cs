@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -19,6 +19,7 @@ using Microsoft.UI.Xaml.Media.Imaging;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Windows.Storage;
+using System.Diagnostics;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -107,13 +108,14 @@ namespace App.View.Dialogs
             }
             catch (Exception ex)
             {
-                var dialog = new ContentDialog
-                {
-                    Title = "Error",
-                    Content = $"Failed to select image: {ex.Message}",
-                    CloseButtonText = "OK"
-                };
-                await dialog.ShowAsync();
+                Debug.WriteLine("Error selecting image: " + ex.Message);
+                //var dialog = new ContentDialog
+                //{
+                //    Title = "Error",
+                //    Content = $"Failed to select image: {ex.Message}",
+                //    CloseButtonText = "OK"
+                //};
+                //await dialog.ShowAsync();
             }
         }
 

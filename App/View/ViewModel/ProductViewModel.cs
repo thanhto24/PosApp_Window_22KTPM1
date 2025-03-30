@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.Pickers;
@@ -18,6 +19,8 @@ namespace App.View.ViewModel
     public class ProductViewModel
     {
         private IDao _dao;
+        private readonly string _imagesDirectoryPath;
+        private readonly string _imagesRelativePath;
 
         public FullObservableCollection<Product> Products { get; set; }
 
@@ -28,20 +31,35 @@ namespace App.View.ViewModel
             _dao = Services.GetKeyedSingleton<IDao>();
             List<Product> products = _dao.Products.GetAll();
             Products = new FullObservableCollection<Product>(products);
-            //_window = new Microsoft.UI.Xaml.Window();
+            _window = new Microsoft.UI.Xaml.Window();
+
+            // Sử dụng AppContext.BaseDirectory để có được đường dẫn cơ sở của ứng dụng
+            string baseDirectory = AppContext.BaseDirectory;
+
+            // Đường dẫn tuyệt đối đến thư mục Images trong project
+            _imagesDirectoryPath = Path.Combine(baseDirectory, "Assets", "ProductImages");
+
+            // Đường dẫn tương đối để lưu vào database
+            _imagesRelativePath = Path.Combine("Assets", "ProductImages");
+
+            // Đảm bảo thư mục tồn tại
+            if (!Directory.Exists(_imagesDirectoryPath))
+            {
+                Directory.CreateDirectory(_imagesDirectoryPath);
+            }
         }
 
-        public void NewFilter(Dictionary<string, object> filter, Dictionary<string, int>? sort = null)
+        public async Task NewFilter(Dictionary<string, object> filter, Dictionary<string, int>? sort = null)
         {
-            //List<Product> filteredProduct = _dao.Products.GetByQuery(filter, null, sort);
-            //if (filteredProduct != null)
-            //{
-            //    Products.Clear();
-            //    foreach (Product product in filteredProduct)
-            //    {
-            //        Products.Add(product);
-            //    }
-            //}
+            List<Product> filteredProduct = _dao.Products.GetByQuery(filter, null, sort);
+            if (filteredProduct != null)
+            {
+                Products.Clear();
+                foreach (Product product in filteredProduct)
+                {
+                    Products.Add(product);
+                }
+            }
         }
 
         // Create (Add) a new product
@@ -53,7 +71,7 @@ namespace App.View.ViewModel
                 if (imageFile != null)
                 {
                     string imagePath = await SaveProductImage(imageFile, product.BarCode);
-                    product.ImagePath = imagePath;
+                    product.ImagePath = "ms-appx:///" + imagePath;
                 }
 
                 Debug.WriteLine("CHECK PRODUCT BEFRORE CALL API: ", product.ToString());
@@ -170,6 +188,7 @@ namespace App.View.ViewModel
                 return false;
             }
         }
+
         // Helper method to pick an image file
         public async Task<StorageFile> PickProductImage()
         {
@@ -191,23 +210,27 @@ namespace App.View.ViewModel
             return await picker.PickSingleFileAsync();
         }
 
-        // Save product image to app's local storage
+        // Save product image to project folder and return a relative path
         private async Task<string> SaveProductImage(StorageFile imageFile, string barCode)
         {
             try
             {
-                // Create a folder for product images if it doesn't exist
-                StorageFolder localFolder = ApplicationData.Current.LocalFolder;
-                StorageFolder imagesFolder = await localFolder.CreateFolderAsync("ProductImages", CreationCollisionOption.OpenIfExists);
-
                 // Generate a filename based on barcode and timestamp to ensure uniqueness
                 string fileName = $"{barCode}_{DateTime.Now.Ticks}{Path.GetExtension(imageFile.Name)}";
+                string destinationPath = Path.Combine(_imagesDirectoryPath, fileName);
 
-                // Copy the image file to the app's local storage
-                StorageFile newFile = await imageFile.CopyAsync(imagesFolder, fileName, NameCollisionOption.GenerateUniqueName);
+                // Copy the file to the project's image folder
+                using (var stream = await imageFile.OpenStreamForReadAsync())
+                {
+                    using (var fileStream = new FileStream(destinationPath, FileMode.Create))
+                    {
+                        await stream.CopyToAsync(fileStream);
+                    }
+                }
 
-                // Return the path to use in ImagePath property
-                return newFile.Path;
+                // Return the relative path to use in ImagePath property
+                string relativePath = Path.Combine(_imagesRelativePath, fileName);
+                return relativePath;
             }
             catch (Exception ex)
             {
@@ -217,12 +240,17 @@ namespace App.View.ViewModel
         }
 
         // Delete a product image
-        private async Task DeleteProductImage(string imagePath)
+        private async Task DeleteProductImage(string relativePath)
         {
             try
             {
-                StorageFile file = await StorageFile.GetFileFromPathAsync(imagePath);
-                await file.DeleteAsync();
+                // Chuyển đổi đường dẫn tương đối thành đường dẫn tuyệt đối
+                string absolutePath = Path.Combine(AppContext.BaseDirectory, relativePath);
+
+                if (File.Exists(absolutePath))
+                {
+                    File.Delete(absolutePath);
+                }
             }
             catch (Exception ex)
             {
@@ -231,21 +259,48 @@ namespace App.View.ViewModel
             }
         }
 
-        // Helper method to load an image from a path and return a BitmapImage
-        public static async Task<BitmapImage> LoadImageFromPath(string imagePath)
+        // Helper method to load an image from a relative path and return a BitmapImage
+        public static async Task<BitmapImage> LoadImageFromPath(string relativePath)
         {
-            if (string.IsNullOrEmpty(imagePath))
+            if (string.IsNullOrEmpty(relativePath))
                 return null;
 
             try
             {
-                StorageFile file = await StorageFile.GetFileFromPathAsync(imagePath);
-                using (IRandomAccessStream stream = await file.OpenAsync(FileAccessMode.Read))
+                // Chuyển đổi đường dẫn tương đối thành đường dẫn tuyệt đối
+                string absolutePath = Path.Combine(AppContext.BaseDirectory, relativePath);
+
+                if (!File.Exists(absolutePath))
+                    return null;
+
+                BitmapImage bitmapImage = new BitmapImage();
+
+                using (FileStream stream = File.OpenRead(absolutePath))
                 {
-                    BitmapImage bitmapImage = new BitmapImage();
-                    await bitmapImage.SetSourceAsync(stream);
-                    return bitmapImage;
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await stream.CopyToAsync(memoryStream);
+                        memoryStream.Position = 0;
+
+                        // Convert to RandomAccessStream required by BitmapImage
+                        using (var randomAccessStream = new InMemoryRandomAccessStream())
+                        {
+                            using (var outputStream = randomAccessStream.GetOutputStreamAt(0))
+                            {
+                                using (var dataWriter = new DataWriter(outputStream))
+                                {
+                                    dataWriter.WriteBytes(memoryStream.ToArray());
+                                    await dataWriter.StoreAsync();
+                                    await outputStream.FlushAsync();
+                                }
+                            }
+
+                            await bitmapImage.SetSourceAsync(randomAccessStream);
+                        }
+                    }
                 }
+
+                return bitmapImage;
             }
             catch (Exception ex)
             {
