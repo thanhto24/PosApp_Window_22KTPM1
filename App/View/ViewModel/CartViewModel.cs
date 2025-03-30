@@ -90,7 +90,7 @@ namespace App.View.ViewModel
             string invoiceId = $"INV{newId:D3}";
 
             string customerName = nameCustomer;
-            List<Product> orderedProductsList = CartItems.Select(ci => ci.Product).ToList();
+            List<OrderedProduct> orderedProductsList = CartItems.Select(ci => new OrderedProduct(ci.Product.ProductCode, ci.Product.Name, ci.Quantity, (decimal)ci.Product.Price)).ToList();
             decimal totalAmount = (decimal)getTotalAmount();
             decimal discount = (decimal)totalDiscount;
             decimal finalAmount = totalAmount - discount;

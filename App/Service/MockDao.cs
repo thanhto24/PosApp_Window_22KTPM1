@@ -54,29 +54,43 @@ namespace App.Service
         {
             private static List<Order_> orders = new List<Order_>()
             {
-                    new Order_(1, "INV001", "Nguyễn Văn A", DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd HH:mm:ss"),
-                        new List<Product> { new Product("CF001", "Espresso", 1, 32000, 0, "", "Cà phê", 0.1f, 25000, ""),
-                                            new Product("ST001", "Sinh tố bơ", 1, 45000, 0, "", "Sinh tố", 0.05f, 38000, "") },
-                        500000, 50000, 450000, 300000, "Tiền mặt",
-                        "Đã giao", "Đã thanh toán", "Giao hàng thành công")
-                    ,
+                new Order_(1, "INV001", "Nguyễn Văn A", DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd HH:mm:ss"),
+                    new List<OrderedProduct> {
+                        new OrderedProduct("CF001", "Espresso", 1, 32000),
+                        new OrderedProduct("ST001", "Sinh tố bơ", 1, 45000)
+                    },
+                    500000, 50000, 450000, 300000, "Tiền mặt",
+                    "Đã giao", "Đã thanh toán", "Giao hàng thành công"),
 
-                    new Order_(2, "INV002", "Trần Thị B", DateTime.Now.AddDays(-2).ToString("yyyy-MM-dd HH:mm:ss"),
-                              new List<Product> { new Product("TS002", "Hồng trà", 2, 40000, 0, "", "Trà sữa", 0.07f, 34000, "") }, 700000, 100000, 600000, 400000, "Chuyển khoản",
-                              "Chưa giao", "Chờ xác nhận", "Chưa xác nhận thanh toán"),
+                new Order_(2, "INV002", "Trần Thị B", DateTime.Now.AddDays(-2).ToString("yyyy-MM-dd HH:mm:ss"),
+                    new List<OrderedProduct> {
+                        new OrderedProduct("TS002", "Hồng trà", 2, 40000)
+                    },
+                    700000, 100000, 600000, 400000, "Chuyển khoản",
+                    "Chưa giao", "Chờ xác nhận", "Chưa xác nhận thanh toán"),
 
-                    new Order_(3, "INV003", "Phạm Văn C", DateTime.Now.AddDays(-3).ToString("yyyy-MM-dd HH:mm:ss"),
-                              new List<Product> { new Product("TS002", "Hồng trà", 2, 40000, 0, "", "Trà sữa", 0.07f, 34000, "") }, 900000, 200000, 700000, 500000, "Thẻ tín dụng",
-                              "Đã giao", "Đã thanh toán", "Khách yêu cầu xuất hóa đơn"),
+                new Order_(3, "INV003", "Phạm Văn C", DateTime.Now.AddDays(-3).ToString("yyyy-MM-dd HH:mm:ss"),
+                    new List<OrderedProduct> {
+                        new OrderedProduct("TS002", "Hồng trà", 2, 40000)
+                    },
+                    900000, 200000, 700000, 500000, "Thẻ tín dụng",
+                    "Đã giao", "Đã thanh toán", "Khách yêu cầu xuất hóa đơn"),
 
-                    new Order_(4, "INV004", "Lý Hữu D", DateTime.Now.AddDays(-4).ToString("yyyy-MM-dd HH:mm:ss"),
-                              new List<Product> { new Product("TS002", "Hồng trà", 2, 40000, 0, "", "Trà sữa", 0.07f, 34000, "") }, 1200000, 150000, 1050000, 700000, "Tiền mặt",
-                              "Đang xử lý", "Chờ thanh toán", "Chờ xác nhận từ quản lý"),
+                new Order_(4, "INV004", "Lý Hữu D", DateTime.Now.AddDays(-4).ToString("yyyy-MM-dd HH:mm:ss"),
+                    new List<OrderedProduct> {
+                        new OrderedProduct("TS002", "Hồng trà", 2, 40000)
+                    },
+                    1200000, 150000, 1050000, 700000, "Tiền mặt",
+                    "Đang xử lý", "Chờ thanh toán", "Chờ xác nhận từ quản lý"),
 
-                    new Order_(5, "INV005", "Đoàn Thanh E", DateTime.Now.AddDays(-5).ToString("yyyy-MM-dd HH:mm:ss"),
-                              new List<Product> { new Product("TS002", "Hồng trà", 2, 40000, 0, "", "Trà sữa", 0.07f, 34000, "") }, 2000000, 500000, 1500000, 1200000, "Ví điện tử",
-                              "Đã hủy", "Hoàn tiền", "Khách hàng hủy đơn do thay đổi nhu cầu")
+                new Order_(5, "INV005", "Đoàn Thanh E", DateTime.Now.AddDays(-5).ToString("yyyy-MM-dd HH:mm:ss"),
+                    new List<OrderedProduct> {
+                        new OrderedProduct("TS002", "Hồng trà", 2, 40000)
+                    },
+                    2000000, 500000, 1500000, 1200000, "Ví điện tử",
+                    "Đã hủy", "Hoàn tiền", "Khách hàng hủy đơn do thay đổi nhu cầu")
             };
+
 
             public List<Order_> GetAll() => orders;
             public List<Order_> GetByQuery(Dictionary<string, object> filter, Dictionary<string, object>? or = null, Dictionary<string, int>? sort = null) => orders;

@@ -34,8 +34,10 @@ namespace App.View.Pages
             VoucherViewModel = new VoucherViewModel();
             CustomerViewModel = new CustomerViewModel();
 
+            if(CategoryViewModel.categories.Any() && ProductViewModel.Products.Any())
+                ProductViewModel.LoadProductsByCategory(CategoryViewModel.categories[0].Name);
+
             ApplyDiscount();
-            ProductViewModel.LoadProductsByCategory(CategoryViewModel.categories[0].Name);
         }
 
         private void DrinkCategoryList_SelectionChanged(object sender, SelectionChangedEventArgs e)
