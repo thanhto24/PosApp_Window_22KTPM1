@@ -151,14 +151,14 @@ namespace App.View.Pages
             await errorDialog.ShowAsync();
         }
 
-        private void SearchButton_Click(object sender, RoutedEventArgs e)
+        private async void SearchButton_Click(object sender, RoutedEventArgs e)
         {
             if (ProductModelPage != null)
-                await ApplyFilters();
+               ApplyFilters();
         }
 
         // Apply all filters
-        private void ApplyFilters()
+        private async void ApplyFilters()
         {
             return;
 
@@ -201,7 +201,6 @@ namespace App.View.Pages
             //{
             //    {"Name", searchText + "%" }
             //};
-            var filter = new Dictionary<string, object>();
 
             if (searchText != "")
                 filter.Add("Name", searchText + "%");
