@@ -29,15 +29,12 @@
                 <Button Content="Thuộc tính" Margin="5" Background="DarkGray" Foreground="White" Padding="10,5" BorderThickness="0"/>
                 <Button Content="Tạo mã vạch" Margin="5" Background="DarkGray" Padding="10,5" BorderThickness="0"/>
                 <Button Content="Nhập xuất Excel" Margin="5" Background="DarkGray" Padding="10,5" BorderThickness="0"/>
-                <!-- Replace the "+ Thêm Mới" button with this -->
                 <Button Content="+ Thêm Mới" Margin="5" Background="Orange" Foreground="White" Padding="10,5" BorderThickness="0" Click="AddNewProduct_Click"/>
             </StackPanel>
 
-
-
             <!-- Dropdowns và Thanh Tìm Kiếm -->
             <StackPanel Orientation="Horizontal" Grid.Row="0">
-                <ComboBox x:Name="ProductTypeComboBox" Width="200" Margin="5" Foreground="Black" BorderThickness="1" BorderBrush="Black" SelectionChanged="Filter_SelectionChanged" SelectedIndex="0">
+                <ComboBox x:Name="ProductTypeComboBox" Width="200" Margin="5" Foreground="Black" BorderThickness="1" BorderBrush="Black" SelectedIndex="0">
                     <ComboBox.Header>
                         <TextBlock Text="Loại sản phẩm" Foreground="Gray" />
                     </ComboBox.Header>
@@ -45,7 +42,7 @@
                     <ComboBoxItem Content="Tất cả"/>
                     <ComboBoxItem Content="Combo"/>
                 </ComboBox>
-                <ComboBox x:Name="ProductGroupComboBox" Width="100" Margin="5" Foreground="Black" BorderThickness="1" BorderBrush="Black" SelectionChanged="Filter_SelectionChanged" SelectedIndex="0" >
+                <ComboBox x:Name="ProductGroupComboBox" Width="100" Margin="5" Foreground="Black" BorderThickness="1" BorderBrush="Black" SelectedIndex="0" >
                     <ComboBox.Header>
                         <TextBlock Text="Nhóm sản phẩm" Foreground="Gray" />
                     </ComboBox.Header>
@@ -54,7 +51,7 @@
                     <ComboBoxItem Content="Đồ uống"/>
                     <ComboBoxItem Content="Đồ ăn"/>
                 </ComboBox>
-                <ComboBox x:Name="StatusComboBox" Width="100" Margin="5" Foreground="Black" BorderThickness="1" BorderBrush="Black" SelectionChanged="Filter_SelectionChanged" SelectedIndex="0">
+                <ComboBox x:Name="StatusComboBox" Width="100" Margin="5" Foreground="Black" BorderThickness="1" BorderBrush="Black" SelectedIndex="0">
                     <ComboBox.Header>
                         <TextBlock Text="Trạng thái" Foreground="Gray" />
                     </ComboBox.Header>
@@ -63,7 +60,7 @@
                     <ComboBoxItem Content="Còn hàng"/>
                     <ComboBoxItem Content="Hết hàng"/>
                 </ComboBox>
-                <ComboBox x:Name="SortOrderComboBox" Width="150" Margin="5" Foreground="Black" BorderThickness="1" BorderBrush="Black" SelectionChanged="Filter_SelectionChanged" SelectedIndex="0">
+                <ComboBox x:Name="SortOrderComboBox" Width="150" Margin="5" Foreground="Black" BorderThickness="1" BorderBrush="Black" SelectedIndex="0">
                     <ComboBox.Header>
                         <TextBlock Text="Sắp xếp" Foreground="Gray" />
                     </ComboBox.Header>
@@ -78,10 +75,10 @@
 
                 <Grid Width="200" Margin="5">
                     <TextBox x:Name="SearchTextBox" PlaceholderText="Tìm theo tên/mã/barcode" Padding="5" BorderBrush="Gray" 
-     BorderThickness="1" KeyUp="SearchTextBox_KeyUp"/>
+                    BorderThickness="1" KeyUp="SearchTextBox_KeyUp"/>
                     <Button Content="🔍" Width="20" Height="20" HorizontalAlignment="Right" 
-    Margin="0,0,5,0" Background="Transparent" BorderThickness="0" 
-    Click="SearchButton_Click" Foreground="Black"/>
+                    Margin="0,0,5,0" Background="Transparent" BorderThickness="0" 
+                    Click="SearchButton_Click" Foreground="Black"/>
                 </Grid>
             </StackPanel>
         </Grid>
@@ -111,42 +108,42 @@
             <ListView Grid.Row="1" Margin="10" ItemsSource="{x:Bind ProductModelPage.Products}">
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="model:Product">
-
                         <StackPanel Orientation="Horizontal">
+                            <!-- # (Index) -->
+                            <TextBlock Text="" Width="50" Margin="5" VerticalAlignment="Center"/>
 
                             <!-- Hình ảnh -->
-                            <Image Source="{x:Bind ImagePath}" Width="100" Height="50" Margin="40, 5, 5, 5"/>
+                            <Image Source="{x:Bind ImagePath}" Width="100" Height="50" Margin="5"/>
 
                             <!-- Nhóm sản phẩm -->
-                            <TextBlock Text="{x:Bind TypeGroup}" Width="50" Margin="40, 5, 5, 5" Foreground="black" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock Text="{x:Bind TypeGroup}" Width="150" Margin="5" Foreground="Black" VerticalAlignment="Center"/>
 
                             <!-- Mã hàng hóa -->
-                            <TextBlock Text="{x:Bind BarCode}" Width="100" Margin="50, 5, 5, 5" Foreground="black" VerticalAlignment="center" HorizontalAlignment="Center"/>
+                            <TextBlock Text="{x:Bind BarCode}" Width="100" Margin="5" Foreground="Black" VerticalAlignment="Center"/>
 
-                            <!-- Thiết lập bar, bếp lập bar -->
-                            <TextBlock Text="{Binding Printer}" Width="100" Margin="10, 5, 5, 5" Foreground="black" VerticalAlignment="center" HorizontalAlignment="Center"/>
+                            <!-- Mã vạch -->
+                            <TextBlock Text="abcd" Width="100" Margin="5" Foreground="Black" VerticalAlignment="Center"/>
 
                             <!-- Tên hàng hóa -->
-                            <TextBlock Text="{x:Bind Name}" Width="100" Margin="40, 5, 5, 5" Foreground="black" VerticalAlignment="center" HorizontalAlignment="Center"/>
+                            <TextBlock Text="{x:Bind Name}" Width="150" Margin="5" Foreground="Black" VerticalAlignment="Center"/>
 
                             <!-- Giá bán -->
-                            <TextBlock Text="{x:Bind Price}" Width="70" Margin="40, 5, 5, 5" Foreground="black" VerticalAlignment="center" HorizontalAlignment="Center"/>
+                            <TextBlock Text="{x:Bind Price}" Width="100" Margin="5" Foreground="Black" VerticalAlignment="Center"/>
 
                             <!-- VAT ban (%) -->
-                            <TextBlock Text="{x:Bind Vat}" Width="100" Margin="40, 5, 5, 5" Foreground="black" VerticalAlignment="center" HorizontalAlignment="Center"/>
+                            <TextBlock Text="{x:Bind Vat}" Width="100" Margin="5" Foreground="Black" VerticalAlignment="Center"/>
 
                             <!-- Trạng thái -->
-                            <CheckBox Width="20" Height="20" Foreground="Green" Margin="5" VerticalAlignment="center" HorizontalAlignment="Center"/>
+                            <CheckBox IsChecked="True" Width="100" Margin="5" VerticalAlignment="Center"/>
 
                             <!-- Thao tác -->
-                            <StackPanel Orientation="Horizontal" Width="200">
+                            <StackPanel Orientation="Horizontal" Width="200" Margin="5">
                                 <Button Content="✎" Width="40" Height="40" Background="Transparent" BorderThickness="1" BorderBrush="Black" Margin="2" 
-        Click="EditProduct_Click" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" CommandParameter="{x:Bind BarCode}" />
+                                Click="EditProduct_Click" Foreground="Black" CommandParameter="{x:Bind BarCode}" />
                                 <Button Content="X" Width="40" Height="40" Background="Transparent" BorderThickness="1" BorderBrush="Black" Margin="2" 
-        Click="DeleteProduct_Click" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                Click="DeleteProduct_Click" Foreground="Black"/>
                                 <Button Content="+" Width="40" Height="40" Background="Transparent" BorderThickness="1" BorderBrush="Black" Margin="2" 
-        HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Black" FontSize="20"/>
-
+                                Foreground="Black" FontSize="20"/>
                             </StackPanel>
                         </StackPanel>
                     </DataTemplate>

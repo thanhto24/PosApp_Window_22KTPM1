@@ -9,69 +9,91 @@
     mc:Ignorable="d"
     Background="Wheat">
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+    <StackPanel>
+        <!-- Tiêu đề -->
+        <TextBlock Foreground="Black" Text="Customer List"
+                   FontSize="20"
+                   FontWeight="Bold"
+                   HorizontalAlignment="Center"
+                   Margin="10"/>
 
-        <!-- Phần đầu: Bộ lọc và Nút -->
-        <Grid Grid.Row="0" Margin="10">
-            <StackPanel Orientation="Horizontal">
-                <TextBox x:Name="SearchBox" Width="400" PlaceholderText="Nhập số điện thoại..."/>
-                <Button Content="Tìm kiếm" Click="OnSearchClick" Margin="5,0,0,0"/>
-                <Button Content="Làm mới" Click="OnResetClick" Margin="5,0,0,0"/>
-            </StackPanel>
-        </Grid>
+        <StackPanel Visibility="{x:Bind CustomerViewModel.displayCustomers.Count, Mode=OneWay, Converter={StaticResource IntegerToVisibilityMsgConverter}}">
+            <TextBlock Text="Không có khách hàng nào được tìm thấy."
+                   Foreground="Red"
+                   FontSize="16"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"/>
+            <Button  Content="Làm mới" Click="OnResetClick" Margin="5" HorizontalAlignment="Center"/>
+        </StackPanel>
 
-        <!-- Danh sách khách hàng -->
-        <Grid Grid.Row="1">
+        <Grid  Visibility="{x:Bind CustomerViewModel.displayCustomers.Count, Mode=OneWay, Converter={StaticResource IntegerToVisibilityListConverter}}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <!-- Header -->
-            <Grid Grid.Row="0" Margin="10,0,10,0" Background="#F0F0F0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
-
-                <TextBlock Text="Tên khách hàng" Grid.Column="0" FontWeight="Bold" HorizontalAlignment="Center"/>
-                <TextBlock Text="Số điện thoại" Grid.Column="1" FontWeight="Bold" HorizontalAlignment="Center"/>
-                <TextBlock Text="Hạng thành viên" Grid.Column="2" FontWeight="Bold" HorizontalAlignment="Center"/>
-                <TextBlock Text="Số đơn hàng" Grid.Column="3" FontWeight="Bold" HorizontalAlignment="Center"/>
-                <TextBlock Text="Tổng chi tích lũy" Grid.Column="4" FontWeight="Bold" HorizontalAlignment="Center"/>
+            <!-- Phần đầu: Bộ lọc và Nút -->
+            <Grid Grid.Row="0" Margin="10">
+                <StackPanel Orientation="Horizontal">
+                    <TextBox x:Name="SearchBox" Width="400" PlaceholderText="Nhập số điện thoại..."/>
+                    <Button Content="Tìm kiếm" Click="OnSearchClick" Margin="5,0,0,0"/>
+                    <Button Content="Làm mới" Click="OnResetClick" Margin="5,0,0,0"/>
+                </StackPanel>
             </Grid>
 
-            <!-- ListView -->
-            <ListView Grid.Row="1" Margin="10,0,10,0" ItemsSource="{x:Bind CustomerViewModel.displayCustomers}">
-                <ListView.ItemTemplate>
-                    <DataTemplate x:DataType="model:Customer">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="1*"/>
-                            </Grid.ColumnDefinitions>
 
-                            <TextBlock Text="{x:Bind Name}" Grid.Column="0" HorizontalAlignment="Center"/>
-                            <TextBlock Text="{x:Bind Phone_num}" Grid.Column="1" HorizontalAlignment="Center"/>
-                            <TextBlock Text="{x:Bind Rank}" Grid.Column="2" HorizontalAlignment="Center"/>
-                            <TextBlock Text="{x:Bind AmountOrder}" Grid.Column="3" HorizontalAlignment="Center"/>
-                            <TextBlock Text="{x:Bind TotalPaid}" Grid.Column="4" HorizontalAlignment="Center"/>
-                        </Grid>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+
+
+            <!-- Danh sách khách hàng -->
+            <Grid Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Header -->
+                <Grid Grid.Row="0" Margin="10,0,10,0" Background="#F0F0F0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="Tên khách hàng" Grid.Column="0" FontWeight="Bold" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Số điện thoại" Grid.Column="1" FontWeight="Bold" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Hạng thành viên" Grid.Column="2" FontWeight="Bold" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Số đơn hàng" Grid.Column="3" FontWeight="Bold" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Tổng chi tích lũy" Grid.Column="4" FontWeight="Bold" HorizontalAlignment="Center"/>
+                </Grid>
+
+                <!-- ListView -->
+                <ListView Grid.Row="1" Margin="10,0,10,0" ItemsSource="{x:Bind CustomerViewModel.displayCustomers}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="model:Customer">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Text="{x:Bind Name}" Grid.Column="0" HorizontalAlignment="Center"/>
+                                <TextBlock Text="{x:Bind Phone_num}" Grid.Column="1" HorizontalAlignment="Center"/>
+                                <TextBlock Text="{x:Bind Rank}" Grid.Column="2" HorizontalAlignment="Center"/>
+                                <TextBlock Text="{x:Bind AmountOrder}" Grid.Column="3" HorizontalAlignment="Center"/>
+                                <TextBlock Text="{x:Bind TotalPaid}" Grid.Column="4" HorizontalAlignment="Center"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
         </Grid>
-    </Grid>
+    </StackPanel>
+
 
 
 

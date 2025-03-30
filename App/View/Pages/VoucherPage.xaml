@@ -9,6 +9,7 @@
     xmlns:model="using:App.Model"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
+
     <Grid Padding="20" Background="Wheat">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -95,56 +96,66 @@
         <ContentDialog x:Name="VoucherDialog"
                    Title="Danh sách Voucher"
                    CloseButtonText="Đóng">
-            <ListView ItemsSource="{x:Bind VoucherViewModel.vouchers, Mode=TwoWay}">
-                <ListView.ItemTemplate>
-                    <DataTemplate x:DataType="model:Voucher">
-                        <Border BorderThickness="1" BorderBrush="Gray" Padding="10" CornerRadius="8" Margin="5">
-                            <Grid Width="400">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
+            <StackPanel>
+                <TextBlock Text="Không có voucher nào được tìm thấy."
+                   Foreground="Red"
+                   FontSize="16"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Visibility="{x:Bind VoucherViewModel.vouchers.Count, Mode=OneWay, Converter={StaticResource IntegerToVisibilityMsgConverter}}"/>
+
+                <ListView ItemsSource="{x:Bind VoucherViewModel.vouchers, Mode=TwoWay}"
+                          Visibility="{x:Bind VoucherViewModel.vouchers.Count, Mode=OneWay, Converter={StaticResource IntegerToVisibilityListConverter}}">
+
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="model:Voucher">
+                            <Border BorderThickness="1" BorderBrush="Gray" Padding="10" CornerRadius="8" Margin="5">
+                                <Grid Width="400">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
 
 
 
-                                <!-- Voucher Code -->
-                                <TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Bind Code}" 
-                               FontSize="18" FontWeight="Bold" Foreground="DarkOrange"/>
+                                    <!-- Voucher Code -->
+                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Bind Code}" 
+                   FontSize="18" FontWeight="Bold" Foreground="DarkOrange"/>
 
-                                <TextBlock Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right"
-                                    Text="{x:Bind EndDate}" FontSize="14" Foreground="Red"/>
+                                    <TextBlock Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right"
+                        Text="{x:Bind EndDate}" FontSize="14" Foreground="Red"/>
 
-                                <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Margin="0,5,0,0">
-                                    <TextBlock Text="Giảm: " FontWeight="Bold" Margin="0,0,5,0"/>
-                                    <TextBlock Text="{x:Bind DiscountValue}" Foreground="Green"/>
-                                </StackPanel>
+                                    <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Margin="0,5,0,0">
+                                        <TextBlock Text="Giảm: " FontWeight="Bold" Margin="0,0,5,0"/>
+                                        <TextBlock Text="{x:Bind DiscountValue}" Foreground="Green"/>
+                                    </StackPanel>
 
-                                <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Margin="0,5,0,0">
-                                    <TextBlock Text="Đơn hàng tối thiểu: " FontWeight="Bold" Margin="0,0,5,0"/>
-                                    <TextBlock Text="{x:Bind MinOrder}"/>
-                                </StackPanel>
+                                    <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Margin="0,5,0,0">
+                                        <TextBlock Text="Đơn hàng tối thiểu: " FontWeight="Bold" Margin="0,0,5,0"/>
+                                        <TextBlock Text="{x:Bind MinOrder}"/>
+                                    </StackPanel>
 
 
-                                <!-- Note -->
-                                <TextBlock Grid.Row="3" Grid.ColumnSpan="2" Text="{x:Bind Note}" 
-                               FontSize="12" Foreground="Gray" TextWrapping="WrapWholeWords"/>
+                                    <!-- Note -->
+                                    <TextBlock Grid.Row="3" Grid.ColumnSpan="2" Text="{x:Bind Note}" 
+                   FontSize="12" Foreground="Gray" TextWrapping="WrapWholeWords"/>
 
-                                <!-- Edit & Delete Buttons -->
-                                <StackPanel Grid.Row="4" Grid.Column="2" Orientation="Horizontal" Spacing="5" HorizontalAlignment="Right">
-                                    <Button Content="Edit" Tag="{x:Bind}" Background="LightGray" Foreground="Black"
-                                Width="100" Height="30" Click="EditVoucher_Click"/>
-                                    <Button Content="Delete" Tag="{x:Bind}" Background="Red" Foreground="White"
-                                Width="100" Height="30" Click="DeleteVoucher_Click"/>
-                                </StackPanel>
-                            </Grid>
-                        </Border>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-
+                                    <!-- Edit & Delete Buttons -->
+                                    <StackPanel Grid.Row="4" Grid.Column="2" Orientation="Horizontal" Spacing="5" HorizontalAlignment="Right">
+                                        <Button Content="Edit" Tag="{x:Bind}" Background="LightGray" Foreground="Black"
+                    Width="100" Height="30" Click="EditVoucher_Click"/>
+                                        <Button Content="Delete" Tag="{x:Bind}" Background="Red" Foreground="White"
+                    Width="100" Height="30" Click="DeleteVoucher_Click"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackPanel>
         </ContentDialog>
     </Grid>
 
