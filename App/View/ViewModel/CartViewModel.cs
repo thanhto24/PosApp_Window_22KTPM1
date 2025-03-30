@@ -115,5 +115,7 @@ namespace App.View.ViewModel
 
             _dao.Orders.Insert(order);
         }
+
+
     }
 }

@@ -31,6 +31,7 @@ namespace App.View.Pages
 
         private void OnResetClick(object sender, RoutedEventArgs e)
         {
+            SearchBox.Text = "";
             CustomerViewModel.resetClick();
         }
 

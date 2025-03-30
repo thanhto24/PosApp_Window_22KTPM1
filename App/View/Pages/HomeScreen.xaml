@@ -7,8 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     xmlns:model="using:App.Model"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-    SizeChanged="Page_SizeChanged">
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -17,65 +16,83 @@
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
 
-        <!-- Thanh menu chọn loại đồ uống -->
-        <Grid Grid.Column="0">
-            <StackPanel>
-                <TextBlock Text="Danh mục" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,10"/>
-                <ListView x:Name="DrinkCategoryList" ItemsSource="{x:Bind CategoryViewModel.categories}" SelectionChanged="DrinkCategoryList_SelectionChanged">
-                    <ListView.ItemTemplate>
-                        <DataTemplate x:DataType="model:Category_">
-                            <TextBlock Text="{x:Bind Name}" />
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-            </StackPanel>
-        </Grid>
+        <StackPanel  Grid.Column="0">
+            <TextBlock Text="Không có danh mục nào được tìm thấy."
+                   Foreground="Red"
+                   FontSize="16"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Visibility="{x:Bind CategoryViewModel.categories.Count, Mode=OneWay, Converter={StaticResource IntegerToVisibilityMsgConverter}}"
+                   TextWrapping="Wrap"
+                   Margin="20"/>
 
-        <!-- Danh sách sản phẩm -->
-        <Grid Grid.Column="1" Background="White">
-            <ScrollViewer VerticalScrollMode="Auto" VerticalScrollBarVisibility="Auto"  HorizontalAlignment="Center">
+            <!-- Thanh menu chọn loại đồ uống -->
+            <Grid Visibility="{x:Bind CategoryViewModel.categories.Count, Mode=OneWay, Converter={StaticResource IntegerToVisibilityListConverter}}">
                 <StackPanel>
-                    <TextBlock Text="Danh sách sản phẩm" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,10"/>
-                    <ListView x:Name="ProductListView" ItemsSource="{x:Bind ProductViewModel.Products}" SelectionMode="None">
-                        <ListView.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <WrapGrid Orientation="Horizontal"/>
-                            </ItemsPanelTemplate>
-                        </ListView.ItemsPanel>
-
+                    <TextBlock Text="Danh mục" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,10"/>
+                    <ListView x:Name="DrinkCategoryList" ItemsSource="{x:Bind CategoryViewModel.categories}" SelectionChanged="DrinkCategoryList_SelectionChanged">
                         <ListView.ItemTemplate>
-                            <DataTemplate x:DataType="model:Product">
-                                <Border BorderBrush="Gray" BorderThickness="1" Padding="10" Margin="0, 0, 0, 10" CornerRadius="10" Width="150">
-                                    <StackPanel HorizontalAlignment="Center">
-                                        <Image Source="{x:Bind ImagePath}" Width="100" Height="100" Margin="0,0,0,10"/>
-                                        <TextBlock Text="{x:Bind Name}" FontSize="18" FontWeight="Bold" HorizontalAlignment="Center" Foreground="Black" TextAlignment="Center"/>
-                                        <TextBlock Text="{x:Bind Price}" FontSize="16" Foreground="Gray" HorizontalAlignment="Center"/>
-                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0" Padding="5" Background="Black">
-                                            <Button Content="-" Width="30" Click="RemoveButton_Click"/>
-                                            <Button Content="+" Width="32" Click="AddButton_Click"/>
-                                        </StackPanel>
-                                    </StackPanel>
-                                </Border>
+                            <DataTemplate x:DataType="model:Category_">
+                                <TextBlock Text="{x:Bind Name}" />
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
                 </StackPanel>
-            </ScrollViewer>
-        </Grid>
+            </Grid>
+        </StackPanel>
+
+        <StackPanel Grid.Column="1">
+            <TextBlock Text="Không có sản phẩm nào được tìm thấy."
+                   Foreground="Red"
+                   FontSize="16"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Visibility="{x:Bind ProductViewModel.Products.Count, Mode=OneWay, Converter={StaticResource IntegerToVisibilityMsgConverter}}"
+                   TextWrapping="Wrap"
+                   Margin="20"/>
+
+            <!-- Danh sách sản phẩm -->
+            <Grid Background="White" Visibility="{x:Bind ProductViewModel.Products.Count, Mode=OneWay, Converter={StaticResource IntegerToVisibilityListConverter}}">
+                <ScrollViewer VerticalScrollMode="Auto" VerticalScrollBarVisibility="Auto"  HorizontalAlignment="Center">
+                    <StackPanel>
+                        <TextBlock Text="Danh sách sản phẩm" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,10"/>
+                        <ListView x:Name="ProductListView" ItemsSource="{x:Bind ProductViewModel.Products}" SelectionMode="None">
+                            <ListView.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapGrid Orientation="Horizontal"/>
+                                </ItemsPanelTemplate>
+                            </ListView.ItemsPanel>
+
+                            <ListView.ItemTemplate>
+                                <DataTemplate x:DataType="model:Product">
+                                    <Border BorderBrush="Gray" BorderThickness="1" Padding="10" Margin="0, 0, 0, 10" CornerRadius="10" Width="150">
+                                        <StackPanel HorizontalAlignment="Center">
+                                            <Image Source="{x:Bind ImagePath}" Width="100" Height="100" Margin="0,0,0,10"/>
+                                            <TextBlock Text="{x:Bind Name}" FontSize="18" FontWeight="Bold" HorizontalAlignment="Center" Foreground="Black" TextAlignment="Center"/>
+                                            <TextBlock Text="{x:Bind Price}" FontSize="16" Foreground="Gray" HorizontalAlignment="Center"/>
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0" Padding="5" Background="Black">
+                                                <Button Content="-" Width="30" Click="RemoveButton_Click"/>
+                                                <TextBlock Text="{x:Bind Quantity}" FontSize="16" Margin="10, 4, 10, 0"/>
+                                            <Button Content="+" Width="32" Click="AddButton_Click"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
+        </StackPanel>
 
         <!-- Phần cuối -->
         <Grid Grid.Column="2" Background="#FFE5B47C" Padding="0, 0, 0, -10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <!-- Tiêu đề -->
                 <RowDefinition Height="Auto"/>
-                <!-- Danh sách sản phẩm -->
                 <RowDefinition Height="Auto"/>
-
-                <RowDefinition Height="Auto"/>
-
                 <RowDefinition Height="*"/>
-                <!-- Tổng tiền và nút -->
+                <!-- Tự động co giãn -->
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
@@ -96,76 +113,68 @@
                 </Button>
             </Grid>
 
-            <TextBox x:Name="CustomerName" Grid.Row="1" PlaceholderText="Nhập tên khách hàng" Background="#5D4037" BorderThickness="0" VerticalAlignment="Top" Padding="6, 8, 12, 0" FontSize="12" Margin="7, 10, 7, 0"/>
+            <TextBox x:Name="CustomerName" Grid.Row="1" PlaceholderText="Nhập tên khách hàng" Background="#5D4037" BorderThickness="0" Padding="6, 8, 12, 0" FontSize="12" Margin="7, 10, 7, 0"/>
 
-            <TextBlock Grid.Row="2" x:Name="OrderSummaryText" Text="Số lượng: 0 món" FontSize="16" FontWeight="Bold" HorizontalAlignment="Left" Margin="10, 10, 0, 0" Foreground="Black"/>
+            <TextBlock Grid.Row="2" x:Name="OrderSummaryText" Text="Số lượng: 0 món" FontSize="16" FontWeight="Bold" Margin="10, 10, 0, 0" Foreground="Black"/>
 
-            <ScrollViewer x:Name="OrderScrollViewer"  Grid.Row="3" VerticalScrollMode="Auto" VerticalScrollBarVisibility="Auto" MaxHeight="30" Margin="0, 10, 0, 0">
+            <!-- ScrollViewer tự động giãn -->
+            <ScrollViewer x:Name="OrderScrollViewer" Grid.Row="3" VerticalScrollMode="Auto" VerticalScrollBarVisibility="Auto" Margin="0, 10, 0, 0">
                 <ListView x:Name="OrderListView" ItemsSource="{x:Bind CartViewModel.CartItems}" Margin="10, 0, 10, 0">
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="model:CartItem">
-                            <Grid>
+                            <Grid Margin="0, -10, 0, 0">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
-
-                                <TextBlock Text="{x:Bind Product.Name}" FontSize="14" FontWeight="Bold" Foreground="Black" 
-                           Grid.Column="0" HorizontalAlignment="Left"/>
-
-                                <TextBlock Text="{x:Bind Quantity}" FontSize="14" Foreground="Black"
-                           Grid.Column="1" HorizontalAlignment="Right"/>
+                                <TextBlock Text="{x:Bind Product.Name}" FontSize="14" FontWeight="Bold" Foreground="Black"/>
+                                <TextBlock Text="{x:Bind Quantity}" FontSize="14" Foreground="Black" Grid.Column="1"/>
                             </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
             </ScrollViewer>
 
-            <StackPanel Grid.Row="4" Orientation="Vertical" HorizontalAlignment="Center" Margin="5, 20, 5, 20">
-                <TextBox x:Name="PromoCodeTextBox" Padding="10, 8, 0, 0" PlaceholderText="Voucher" TextChanged="PromoCodeTextBox_TextChanged" Margin="0, 0, 0, 10" Background="#5D4037" BorderThickness="0" FontSize="12"/>
-                <TextBox x:Name="CustomerCodeTextBox" Padding="10, 8, 0, 0" PlaceholderText="SĐT tích điểm" TextChanged="CustomerCodeTextBox_TextChanged" Margin="0, 0, 0, 10" Background="#5D4037" BorderThickness="0" FontSize="12"/>
+            <StackPanel Grid.Row="4" Orientation="Vertical" HorizontalAlignment="Center" Margin="5, 10, 5, 20">
+                <TextBox x:Name="PromoCodeTextBox" Padding="10, 8, 0, 0" PlaceholderText="Voucher" TextChanged="PromoCodeTextBox_TextChanged" Margin="0, 0, 0, 5" Background="#5D4037" BorderThickness="0" FontSize="12"/>
+                <TextBox x:Name="CustomerCodeTextBox" Padding="10, 8, 0, 0" PlaceholderText="SĐT tích điểm" TextChanged="CustomerCodeTextBox_TextChanged" Margin="0, 0, 0, 5" Background="#5D4037" BorderThickness="0" FontSize="12"/>
 
                 <!-- Tổng tiền -->
-                <Grid x:Name="TongTien" Margin="0, 25, 0, 0">
+                <Grid x:Name="TongTien" Margin="0, 5, 0, 0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-
                     <TextBlock Text="Tổng tiền: " Foreground="Black" FontSize="14" Grid.Column="0"/>
                     <TextBlock x:Name="TotalAmountTextBlock" Foreground="Red" FontSize="15" FontWeight="Bold" HorizontalAlignment="Right" Grid.Column="1"/>
                 </Grid>
 
                 <!-- Số tiền được giảm -->
-                <Grid x:Name="TienGiam" Margin="0, 25, 0, 0">
+                <Grid x:Name="TienGiam" Margin="0, 5, 0, 0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-
                     <TextBlock Text="Tiền được giảm:" Foreground="Black" FontSize="14" Grid.Column="0"/>
                     <TextBlock x:Name="DiscountAmountTextBlock" Foreground="Green" FontSize="15" FontWeight="Bold" HorizontalAlignment="Right" Grid.Column="1"/>
                 </Grid>
 
                 <!-- Số tiền phải trả -->
-                <Grid x:Name="TienTra" Margin="0, 25, 0, 0">
+                <Grid x:Name="TienTra" Margin="0, 5, 0, 0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-
                     <TextBlock Text="Số tiền phải trả:" Foreground="Black" FontSize="14" Grid.Column="0"/>
                     <TextBlock x:Name="FinalAmountTextBlock" Foreground="Red" FontSize="15" FontWeight="Bold" HorizontalAlignment="Right" Grid.Column="1"/>
                 </Grid>
 
                 <!-- Nút Xóa và Thanh toán -->
-                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="5, 20, 5, 5" Width="250">
-                    <Button Content="Xóa hết" Click="ClearCart_Click" Margin="2" HorizontalAlignment="Stretch"/>
-                    <Button Content="Thanh toán" Click="Checkout_Click" HorizontalAlignment="Stretch" Margin="0, 5, 0, 0"/>
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="5, 10, 5, 5" Width="250" BorderThickness="0">
+                    <Button Content="Xóa hết" Click="ClearCart_Click" Margin="2" HorizontalAlignment="Stretch" Background="#D38C3E" BorderThickness="0"/>
+                    <Button Content="Thanh toán" Click="Checkout_Click" HorizontalAlignment="Stretch" Margin="0, 5, 0, 0" Background="#D38C3E" BorderThickness="0"/>
                 </StackPanel>
             </StackPanel>
-
-
         </Grid>
     </Grid>
 </Page>

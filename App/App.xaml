@@ -3,7 +3,8 @@
     x:Class="App.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:App">
+    xmlns:local="using:App"
+    xmlns:coverter="using:App.Converter">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -11,6 +12,8 @@
                 <!-- Other merged dictionaries here -->
             </ResourceDictionary.MergedDictionaries>
             <!-- Other app resources here -->
+            <coverter:IntegerToVisibilityMsgConverter x:Key="IntegerToVisibilityMsgConverter"/>
+            <coverter:IntegerToVisibilityListConverter x:Key="IntegerToVisibilityListConverter"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -7,6 +7,7 @@ using System.Diagnostics;
 using App.Model;
 using App.Service;
 using System.Linq;
+using App.View.ViewModel;
 
 namespace App.View.Pages
 {
@@ -14,8 +15,15 @@ namespace App.View.Pages
     {
         public ObservableCollection<string> PresetDates { get; set; }
         public ObservableCollection<Product> Products { get; set; }
-        public ObservableCollection<ReportData> Reports { get; set; } = new ObservableCollection<ReportData>();
-        private readonly MockDao mockDao = new MockDao();
+        public ReportViewModel ReportViewModel { get; set; }
+        public OrderViewModel OrderViewModel { get; set; }
+
+        public decimal totalRevenue;
+        public decimal totalCost;
+        public decimal totalProfit;
+        public int totalOrders;
+
+
 
         public OverviewReport()
         {
@@ -25,7 +33,8 @@ namespace App.View.Pages
                 "Hôm nay", "Hôm qua", "7 ngày qua", "Tuần trước",
                 "Tháng trước", "30 ngày qua", "Trong quý", "Năm trước"
             };
-
+            OrderViewModel = new OrderViewModel();
+            ReportViewModel = new ReportViewModel();
             this.DataContext = this;
             LoadReportData();
         }
@@ -79,11 +88,6 @@ namespace App.View.Pages
             CbCategory.IsDropDownOpen = true; // Open ComboBox dropdown
         }
 
-        private void TxtCategoryWare_PointerPressed(object sender, PointerRoutedEventArgs e)
-        {
-            CbCategoryWare.IsDropDownOpen = true; // Open ComboBox dropdown
-        }
-
         private void SearchButton_Click(object sender, RoutedEventArgs e)
         {
 
@@ -91,16 +95,13 @@ namespace App.View.Pages
 
         private void LoadReportData()
         {
-            CalculateSummary(); // Gọi tính toán và chèn report mới
-
-            // Lấy danh sách cập nhật sau khi insert
-            var reports = mockDao.Reports.GetAll();
+            CalculateSummary();
 
             // Xóa dữ liệu cũ và cập nhật mới
-            Reports.Clear();
-            foreach (var report in reports)
+            ReportViewModel.report.Clear();
+            foreach (var report in ReportViewModel.report)
             {
-                Reports.Add(report);
+                ReportViewModel.report.Add(report);
                 Debug.WriteLine($"[DEBUG] Report: Orders = {report.TotalOrders}, Revenue = {report.TotalRevenue}, Profit = {report.TotalProfit}");
             }
 
@@ -109,34 +110,33 @@ namespace App.View.Pages
 
         private void UpdateReportUI()
         {
-            if (Reports.Count > 0)
-            {
-                var latestReport = Reports[^1]; // Lấy báo cáo mới nhất
-                OrdersCountText.Text = latestReport.TotalOrders.ToString();
-                RevenueText.Text = $"{latestReport.TotalRevenue:N0}đ";
-                ProfitText.Text = $"{latestReport.TotalProfit:N0}đ";
-            }
+            //var latestReport = ReportViewModel.report[^1]; // Lấy báo cáo mới nhất
+            Debug.WriteLine($"[DEBUG] Report Count: {ReportViewModel.report.Count}");
+            Debug.WriteLine($"[DEBUG] Reportkkkkk: Revenue = {totalRevenue}, Profit = {totalProfit}, TotalDiscount = {totalCost}");
+
+            OrdersCountText.Text = totalOrders.ToString();
+            RevenueText.Text = $"{totalRevenue:N0}đ";
+            ProfitText.Text = $"{totalProfit:N0}đ";
         }
 
         private void CalculateSummary()
         {
-            var orders = mockDao.Orders.GetAll();
+            var orders = ReportViewModel.GetAllOrders();
+            Debug.WriteLine($"[DEBUG] Orders Count: {orders.Count}");
+            totalOrders = orders.Count;
+            totalRevenue = orders.Sum(o => o.TotalAmount); // Tổng tiền của tất cả đơn hàng
+            totalCost = orders.Sum(o => o.TotalCost); // Tổng chiết khấu của tất cả đơn hàng
+            totalProfit = totalRevenue - totalCost; // Tổng lợi nhuận
 
-            int totalOrders = orders.Count;
-            decimal totalRevenue = orders.Sum(o => o.TotalAmount); // Tổng tiền của tất cả đơn hàng
-            decimal totalCost = orders.Sum(o => o.TotalCost); // Tổng chiết khấu của tất cả đơn hàng
-            decimal totalProfit = totalRevenue - totalCost; // Tổng lợi nhuận
-
-            // Debug để kiểm tra từng giá trị
             foreach (var o in orders)
             {
                 Debug.WriteLine($"[DEBUG] Order: TotalAmount = {o.TotalAmount}, TotalDiscount = {o.TotalDiscount}");
             }
 
             Debug.WriteLine($"[DEBUG] Summary: Orders = {totalOrders}, Revenue = {totalRevenue}, TotalDiscount = {totalCost}, Profit = {totalProfit}");
-
             var report = new ReportData(totalOrders, totalRevenue, totalProfit);
-            mockDao.Reports.Insert(report);
+            ReportViewModel.addReport(report);
+
         }
 
 

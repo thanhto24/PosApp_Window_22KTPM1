@@ -19,10 +19,10 @@ namespace App.View.Pages
         public CategoryViewModel CategoryViewModel { get; set; }
         public ProductViewModel ProductViewModel { get; set; }
         public CartViewModel CartViewModel { get; set; }
-        public OrderViewModel OrderViewModel { get; set; }
 
         public VoucherViewModel VoucherViewModel { get; set; }
         public CustomerViewModel CustomerViewModel { get; set; }
+
         private double finalAmount = 0;
         public HomeScreen()
         {
@@ -30,13 +30,14 @@ namespace App.View.Pages
             CategoryViewModel = new CategoryViewModel();
             ProductViewModel = new ProductViewModel();
             CartViewModel = new CartViewModel();
-            OrderViewModel = new OrderViewModel();
 
             VoucherViewModel = new VoucherViewModel();
             CustomerViewModel = new CustomerViewModel();
 
+            if(CategoryViewModel.categories.Any() && ProductViewModel.Products.Any())
+                ProductViewModel.LoadProductsByCategory(CategoryViewModel.categories[0].Name);
+
             ApplyDiscount();
-            ProductViewModel.LoadProductsByCategory(CategoryViewModel.categories[0].Name);
         }
 
         private void DrinkCategoryList_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -140,30 +141,5 @@ namespace App.View.Pages
 
             await checkoutDialog.ShowAsync();
         }
-
-        private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            //Debug.WriteLine($"New Height: {e.NewSize.Height}");
-
-            if (e.NewSize.Height < 450)
-            {
-                OrderScrollViewer.MaxHeight = 30;
-                TongTien.Margin = new Thickness(0, 5, 0, 0);
-                TienGiam.Margin = new Thickness(0, 5, 0, 0);
-                TienTra.Margin = new Thickness(0, 5, 0, 0);
-
-            }
-            else
-            {
-                OrderScrollViewer.MaxHeight = 180;
-                TongTien.Margin = new Thickness(0, 25, 0, 0);
-                TienGiam.Margin = new Thickness(0, 25, 0, 0);
-                TienTra.Margin = new Thickness(0, 25, 0, 0);
-            }
-
-            //Debug.WriteLine($"OrderScrollViewer MaxHeight: {OrderScrollViewer.MaxHeight}");
-        }
-
-
     }
 }

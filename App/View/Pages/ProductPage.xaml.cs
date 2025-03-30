@@ -43,18 +43,28 @@ namespace App.View.Pages
         // Edit Product Button Click
         private async void EditProduct_Click(object sender, RoutedEventArgs e)
         {
-            var button = sender as Button;
-            if (button?.DataContext is Product product)
-            {
-                await ShowProductDialog(product);
-            }
+            //var button = sender as Button;
+            //string barCode = button?.CommandParameter as string;
+
+            //if (!string.IsNullOrEmpty(barCode))
+            //{
+            //    // Find the product with matching barCode
+            //    Product product = ProductModelPage.Products.Find(p => p.BarCode == barCode);
+            //    if (product != null)
+            //    {
+            //        await ShowProductDialog(product);
+            //    }
+            //}
         }
 
         // Delete Product Button Click
         private async void DeleteProduct_Click(object sender, RoutedEventArgs e)
         {
             var button = sender as Button;
-            if (button?.DataContext is Product product)
+            // Get parent StackPanel
+            if (button?.Parent is StackPanel stackPanel &&
+                stackPanel.Parent is StackPanel productPanel &&
+                productPanel.DataContext is Product product)
             {
                 ContentDialog confirmDialog = new ContentDialog
                 {
@@ -141,51 +151,48 @@ namespace App.View.Pages
             await errorDialog.ShowAsync();
         }
 
-        private async void Filter_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void SearchButton_Click(object sender, RoutedEventArgs e)
         {
             if (ProductModelPage != null)
                 await ApplyFilters();
         }
 
-        private async void SearchButton_Click(object sender, RoutedEventArgs e)
-        {
-            await ApplyFilters();
-        }
-
         // Apply all filters
-        private async Task ApplyFilters()
+        private void ApplyFilters()
         {
-            string searchText;
+            return;
+
+            string searchText = string.Empty;
             if (SearchTextBox != null && !string.IsNullOrEmpty(SearchTextBox.Text))
             {
                 searchText = SearchTextBox.Text;
             }
-            else
-            {
-                searchText = "";
-            }
+
             string productType = "Tất cả";
             if (ProductTypeComboBox != null && (ProductTypeComboBox.SelectedItem is ComboBoxItem typeItem))
             {
                 productType = typeItem.Content.ToString();
             }
+
             string productGroup = "Tất cả";
             if (ProductGroupComboBox != null && (ProductGroupComboBox.SelectedItem is ComboBoxItem groupItem))
             {
                 productGroup = groupItem.Content.ToString();
             }
+
             string status = "Tất cả";
             if (StatusComboBox != null && (StatusComboBox.SelectedItem is ComboBoxItem statusItem))
             {
                 status = statusItem.Content.ToString();
             }
+
             string sortOrder = "Tên: A => Z";
             if (SortOrderComboBox != null && (SortOrderComboBox.SelectedItem is ComboBoxItem sortItem))
             {
                 sortOrder = sortItem.Content.ToString();
             }
 
-            //Debug.WriteLine("ProductPage", $"Filters: {searchText}, {productType}, {productGroup}, {status}, {sortOrder}");
+            var filter = new Dictionary<string, object>();
 
             // Use the new filter method from ViewModel
             //await ProductModelPage.FilterProducts(searchText, productType, productGroup, status, sortOrder);
@@ -199,39 +206,50 @@ namespace App.View.Pages
             if (searchText != "")
                 filter.Add("Name", searchText + "%");
 
-            // Chỉ thêm TypeGroup nếu productType không phải là "Tất cả"
+            // Add TypeGroup filter if not "Tất cả"
             if (productType != "Tất cả")
+            {
                 filter.Add("TypeGroup", productType);
+            }
 
+            // Add product group filter if not "Tất cả"
+            if (productGroup != "Tất cả")
+            {
+                filter.Add("Group", productGroup);
+            }
 
-            // Điều kiện OR
-            //var or = new Dictionary<string, object>
-            //{
-            //    { "name", "Alice" },
-            //    { "city", "New York" }
-            //};
-            // Điều kiện sắp xếp
-            Dictionary<string, int> sort = new Dictionary<string, int> { { "Name", 1 } }; // Mặc định sắp xếp theo tên A-Z
+            // Add status filter if not "Tất cả"
+            if (status != "Tất cả")
+            {
+                bool isActive = status == "Còn hàng";
+                filter.Add("IsActive", isActive);
+            }
+
+            // Set up sort order
+            Dictionary<string, int> sort = new Dictionary<string, int>();
 
             switch (sortOrder)
             {
                 case "Tên: A => Z":
-                    sort = new Dictionary<string, int> { { "Name", 1 } };
+                    sort.Add("Name", 1);
                     break;
                 case "Tên: Z => A":
-                    sort = new Dictionary<string, int> { { "Name", -1 } };
+                    sort.Add("Name", -1);
                     break;
                 case "Giá: Thấp => Cao":
-                    sort = new Dictionary<string, int> { { "Price", 1 } };
+                    sort.Add("Price", 1);
                     break;
                 case "Giá: Cao => Thấp":
-                    sort = new Dictionary<string, int> { { "Price", -1 } };
+                    sort.Add("Price", -1);
                     break;
                 case "Ngày cập nhật: Cũ nhất":
-                    sort = new Dictionary<string, int> { { "LastUpdated", 1 } };
+                    sort.Add("LastUpdated", 1);
                     break;
                 case "Ngày cập nhật: Mới nhất":
-                    sort = new Dictionary<string, int> { { "LastUpdated", -1 } };
+                    sort.Add("LastUpdated", -1);
+                    break;
+                default:
+                    sort.Add("Name", 1); // Default sort
                     break;
             }
 
@@ -243,14 +261,14 @@ namespace App.View.Pages
             }
             await ProductModelPage.NewFilter(filter, sort);
         }
-        private async void SearchTextBox_KeyUp(object sender, Microsoft.UI.Xaml.Input.KeyRoutedEventArgs e)
+
+        private void SearchTextBox_KeyUp(object sender, Microsoft.UI.Xaml.Input.KeyRoutedEventArgs e)
         {
+            // Check if Enter key was pressed
             if (e.Key == Windows.System.VirtualKey.Enter)
             {
-                await ApplyFilters();
+                ApplyFilters();
             }
         }
-
-
     }
 }

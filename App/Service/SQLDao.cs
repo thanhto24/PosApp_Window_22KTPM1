@@ -16,6 +16,7 @@ namespace App.Service
         public IRepository<Voucher> Vouchers { get; set; } = new SQLRepository<Voucher>();
         public IRepository<Category_> Categories { get; set; } = new SQLRepository<Category_>();
         public IRepository<Customer> Customers { get; set; } = new SQLRepository<Customer>();
+        public IRepository<ReportData> Reports { get; set; } = new SQLRepository<ReportData>();
 
     }
 }
