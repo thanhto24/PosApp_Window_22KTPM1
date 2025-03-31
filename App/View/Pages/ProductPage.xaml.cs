@@ -242,47 +242,47 @@ namespace App.View.Pages
             }
         }
 
-        private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            double width = e.NewSize.Width;
-            double fontSize = 16;
-            double buttonSize = 40;
+        //private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
+        //{
+        //    double width = e.NewSize.Width;
+        //    double fontSize = 16;
+        //    double buttonSize = 40;
 
-            if (width < 670)
-                fontSize = 8;
-            else if (width < 700)
-                fontSize = 10;
-            else if (width < 800)
-                fontSize = 11;
-            else if (width < 1000)
-                fontSize = 12;
-            else if (width < 1100)
-                fontSize = 14;
-            else
-                fontSize = 16;
+        //    if (width < 670)
+        //        fontSize = 8;
+        //    else if (width < 700)
+        //        fontSize = 10;
+        //    else if (width < 800)
+        //        fontSize = 11;
+        //    else if (width < 1000)
+        //        fontSize = 12;
+        //    else if (width < 1100)
+        //        fontSize = 14;
+        //    else
+        //        fontSize = 16;
 
-            Debug.WriteLine($"Current Width: {width}, Font Size: {fontSize}, Button Size: {buttonSize}");
+        //    Debug.WriteLine($"Current Width: {width}, Font Size: {fontSize}, Button Size: {buttonSize}");
 
-            UpdateFontSize(GridRoot, fontSize);
-        }
+        //    UpdateFontSize(GridRoot, fontSize);
+        //}
 
 
 
-        private void UpdateFontSize(DependencyObject parent, double fontSize)
-        {
-            int count = VisualTreeHelper.GetChildrenCount(parent);
+        //private void UpdateFontSize(DependencyObject parent, double fontSize)
+        //{
+        //    int count = VisualTreeHelper.GetChildrenCount(parent);
 
-            for (int i = 0; i < count; i++)
-            {
-                var child = VisualTreeHelper.GetChild(parent, i);
+        //    for (int i = 0; i < count; i++)
+        //    {
+        //        var child = VisualTreeHelper.GetChild(parent, i);
 
-                if (child is TextBlock textBlock)
-                {
-                    textBlock.FontSize = fontSize;
-                }
+        //        if (child is TextBlock textBlock)
+        //        {
+        //            textBlock.FontSize = fontSize;
+        //        }
 
-                UpdateFontSize(child, fontSize);
-            }
-        }
+        //        UpdateFontSize(child, fontSize);
+        //    }
+        //}
     }
 }

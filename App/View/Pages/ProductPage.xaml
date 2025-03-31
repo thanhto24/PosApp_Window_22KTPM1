@@ -8,8 +8,7 @@
     xmlns:model="using:App.Model"
     xmlns:local="using:App.View.Pages"
     mc:Ignorable="d"
-    Background="Wheat"
-    SizeChanged="Page_SizeChanged">
+    Background="Wheat">
 
     <Grid x:Name="GridRoot">
         <Grid.RowDefinitions>
@@ -110,15 +109,15 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Text="#" Grid.Column="0" FontWeight="Bold" Foreground="White" Margin="5"/>
-                <TextBlock Text="Hình đại diện" Grid.Column="1" FontWeight="Bold" Foreground="White" Margin="5" TextWrapping="Wrap" TextAlignment="Center"/>
-                <TextBlock Text="Nhóm sản phẩm" Grid.Column="2" FontWeight="Bold" Foreground="White" Margin="5" TextWrapping="Wrap" TextAlignment="Center"/>
-                <TextBlock Text="Mã hàng hóa" Grid.Column="3" FontWeight="Bold" Foreground="White" Margin="5" TextWrapping="Wrap" TextAlignment="Center"/>
-                <TextBlock Text="Mã vạch" Grid.Column="4" FontWeight="Bold" Foreground="White" Margin="5" TextWrapping="Wrap" TextAlignment="Center"/>
-                <TextBlock Text="Tên hàng hóa" Grid.Column="5" FontWeight="Bold" Foreground="White" Margin="5" TextWrapping="Wrap" TextAlignment="Center"/>
-                <TextBlock Text="Giá bán" Grid.Column="6" FontWeight="Bold" Foreground="White" Margin="5" TextWrapping="Wrap" TextAlignment="Center"/>
-                <TextBlock Text="VAT" Grid.Column="7" FontWeight="Bold" Foreground="White" Margin="5" TextWrapping="Wrap" TextAlignment="Center"/>
-                <TextBlock Text="Trạng thái" Grid.Column="8" FontWeight="Bold" Foreground="White" Margin="5" TextWrapping="Wrap" TextAlignment="Center"/>
-                <TextBlock Text="Thao tác" Grid.Column="9" FontWeight="Bold" Foreground="White" Margin="5" TextWrapping="Wrap" TextAlignment="Center"/>
+                <TextBlock Text="Hình đại diện" Grid.Column="1" FontWeight="Bold" Foreground="White" Margin="5" TextWrapping="Wrap" TextAlignment="Center" FontSize="12"/>
+                <TextBlock Text="Nhóm sản phẩm" Grid.Column="2" FontWeight="Bold" Foreground="White" Margin="5" TextWrapping="Wrap" TextAlignment="Center" FontSize="12"/>
+                <TextBlock Text="Mã hàng hóa" Grid.Column="3" FontWeight="Bold" Foreground="White" Margin="5" TextWrapping="Wrap" TextAlignment="Center" FontSize="12"/>
+                <TextBlock Text="Mã vạch" Grid.Column="4" FontWeight="Bold" Foreground="White" Margin="5" TextWrapping="Wrap" TextAlignment="Center" FontSize="12"/>
+                <TextBlock Text="Tên hàng hóa" Grid.Column="5" FontWeight="Bold" Foreground="White" Margin="5" TextWrapping="Wrap" TextAlignment="Center" FontSize="12"/>
+                <TextBlock Text="Giá bán" Grid.Column="6" FontWeight="Bold" Foreground="White" Margin="5" TextWrapping="Wrap" TextAlignment="Center" FontSize="12"/>
+                <TextBlock Text="VAT" Grid.Column="7" FontWeight="Bold" Foreground="White" Margin="5" TextWrapping="Wrap" TextAlignment="Center" FontSize="12"/>
+                <TextBlock Text="Trạng thái" Grid.Column="8" FontWeight="Bold" Foreground="White" Margin="5" TextWrapping="Wrap" TextAlignment="Center" FontSize="12"/>
+                <TextBlock Text="Thao tác" Grid.Column="9" FontWeight="Bold" Foreground="White" Margin="5" TextWrapping="Wrap" TextAlignment="Center" FontSize="12"/>
             </Grid>
 
             <!-- ListView Cuộn -->
@@ -141,12 +140,12 @@
                                 </Grid.ColumnDefinitions>
 
                                 <Image Source="{x:Bind ImagePath}" Width="100" Stretch="UniformToFill" Grid.Column="1" Margin="5" HorizontalAlignment="Left"/>
-                                <TextBlock Text="{x:Bind TypeGroup}" Grid.Column="2" Margin="5" Foreground="Black" VerticalAlignment="Center" TextWrapping="Wrap" HorizontalAlignment="Center"/>
-                                <TextBlock Text="{x:Bind BarCode}" Grid.Column="3" Margin="5" Foreground="Black" VerticalAlignment="Center" TextWrapping="Wrap" HorizontalAlignment="Center"/>
-                                <TextBlock Text="{x:Bind BarCode}" Grid.Column="4" Margin="5" Foreground="Black" VerticalAlignment="Center" TextWrapping="Wrap" HorizontalAlignment="Center"/>
-                                <TextBlock Text="{x:Bind Name}" Grid.Column="5" Margin="5" Foreground="Black" VerticalAlignment="Center" TextWrapping="Wrap" HorizontalAlignment="Center"/>
-                                <TextBlock Text="{x:Bind Price}" Grid.Column="6" Margin="5" Foreground="Black" VerticalAlignment="Center" TextWrapping="Wrap" HorizontalAlignment="Center"/>
-                                <TextBlock Text="{x:Bind Vat}" Grid.Column="7" Margin="5" Foreground="Black" VerticalAlignment="Center" TextWrapping="Wrap" HorizontalAlignment="Center"/>
+                                <TextBlock Text="{x:Bind TypeGroup}" Grid.Column="2" Margin="5" Foreground="Black" VerticalAlignment="Center" TextWrapping="Wrap" HorizontalAlignment="Center" FontSize="12"/>
+                                <TextBlock Text="{x:Bind BarCode}" Grid.Column="3" Margin="5" Foreground="Black" VerticalAlignment="Center" TextWrapping="Wrap" HorizontalAlignment="Center" FontSize="12"/>
+                                <TextBlock Text="{x:Bind BarCode}" Grid.Column="4" Margin="5" Foreground="Black" VerticalAlignment="Center" TextWrapping="Wrap" HorizontalAlignment="Center" FontSize="12"/>
+                                <TextBlock Text="{x:Bind Name}" Grid.Column="5" Margin="5" Foreground="Black" VerticalAlignment="Center" TextWrapping="Wrap" HorizontalAlignment="Center" FontSize="12"/>
+                                <TextBlock Text="{x:Bind Price}" Grid.Column="6" Margin="5" Foreground="Black" VerticalAlignment="Center" TextWrapping="Wrap" HorizontalAlignment="Center" FontSize="12"/>
+                                <TextBlock Text="{x:Bind Vat}" Grid.Column="7" Margin="5" Foreground="Black" VerticalAlignment="Center" TextWrapping="Wrap" HorizontalAlignment="Center" FontSize="12"/>
                                 <StackPanel Grid.Column="8" HorizontalAlignment="Center" VerticalAlignment="Center" Width="30" Margin="5">
                                     <CheckBox/>
                                 </StackPanel>
