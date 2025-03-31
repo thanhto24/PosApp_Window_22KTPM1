@@ -14,11 +14,16 @@
 
 #### **2. Chọn instance phù hợp**
 - Truy cập vào **App > App.xaml.cs**, thay đổi giá trị **Singleton key**:
-
-![alt text](image-2.png)
+```sh
+Services.AddKeyedSingleton<IDao, key>();
+```
 
   - `'MockDao'`: Sử dụng dữ liệu giả, có thể chạy ngay sau bước 3.
   - `'MongoDao'`: Kết nối với database thật, cần cấu hình Backend.
+  - Ví dụ:
+```sh
+Services.AddKeyedSingleton<IDao, MongoDao>();
+```
 
 📌 **Lưu ý**: Nếu chọn `'MongoDao'`, cần khởi động Backend Node.js trước khi chạy ứng dụng.
 
