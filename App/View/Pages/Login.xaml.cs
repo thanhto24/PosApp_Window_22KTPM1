@@ -52,33 +52,33 @@ namespace App.View.Pages
             }
         }
 
-        private void Signup_Click(object sender, RoutedEventArgs e)
-        {
-            string username = txtUsername.Text;
-            string password = txtPassword.Password;
-            AddUser(username, password);
-            ContentDialog SignupDialog = new ContentDialog
-            {
-                Title = "Sign Up",
-                Content = "Đăng ký thành công",
-                CloseButtonText = "Đóng",
-                XamlRoot = this.XamlRoot
-            };
-            _ = SignupDialog.ShowAsync();
-        }
+        //private void Signup_Click(object sender, RoutedEventArgs e)
+        //{
+        //    string username = txtUsername.Text;
+        //    string password = txtPassword.Password;
+        //    AddUser(username, password);
+        //    ContentDialog SignupDialog = new ContentDialog
+        //    {
+        //        Title = "Sign Up",
+        //        Content = "Đăng ký thành công",
+        //        CloseButtonText = "Đóng",
+        //        XamlRoot = this.XamlRoot
+        //    };
+        //    _ = SignupDialog.ShowAsync();
+        //}
 
         private void AddUser(string username, string password)
         {
-            using (var connection = new SqliteConnection($"Data Source={DatabasePath}"))
-            {
-                connection.Open();
-                var command = connection.CreateCommand();
-                command.CommandText = "INSERT INTO User (Username, Password) VALUES (@username, @password)";
-                command.Parameters.AddWithValue("@username", username);
-                command.Parameters.AddWithValue("@password", password); // Nên mã hóa mật khẩu trước khi lưu
-                command.ExecuteNonQuery();
-                connection.Close();
-            }
+            //using (var connection = new SqliteConnection($"Data Source={DatabasePath}"))
+            //{
+            //    connection.Open();
+            //    var command = connection.CreateCommand();
+            //    command.CommandText = "INSERT INTO User (Username, Password) VALUES (@username, @password)";
+            //    command.Parameters.AddWithValue("@username", username);
+            //    command.Parameters.AddWithValue("@password", password); // Nên mã hóa mật khẩu trước khi lưu
+            //    command.ExecuteNonQuery();
+            //    connection.Close();
+            //}
 
         }
 
@@ -89,20 +89,22 @@ namespace App.View.Pages
             else if (username == "admin" && password == "123")
                 return true;
 
+            return false;
 
-            using (var connection = new SqliteConnection($"Data Source={DatabasePath}"))
-            {
-                connection.Open();
-                var command = connection.CreateCommand();
-                command.CommandText = "SELECT COUNT(*) FROM User WHERE Username = @username AND Password = @password";
-                command.Parameters.AddWithValue("@username", username);
-                command.Parameters.AddWithValue("@password", password);
 
-                long count = (long)command.ExecuteScalar();
-                connection.Close();
+            //using (var connection = new SqliteConnection($"Data Source={DatabasePath}"))
+            //{
+            //    connection.Open();
+            //    var command = connection.CreateCommand();
+            //    command.CommandText = "SELECT COUNT(*) FROM User WHERE Username = @username AND Password = @password";
+            //    command.Parameters.AddWithValue("@username", username);
+            //    command.Parameters.AddWithValue("@password", password);
 
-                return count > 0;
-            }
+            //    long count = (long)command.ExecuteScalar();
+            //    connection.Close();
+
+            //    return count > 0;
+            //}
         }
 
 

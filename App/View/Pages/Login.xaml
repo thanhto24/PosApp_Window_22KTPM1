@@ -15,8 +15,7 @@
             <PasswordBox x:Name="txtPassword" Header="Password" Width="250" Margin="0,10" Background="White" Foreground="Black"/>
 
             <Button Content="Login" Click="Login_Click" Width="250" Margin="0,10" Background="Orange" Foreground="White" FontWeight="Bold"/>
-            <Button Content="Sign Up" Click="Signup_Click" Width="250" Margin="0,10" Background="White" Foreground="Orange" FontWeight="Bold"/>
-
+            
         </StackPanel>
     </Grid>
 </Page>

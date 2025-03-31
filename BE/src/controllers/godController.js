@@ -124,8 +124,8 @@ const parseString = (WhereClause, WhereParams) => {
     let [key, value] = part.split("=").map((str) => str.trim());
 
     // Nếu giá trị bắt đầu bằng '0', giữ nguyên dưới dạng chuỗi
-    conditions[key] = /^0\d+$/.test(value) ? value : Number(value);
-    
+    // conditions[key] = /^0\d+$/.test(value) ? value : Number(value);
+
     if ( (/^0\d+$/.test(value)) || isNaN(Number(value)) ) {
       conditions[key] = value;
     }else {

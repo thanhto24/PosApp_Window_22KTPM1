@@ -124,7 +124,7 @@ namespace App.View.Pages
         {
             ApplyDiscount();
 
-            if (CartViewModel.totalDiscount == 0)
+            if (CartViewModel.getTotalAmount() == 0)
                 return;
 
             string customerName = string.IsNullOrWhiteSpace(CustomerName.Text) ? "Khách vãng lai" : CustomerName.Text;

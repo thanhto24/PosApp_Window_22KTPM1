@@ -34,7 +34,7 @@ namespace App
         public App()
         {
             this.InitializeComponent();
-            Services.AddKeyedSingleton<IDao, MockDao>();
+            Services.AddKeyedSingleton<IDao, MongoDao>();
         }
 
         /// <summary>

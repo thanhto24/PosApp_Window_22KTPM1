@@ -194,8 +194,15 @@ namespace App.View.Pages
                 filter.Add("Name", searchText + "%");
 
             // Chỉ thêm TypeGroup nếu productType không phải là "Tất cả"
-            if (productType != "Tất cả")
-                filter.Add("TypeGroup", productType);
+            //if (productType != "Tất cả")
+            //    filter.Add("TypeGroup", productType);
+
+            if (productGroup != "Tất cả")
+                filter.Add("TypeGroup", productGroup);
+
+
+
+
 
 
             // Điều kiện OR
