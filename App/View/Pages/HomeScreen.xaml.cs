@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Microsoft.UI.Xaml;
@@ -24,6 +24,7 @@ namespace App.View.Pages
         public CustomerViewModel CustomerViewModel { get; set; }
 
         private double finalAmount = 0;
+        public double vcDis = 0, cusDis = 0;
         public HomeScreen()
         {
             this.InitializeComponent();
@@ -34,7 +35,7 @@ namespace App.View.Pages
             VoucherViewModel = new VoucherViewModel();
             CustomerViewModel = new CustomerViewModel();
 
-            if(CategoryViewModel.categories.Any() && ProductViewModel.Products.Any())
+            if (CategoryViewModel.categories.Any() && ProductViewModel.Products.Any())
                 ProductViewModel.LoadProductsByCategory(CategoryViewModel.categories[0].Name);
 
             ApplyDiscount();
@@ -77,11 +78,17 @@ namespace App.View.Pages
 
         private void PromoCodeTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
+            string promoCode = PromoCodeTextBox.Text.Trim();
+
+            vcDis = VoucherViewModel.ApplyVoucher(promoCode) / 100;
             ApplyDiscount();
         }
 
         private void CustomerCodeTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
+            string phone = CustomerCodeTextBox.Text.Trim();
+
+            cusDis = CustomerViewModel.ApplyCusPhone(phone) / 100;
             ApplyDiscount();
         }
 
@@ -90,12 +97,10 @@ namespace App.View.Pages
             double total = CartViewModel.getTotalAmount();
             double discountVc = 0, discountCustomer = 0;
 
-            string promoCode = PromoCodeTextBox.Text.Trim();
-            string phone = CustomerCodeTextBox.Text.Trim();
 
             // Áp dụng mã khuyến mãi
-            discountVc = total * VoucherViewModel.ApplyVoucher(promoCode);
-            discountCustomer = total * CustomerViewModel.ApplyCusPhone(phone);
+            discountVc = total * vcDis;
+            discountCustomer = total * cusDis;
 
             finalAmount = total - discountVc - discountCustomer;
             CartViewModel.totalDiscount = discountVc + discountCustomer;

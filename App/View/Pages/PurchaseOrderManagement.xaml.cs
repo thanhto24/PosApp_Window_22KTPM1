@@ -117,11 +117,11 @@ namespace App.View.Pages
 
         private void UpdateTotals()
         {
-            int totalQuantity = Products.Sum(p => p.Quantity);
-            decimal totalValue = Products.Sum(p => p.TotalPrice); // Tổng giá trị tồn kho
+            //int totalQuantity = Products.Sum(p => p.Quantity);
+            //decimal totalValue = Products.Sum(p => p.TotalPrice); // Tổng giá trị tồn kho
 
-            TxtTotalQuantity.Text = totalQuantity.ToString();
-            TxtTotalValue.Text = $"{totalValue:N0} đ"; // Định dạng số có dấu chấm phân cách
+            //TxtTotalQuantity.Text = totalQuantity.ToString();
+            //TxtTotalValue.Text = $"{totalValue:N0} đ"; // Định dạng số có dấu chấm phân cách
         }
     }
 }

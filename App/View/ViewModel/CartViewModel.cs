@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using App.Model;
 using App.Service;
 using App.Utils;
+using Newtonsoft.Json;
+
 
 namespace App.View.ViewModel
 {
@@ -90,7 +92,7 @@ namespace App.View.ViewModel
             string invoiceId = $"INV{newId:D3}";
 
             string customerName = nameCustomer;
-            List<Product> orderedProductsList = CartItems.Select(ci => ci.Product).ToList();
+            List<OrderedProduct> orderedProductsList = CartItems.Select(ci => new OrderedProduct("PC01", ci.Product.Name, ci.Quantity, (decimal)ci.Product.Price)).ToList();
             decimal totalAmount = (decimal)getTotalAmount();
             decimal discount = (decimal)totalDiscount;
             decimal finalAmount = totalAmount - discount;
@@ -112,6 +114,9 @@ namespace App.View.ViewModel
                 paymentStatus: "Đã thanh toán",
                 notes: "Giao hàng thành công"
             );
+
+            var json = Newtonsoft.Json.JsonConvert.SerializeObject(order, Formatting.Indented);
+            Console.WriteLine(json);
 
             _dao.Orders.Insert(order);
         }

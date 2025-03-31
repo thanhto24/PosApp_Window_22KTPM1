@@ -10,37 +10,11 @@ namespace App.Model
         public string ProductCode { get; set; }
         public string Name { get; set; }
 
-        private int _quantity;
-        public int Quantity
-        {
-            get => _quantity;
-            set
-            {
-                if (_quantity != value)
-                {
-                    _quantity = value;
-                    OnPropertyChanged(nameof(Quantity));
-                    OnPropertyChanged(nameof(TotalPrice)); // Cập nhật TotalPrice
-                }
-            }
-        }
+        public int Quantity { get; set; }
 
-        private int _price;
-        public int Price
-        {
-            get => _price;
-            set
-            {
-                if (_price != value)
-                {
-                    _price = value;
-                    OnPropertyChanged(nameof(Price));
-                    OnPropertyChanged(nameof(TotalPrice)); // Cập nhật TotalPrice
-                }
-            }
-        }
+        public int Price { get; set; }
 
-        public int TotalPrice => Price * Quantity; // Tính toán động
+        //public int TotalPrice => Price * Quantity;
 
         public string ImagePath { get; set; }
         public string BarCode { get; set; }
@@ -53,8 +27,8 @@ namespace App.Model
         {
             ProductCode = productCode;
             Name = name;
-            _quantity = quantity;
-            _price = price;
+            Quantity = quantity;
+            Price = price;
             ImagePath = image;
             TypeGroup = typeGroup;
             Vat = vAT;
@@ -63,10 +37,5 @@ namespace App.Model
         }
 
         public Product() { }
-
-        private void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
 }

@@ -8,9 +8,10 @@
     xmlns:model="using:App.Model"
     xmlns:local="using:App.View.Pages"
     mc:Ignorable="d"
-    Background="Wheat">
+    Background="Wheat"
+    SizeChanged="Page_SizeChanged">
 
-    <Grid>
+    <Grid x:Name="GridRoot">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -97,37 +98,27 @@
             <Grid Background="Gray" Padding="5" Grid.Row="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
-                    <!-- # -->
+                    <ColumnDefinition Width="2.5*"/>
+                    <ColumnDefinition Width="1.5*"/>
+                    <ColumnDefinition Width="1.9*"/>
+                    <ColumnDefinition Width="2.5*"/>
+                    <ColumnDefinition Width="2.3*"/>
                     <ColumnDefinition Width="2*"/>
-                    <!-- Hình đại diện -->
                     <ColumnDefinition Width="2*"/>
-                    <!-- Nhóm sản phẩm -->
-                    <ColumnDefinition Width="2*"/>
-                    <!-- Mã hàng hóa -->
-                    <ColumnDefinition Width="2*"/>
-                    <!-- Mã vạch -->
+                    <ColumnDefinition Width="2.1*"/>
                     <ColumnDefinition Width="3*"/>
-                    <!-- Tên hàng hóa -->
-                    <ColumnDefinition Width="2*"/>
-                    <!-- Giá bán -->
-                    <ColumnDefinition Width="2*"/>
-                    <!-- VAT -->
-                    <ColumnDefinition Width="2*"/>
-                    <!-- Trạng thái -->
-                    <ColumnDefinition Width="3*"/>
-                    <!-- Thao tác -->
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Text="#" Grid.Column="0" FontWeight="Bold" Foreground="White" Margin="5"/>
-                <TextBlock Text="Hình đại diện" Grid.Column="1" FontWeight="Bold" Foreground="White" Margin="5"/>
-                <TextBlock Text="Nhóm sản phẩm" Grid.Column="2" FontWeight="Bold" Foreground="White" Margin="5"/>
-                <TextBlock Text="Mã hàng hóa" Grid.Column="3" FontWeight="Bold" Foreground="White" Margin="5"/>
-                <TextBlock Text="Mã vạch" Grid.Column="4" FontWeight="Bold" Foreground="White" Margin="5"/>
-                <TextBlock Text="Tên hàng hóa" Grid.Column="5" FontWeight="Bold" Foreground="White" Margin="5"/>
-                <TextBlock Text="Giá bán" Grid.Column="6" FontWeight="Bold" Foreground="White" Margin="5"/>
-                <TextBlock Text="VAT" Grid.Column="7" FontWeight="Bold" Foreground="White" Margin="5"/>
-                <TextBlock Text="Trạng thái" Grid.Column="8" FontWeight="Bold" Foreground="White" Margin="5"/>
-                <TextBlock Text="Thao tác" Grid.Column="9" FontWeight="Bold" Foreground="White" Margin="5"/>
+                <TextBlock Text="Hình đại diện" Grid.Column="1" FontWeight="Bold" Foreground="White" Margin="5" TextWrapping="Wrap" TextAlignment="Center"/>
+                <TextBlock Text="Nhóm sản phẩm" Grid.Column="2" FontWeight="Bold" Foreground="White" Margin="5" TextWrapping="Wrap" TextAlignment="Center"/>
+                <TextBlock Text="Mã hàng hóa" Grid.Column="3" FontWeight="Bold" Foreground="White" Margin="5" TextWrapping="Wrap" TextAlignment="Center"/>
+                <TextBlock Text="Mã vạch" Grid.Column="4" FontWeight="Bold" Foreground="White" Margin="5" TextWrapping="Wrap" TextAlignment="Center"/>
+                <TextBlock Text="Tên hàng hóa" Grid.Column="5" FontWeight="Bold" Foreground="White" Margin="5" TextWrapping="Wrap" TextAlignment="Center"/>
+                <TextBlock Text="Giá bán" Grid.Column="6" FontWeight="Bold" Foreground="White" Margin="5" TextWrapping="Wrap" TextAlignment="Center"/>
+                <TextBlock Text="VAT" Grid.Column="7" FontWeight="Bold" Foreground="White" Margin="5" TextWrapping="Wrap" TextAlignment="Center"/>
+                <TextBlock Text="Trạng thái" Grid.Column="8" FontWeight="Bold" Foreground="White" Margin="5" TextWrapping="Wrap" TextAlignment="Center"/>
+                <TextBlock Text="Thao tác" Grid.Column="9" FontWeight="Bold" Foreground="White" Margin="5" TextWrapping="Wrap" TextAlignment="Center"/>
             </Grid>
 
             <!-- ListView Cuộn -->
@@ -146,26 +137,28 @@
                                     <ColumnDefinition Width="2*"/>
                                     <ColumnDefinition Width="2*"/>
                                     <ColumnDefinition Width="2.1*"/>
-                                    <ColumnDefinition Width="2.4*"/>
+                                    <ColumnDefinition Width="3*"/>
                                 </Grid.ColumnDefinitions>
 
                                 <Image Source="{x:Bind ImagePath}" Width="100" Stretch="UniformToFill" Grid.Column="1" Margin="5" HorizontalAlignment="Left"/>
-                                <TextBlock Text="{x:Bind TypeGroup}" Grid.Column="2" Margin="5" Foreground="Black" VerticalAlignment="Center"/>
-                                <TextBlock Text="{x:Bind BarCode}" Grid.Column="3" Margin="5" Foreground="Black" VerticalAlignment="Center"/>
-                                <TextBlock Text="{x:Bind BarCode}" Grid.Column="4" Margin="5" Foreground="Black" VerticalAlignment="Center"/>
-                                <TextBlock Text="{x:Bind Name}" Grid.Column="5" Margin="5" Foreground="Black" VerticalAlignment="Center"/>
-                                <TextBlock Text="{x:Bind Price}" Grid.Column="6" Margin="5" Foreground="Black" VerticalAlignment="Center"/>
-                                <TextBlock Text="{x:Bind Vat}" Grid.Column="7" Margin="5" Foreground="Black" VerticalAlignment="Center"/>
-                                <CheckBox Grid.Column="8" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                                <TextBlock Text="{x:Bind TypeGroup}" Grid.Column="2" Margin="5" Foreground="Black" VerticalAlignment="Center" TextWrapping="Wrap" HorizontalAlignment="Center"/>
+                                <TextBlock Text="{x:Bind BarCode}" Grid.Column="3" Margin="5" Foreground="Black" VerticalAlignment="Center" TextWrapping="Wrap" HorizontalAlignment="Center"/>
+                                <TextBlock Text="{x:Bind BarCode}" Grid.Column="4" Margin="5" Foreground="Black" VerticalAlignment="Center" TextWrapping="Wrap" HorizontalAlignment="Center"/>
+                                <TextBlock Text="{x:Bind Name}" Grid.Column="5" Margin="5" Foreground="Black" VerticalAlignment="Center" TextWrapping="Wrap" HorizontalAlignment="Center"/>
+                                <TextBlock Text="{x:Bind Price}" Grid.Column="6" Margin="5" Foreground="Black" VerticalAlignment="Center" TextWrapping="Wrap" HorizontalAlignment="Center"/>
+                                <TextBlock Text="{x:Bind Vat}" Grid.Column="7" Margin="5" Foreground="Black" VerticalAlignment="Center" TextWrapping="Wrap" HorizontalAlignment="Center"/>
+                                <StackPanel Grid.Column="8" HorizontalAlignment="Center" VerticalAlignment="Center" Width="30" Margin="5">
+                                    <CheckBox/>
+                                </StackPanel>
 
-                                <StackPanel Orientation="Horizontal" Grid.Column="9" HorizontalAlignment="Left">
-                                    <Button Content="✎" Width="40" Height="40" Background="Transparent" BorderThickness="1"
+                                <StackPanel Orientation="Horizontal" Grid.Column="9" HorizontalAlignment="Right">
+                                    <Button x:Name="editBtn" Content="✎" Width="35" Height="35" Background="Transparent" BorderThickness="1"
                                     BorderBrush="Black" Margin="2" Click="EditProduct_Click" Foreground="Black"
                                     CommandParameter="{x:Bind BarCode}"/>
-                                    <Button Content="X" Width="40" Height="40" Background="Transparent" BorderThickness="1"
+                                    <Button x:Name="cancelBtn" Content="X" Width="35" Height="35" Background="Transparent" BorderThickness="1"
                                     BorderBrush="Black" Margin="2" Click="DeleteProduct_Click" Foreground="Black"/>
-                                    <Button Content="+" Width="40" Height="40" Background="Transparent" BorderThickness="1"
-                                    BorderBrush="Black" Margin="2" Foreground="Black" FontSize="20"/>
+                                    <Button x:Name="addBtn" Content="+" Width="35" Height="35" Background="Transparent" BorderThickness="1"
+                                    BorderBrush="Black" Margin="2, 2, -5, 2" Foreground="Black"/>
                                 </StackPanel>
                             </Grid>
                         </DataTemplate>

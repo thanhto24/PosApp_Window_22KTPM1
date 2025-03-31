@@ -11,7 +11,7 @@ namespace App.Model
         public string InvoiceCode { get; set; }
         public string Customer { get; set; }
         public string SaleDateTime { get; set; }
-        public List<Product> OrderedProducts { get; set; }
+        public List<OrderedProduct> OrderedProducts { get; set; }
         public decimal TotalAmount { get; set; }
         public decimal TotalDiscount { get; set; }
         public decimal TotalPayment { get; set; }
@@ -21,7 +21,7 @@ namespace App.Model
         public string PaymentStatus { get; set; }
         public string Notes { get; set; }
 
-        public Order_(int id, string invoiceCode, string customer, string saleDateTime, List<Product> orderedProducts, decimal totalAmount, decimal totalDiscount, decimal totalPayment, decimal totalCost, string paymentMethod, string status, string paymentStatus, string notes)
+        public Order_(int id, string invoiceCode, string customer, string saleDateTime, List<OrderedProduct> orderedProducts, decimal totalAmount, decimal totalDiscount, decimal totalPayment, decimal totalCost, string paymentMethod, string status, string paymentStatus, string notes)
         {
             Id = id;
             InvoiceCode = invoiceCode;

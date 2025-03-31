@@ -1,18 +1,29 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const OrderSchema = new mongoose.Schema({
-    InvoiceCode: { type: String, required: true },
-    Customer: { type: String, required: true },
-    SaleDateTime: { type: Date, required: true }, // Chuyển sang Date để dễ thao tác
-    TotalAmount: { type: Number, required: true },
-    TotalDiscount: { type: Number, required: true },
-    TotalPayment: { type: Number, required: true },
-    TotalCost: { type: Number, required: true },
-    PaymentMethod: { type: String, required: true },
-    Status: { type: String, required: true },
-    PaymentStatus: { type: String, required: true },
-    Notes: { type: String, default: "" } // Fix lỗi null
-}, { timestamps: true, collection: "order_" });
+const OrderedProductSchema = new mongoose.Schema({
+    productCode: { type: String, required: false },
+    name: { type: String, required: true },
+    quantity: { type: Number, required: true },
+    price: { type: Number, required: true }
+});
 
-const Order = mongoose.model("order", OrderSchema);
+const OrderSchema = new mongoose.Schema(
+    {
+        InvoiceCode: { type: String, required: true },
+        Customer: { type: String, required: true },
+        SaleDateTime: { type: Date, required: true, default: Date.now },
+        OrderedProducts: { type: [OrderedProductSchema], required: true }, // Danh sách sản phẩm
+        TotalAmount: { type: Number, required: true },
+        TotalDiscount: { type: Number, required: true },
+        TotalPayment: { type: Number, required: true },
+        TotalCost: { type: Number, required: true },
+        PaymentMethod: { type: String, required: true },
+        Status: { type: String, required: true },
+        PaymentStatus: { type: String, required: true },
+        Notes: { type: String, default: "" }
+    },
+    { timestamps: true, collection: "order_" } // Đổi collection thành "orders" (số nhiều)
+);
+
+const Order = mongoose.model("Order", OrderSchema);
 module.exports = Order;

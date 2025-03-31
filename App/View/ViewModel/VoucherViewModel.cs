@@ -117,7 +117,7 @@ namespace App.View.ViewModel
             var voucher = _dao.Vouchers.GetByQuery(filter);
             if (voucher != null && voucher.Any())
             {
-                return (double)voucher[0].DiscountValue / 100;
+                return (double)voucher[0].DiscountValue;
             }
             return 0;
         }

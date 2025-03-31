@@ -7,9 +7,10 @@
     xmlns:model="using:App.Model"
     mc:Ignorable="d"
     RequestedTheme="Light"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    SizeChanged="Page_SizeChanged">
 
-    <Grid Padding="20" Background="Wheat">
+    <Grid Padding="20" Background="Wheat" x:Name="GridRoot">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -23,146 +24,147 @@
                    HorizontalAlignment="Center"
                    Margin="10"/>
 
-        <StackPanel Grid.Row="1" >
-            <TextBlock Text="Không có order nào được tìm thấy."
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <TextBlock Text="Không có order nào được tìm thấy."
                    Foreground="Red"
                    FontSize="16"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
                    Visibility="{x:Bind OrderViewModel.DisplayedOrders.Count, Mode=OneWay, Converter={StaticResource IntegerToVisibilityMsgConverter}}"/>
 
-            <StackPanel Visibility="{x:Bind OrderViewModel.DisplayedOrders.Count, Mode=OneWay, Converter={StaticResource IntegerToVisibilityListConverter}}">
-                <!-- Danh sách đơn hàng -->
-                <ListView x:Name="OrderListView" BorderThickness="1" BorderBrush="Gray"
+                <StackPanel Visibility="{x:Bind OrderViewModel.DisplayedOrders.Count, Mode=OneWay, Converter={StaticResource IntegerToVisibilityListConverter}}">
+                    <!-- Danh sách đơn hàng -->
+                    <ListView x:Name="OrderListView" BorderThickness="1" BorderBrush="Gray"
                       HorizontalAlignment="Stretch" Width="Auto"
                       ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemsSource="{x:Bind OrderViewModel.DisplayedOrders}">
-                    <ListView.Header>
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="1"/>
-                            </Grid.RowDefinitions>
-
-                            <!-- Tiêu đề cột -->
-                            <Grid Grid.Row="0" Height="85">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="0.5*"/>
-                                    <ColumnDefinition Width="1.2*"/>
-                                    <ColumnDefinition Width="1.2*"/>
-                                    <ColumnDefinition Width="1.2*"/>
-                                    <ColumnDefinition Width="1.5*"/>
-                                    <ColumnDefinition Width="1.2*"/>
-                                    <ColumnDefinition Width="1.2*"/>
-                                    <ColumnDefinition Width="1.2*"/>
-                                    <ColumnDefinition Width="1.2*"/>
-                                    <ColumnDefinition Width="1.2*"/>
-                                    <ColumnDefinition Width="1.1*"/>
-                                    <ColumnDefinition Width="1.2*"/>
-                                    <ColumnDefinition Width="1*"/>
-                                </Grid.ColumnDefinitions>
-
-                                <TextBlock Foreground="Black" Text="#" Grid.Column="0" FontWeight="Bold" Padding="5" 
-                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="Id" TextWrapping="Wrap"/>
-                                <TextBlock Foreground="Black" Text="MÃ HÓA ĐƠN" Grid.Column="1" FontWeight="Bold" Padding="5" 
-                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="InvoiceCode" TextWrapping="Wrap"/>
-                                <TextBlock Foreground="Black" Text="KHÁCH HÀNG" Grid.Column="2" FontWeight="Bold" Padding="5" 
-                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="Customer" TextWrapping="Wrap"/>
-                                <TextBlock Foreground="Black" Text="NGÀY GIỜ BÁN HÀNG" Grid.Column="3" FontWeight="Bold" Padding="5" 
-                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="SaleDateTime" TextWrapping="Wrap"/>
-                                <TextBlock Foreground="Black" Text="CÁC MÓN TRONG ĐƠN" Grid.Column="4" FontWeight="Bold" Padding="5" 
-                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="Salesperson" TextWrapping="Wrap"/>
-                                <TextBlock Foreground="Black" Text="TỔNG TIỀN" Grid.Column="5" FontWeight="Bold" Padding="5" 
-                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="TotalAmount" TextWrapping="Wrap"/>
-                                <TextBlock Foreground="Black" Text="TỔNG GIẢM GIÁ" Grid.Column="6" FontWeight="Bold" Padding="5" 
-                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="TotalDiscount" TextWrapping="Wrap"/>
-                                <TextBlock Foreground="Black" Text="TỔNG THANH TOÁN" Grid.Column="7" FontWeight="Bold" Padding="5" 
-                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="TotalPayment" TextWrapping="Wrap"/>
-                                <TextBlock Foreground="Black" Text="TỔNG GIÁ VỐN" Grid.Column="8" FontWeight="Bold" Padding="5" 
-                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="TotalCost" TextWrapping="Wrap"/>
-                                <TextBlock Foreground="Black" Text="THANH TOÁN" Grid.Column="9" FontWeight="Bold" Padding="5" 
-                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="PaymentMethod" TextWrapping="Wrap"/>
-                                <TextBlock Foreground="Black" Text="TRẠNG THÁI" Grid.Column="10" FontWeight="Bold" Padding="5" 
-                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="OrderStatus" TextWrapping="Wrap"/>
-                                <TextBlock Foreground="Black" Text="TRẠNG THÁI THANH TOÁN" Grid.Column="11" FontWeight="Bold" Padding="5" 
-                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="PaymentStatus" TextWrapping="Wrap"/>
-                                <TextBlock Foreground="Black" Text="GHI CHÚ" Grid.Column="12" FontWeight="Bold" Padding="5" 
-                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="Notes" TextWrapping="Wrap"/>
-                            </Grid>
-
-                            <!-- Đường kẻ ngang -->
-                            <Border Grid.Row="1" BorderThickness="0,1,0,0" BorderBrush="Black" Margin="5,0,5,0"/>
-                        </Grid>
-                    </ListView.Header>
-
-                    <ListView.ItemTemplate>
-                        <DataTemplate x:DataType="model:Order_">
+                        <ListView.Header>
                             <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="0.5*"/>
-                                    <ColumnDefinition Width="1.2*"/>
-                                    <ColumnDefinition Width="1.2*"/>
-                                    <ColumnDefinition Width="1.2*"/>
-                                    <ColumnDefinition Width="1.5*"/>
-                                    <ColumnDefinition Width="1.2*"/>
-                                    <ColumnDefinition Width="1.2*"/>
-                                    <ColumnDefinition Width="1.2*"/>
-                                    <ColumnDefinition Width="1.2*"/>
-                                    <ColumnDefinition Width="1.2*"/>
-                                    <ColumnDefinition Width="1.1*"/>
-                                    <ColumnDefinition Width="1.2*"/>
-                                    <ColumnDefinition Width="1*"/>
-                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="1"/>
+                                </Grid.RowDefinitions>
 
-                                <TextBlock Foreground="Black" Text="{x:Bind Id}" Grid.Column="0" Padding="5" 
-                                TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"/>
-                                <TextBlock Foreground="Black" Text="{x:Bind InvoiceCode}" Grid.Column="1" Padding="5" 
-                                TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"/>
-                                <TextBlock Foreground="Black" Text="{x:Bind Customer}" Grid.Column="2" Padding="5" 
-                                TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"/>
-                                <TextBlock Foreground="Black" Text="{x:Bind SaleDateTime}" Grid.Column="3" Padding="5" 
-                                TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"/>
-                                <Button Content="Chi tiết" Click="ShowOrderDetails_Click"
-                                Grid.Column="4" Padding="5" HorizontalAlignment="Center" Background="Gray"/>
-                                <TextBlock Foreground="Black" Text="{x:Bind TotalAmount}" Grid.Column="5" Padding="5" 
-                                TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"/>
-                                <TextBlock Foreground="Black" Text="{x:Bind TotalDiscount}" Grid.Column="6" Padding="5" 
-                                TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"/>
-                                <TextBlock Foreground="Black" Text="{x:Bind TotalPayment}" Grid.Column="7" Padding="5" 
-                                TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"/>
-                                <TextBlock Foreground="Black" Text="{x:Bind TotalCost}" Grid.Column="8" Padding="5" 
-                                TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"/>
-                                <TextBlock Foreground="Black" Text="{x:Bind PaymentMethod}" Grid.Column="9" Padding="5" 
-                                TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"/>
-                                <TextBlock Foreground="Black" Text="{x:Bind Status}" Grid.Column="10" Padding="5" 
-                                TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"/>
-                                <TextBlock Foreground="Black" Text="{x:Bind PaymentStatus}" Grid.Column="11" Padding="5" 
-                                TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"/>
-                                <TextBlock Foreground="Black" Text="{x:Bind Notes}" Grid.Column="12" Padding="5" 
-                                TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"/>
+                                <!-- Tiêu đề cột -->
+                                <Grid Grid.Row="0" Height="85">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="0.5*"/>
+                                        <ColumnDefinition Width="1.2*"/>
+                                        <ColumnDefinition Width="1.2*"/>
+                                        <ColumnDefinition Width="1.2*"/>
+                                        <ColumnDefinition Width="1.5*"/>
+                                        <ColumnDefinition Width="1.2*"/>
+                                        <ColumnDefinition Width="1.2*"/>
+                                        <ColumnDefinition Width="1.2*"/>
+                                        <ColumnDefinition Width="1.2*"/>
+                                        <ColumnDefinition Width="1.2*"/>
+                                        <ColumnDefinition Width="1.1*"/>
+                                        <ColumnDefinition Width="1.2*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                    </Grid.ColumnDefinitions>
 
+                                    <TextBlock Foreground="Black" Text="#" Grid.Column="0" FontWeight="Bold" Padding="5" 
+                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="Id" TextWrapping="Wrap"/>
+                                    <TextBlock Foreground="Black" Text="MÃ HÓA ĐƠN" Grid.Column="1" FontWeight="Bold" Padding="5" 
+                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="InvoiceCode" TextWrapping="Wrap"/>
+                                    <TextBlock Foreground="Black" Text="KHÁCH HÀNG" Grid.Column="2" FontWeight="Bold" Padding="5" 
+                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="Customer" TextWrapping="Wrap"/>
+                                    <TextBlock Foreground="Black" Text="NGÀY GIỜ BÁN HÀNG" Grid.Column="3" FontWeight="Bold" Padding="5" 
+                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="SaleDateTime" TextWrapping="Wrap"/>
+                                    <TextBlock Foreground="Black" Text="CÁC MÓN TRONG ĐƠN" Grid.Column="4" FontWeight="Bold" Padding="5" 
+                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="Salesperson" TextWrapping="Wrap"/>
+                                    <TextBlock Foreground="Black" Text="TỔNG TIỀN" Grid.Column="5" FontWeight="Bold" Padding="5" 
+                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="TotalAmount" TextWrapping="Wrap"/>
+                                    <TextBlock Foreground="Black" Text="TỔNG GIẢM GIÁ" Grid.Column="6" FontWeight="Bold" Padding="5" 
+                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="TotalDiscount" TextWrapping="Wrap"/>
+                                    <TextBlock Foreground="Black" Text="TỔNG THANH TOÁN" Grid.Column="7" FontWeight="Bold" Padding="5" 
+                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="TotalPayment" TextWrapping="Wrap"/>
+                                    <TextBlock Foreground="Black" Text="TỔNG GIÁ VỐN" Grid.Column="8" FontWeight="Bold" Padding="5" 
+                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="TotalCost" TextWrapping="Wrap"/>
+                                    <TextBlock Foreground="Black" Text="THANH TOÁN" Grid.Column="9" FontWeight="Bold" Padding="5" 
+                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="PaymentMethod" TextWrapping="Wrap"/>
+                                    <TextBlock Foreground="Black" Text="TRẠNG THÁI" Grid.Column="10" FontWeight="Bold" Padding="5" 
+                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="OrderStatus" TextWrapping="Wrap"/>
+                                    <TextBlock Foreground="Black" Text="TRẠNG THÁI THANH TOÁN" Grid.Column="11" FontWeight="Bold" Padding="5" 
+                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="PaymentStatus" TextWrapping="Wrap"/>
+                                    <TextBlock Foreground="Black" Text="GHI CHÚ" Grid.Column="12" FontWeight="Bold" Padding="5" 
+                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="Notes" TextWrapping="Wrap"/>
+                                </Grid>
+
+                                <!-- Đường kẻ ngang -->
+                                <Border Grid.Row="1" BorderThickness="0,1,0,0" BorderBrush="Black" Margin="5,0,5,0"/>
                             </Grid>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
+                        </ListView.Header>
+
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="model:Order_">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="0.5*"/>
+                                        <ColumnDefinition Width="1.2*"/>
+                                        <ColumnDefinition Width="1.2*"/>
+                                        <ColumnDefinition Width="1.2*"/>
+                                        <ColumnDefinition Width="1.5*"/>
+                                        <ColumnDefinition Width="1.2*"/>
+                                        <ColumnDefinition Width="1.2*"/>
+                                        <ColumnDefinition Width="1.2*"/>
+                                        <ColumnDefinition Width="1.2*"/>
+                                        <ColumnDefinition Width="1.2*"/>
+                                        <ColumnDefinition Width="1.1*"/>
+                                        <ColumnDefinition Width="1.2*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Foreground="Black" Text="{x:Bind Id}" Grid.Column="0" Padding="5" 
+                                TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"/>
+                                    <TextBlock Foreground="Black" Text="{x:Bind InvoiceCode}" Grid.Column="1" Padding="5" 
+                                TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"/>
+                                    <TextBlock Foreground="Black" Text="{x:Bind Customer}" Grid.Column="2" Padding="5" 
+                                TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"/>
+                                    <TextBlock Foreground="Black" Text="{x:Bind SaleDateTime}" Grid.Column="3" Padding="5" 
+                                TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"/>
+                                    <Button Content="Chi tiết" Click="ShowOrderDetails_Click"
+                                Grid.Column="4" Padding="5" HorizontalAlignment="Center" Background="Gray"/>
+                                    <TextBlock Foreground="Black" Text="{x:Bind TotalAmount}" Grid.Column="5" Padding="5" 
+                                TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"/>
+                                    <TextBlock Foreground="Black" Text="{x:Bind TotalDiscount}" Grid.Column="6" Padding="5" 
+                                TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"/>
+                                    <TextBlock Foreground="Black" Text="{x:Bind TotalPayment}" Grid.Column="7" Padding="5" 
+                                TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"/>
+                                    <TextBlock Foreground="Black" Text="{x:Bind TotalCost}" Grid.Column="8" Padding="5" 
+                                TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"/>
+                                    <TextBlock Foreground="Black" Text="{x:Bind PaymentMethod}" Grid.Column="9" Padding="5" 
+                                TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"/>
+                                    <TextBlock Foreground="Black" Text="{x:Bind Status}" Grid.Column="10" Padding="5" 
+                                TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"/>
+                                    <TextBlock Foreground="Black" Text="{x:Bind PaymentStatus}" Grid.Column="11" Padding="5" 
+                                TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"/>
+                                    <TextBlock Foreground="Black" Text="{x:Bind Notes}" Grid.Column="12" Padding="5" 
+                                TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"/>
+
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
 
 
-                <!-- Thanh điều hướng phân trang -->
-                <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
-                    <Button Content="Previous"
+                    <!-- Thanh điều hướng phân trang -->
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+                        <Button Content="Previous"
                         Click="PreviousPage_Click"
                         Width="100" Margin="5, 5, 20, 5"
                         x:Name="PrevOrderBtn" Background="Gray" Foreground="White" IsEnabled="True"/>
 
-                    <TextBlock x:Name="PageBlock"
+                        <TextBlock x:Name="PageBlock"
                            VerticalAlignment="Center" FontSize="16" Foreground="Black"/>
 
-                    <Button Content="Next"
+                        <Button Content="Next"
                         Click="NextPage_Click"
                         Width="100" Margin="20, 5, 5, 5"
                         x:Name="NextOrderBtn" Background="Gray" Foreground="White" IsEnabled="True"/>
+                    </StackPanel>
                 </StackPanel>
             </StackPanel>
-        </StackPanel>
-
+        </ScrollViewer>
     </Grid>
 </Page>

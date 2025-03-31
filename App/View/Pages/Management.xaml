@@ -9,9 +9,9 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid Padding="20">
+    <Grid Padding="20" Background="Wheat">
         <StackPanel Margin="20, 0, 0, 0">
-            <TextBlock Text="Nhập - xuất hàng" FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
+            <TextBlock Text="Nhập - xuất hàng" FontSize="20" FontWeight="Bold" Margin="0,0,0,10" Foreground="Black"/>
 
             <GridView ItemsSource="{x:Bind ItemsInOut}" SelectionMode="None" IsItemClickEnabled="True" ItemClick="GridView_ItemClick">
                 <GridView.ItemTemplate>
@@ -33,7 +33,7 @@
             </GridView>
 
 
-            <TextBlock Text="Truy xuất hàng hóa tồn kho" FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
+            <TextBlock Text="Truy xuất hàng hóa tồn kho" FontSize="20" FontWeight="Bold" Margin="0,0,0,10" Foreground="Black"/>
 
             <GridView ItemsSource="{x:Bind ItemsAccess}" SelectionMode="None" IsItemClickEnabled="True" ItemClick="GridView_ItemClick">
                 <GridView.ItemTemplate>
@@ -54,7 +54,7 @@
                 </GridView.ItemTemplate>
             </GridView>
 
-            <TextBlock Text="Kiểm kê kho" FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
+            <TextBlock Text="Kiểm kê kho" FontSize="20" FontWeight="Bold" Margin="0,0,0,10" Foreground="Black"/>
 
             <GridView ItemsSource="{x:Bind ItemsCheck}" SelectionMode="None" IsItemClickEnabled="True" ItemClick="GridView_ItemClick">
                 <GridView.ItemTemplate>
@@ -75,7 +75,7 @@
                 </GridView.ItemTemplate>
             </GridView>
 
-            <TextBlock Text="Khác" FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
+            <TextBlock Text="Khác" FontSize="20" FontWeight="Bold" Margin="0,0,0,10" Foreground="Black"/>
 
             <GridView ItemsSource="{x:Bind ItemsOther}" SelectionMode="None" IsItemClickEnabled="True" ItemClick="GridView_ItemClick">
                 <GridView.ItemTemplate>
