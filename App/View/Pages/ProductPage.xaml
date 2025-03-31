@@ -35,7 +35,7 @@
 
             <!-- Dropdowns và Thanh Tìm Kiếm -->
             <StackPanel Orientation="Horizontal" Grid.Row="0">
-                <ComboBox x:Name="ProductTypeComboBox" Width="200" Margin="5" Foreground="Black" BorderThickness="1" BorderBrush="Black" SelectedIndex="0">
+                <ComboBox x:Name="ProductTypeComboBox" Width="200" Margin="5" Foreground="Black" BorderThickness="1" BorderBrush="Black" SelectionChanged="Filter_SelectionChanged" SelectedIndex="0">
                     <ComboBox.Header>
                         <TextBlock Text="Loại sản phẩm" Foreground="Gray" />
                     </ComboBox.Header>
@@ -43,7 +43,7 @@
                     <ComboBoxItem Content="Tất cả"/>
                     <ComboBoxItem Content="Combo"/>
                 </ComboBox>
-                <ComboBox x:Name="ProductGroupComboBox" Width="100" Margin="5" Foreground="Black" BorderThickness="1" BorderBrush="Black" SelectedIndex="0" >
+                <ComboBox x:Name="ProductGroupComboBox" Width="100" Margin="5" Foreground="Black" BorderThickness="1" BorderBrush="Black" SelectionChanged="Filter_SelectionChanged" SelectedIndex="0" >
                     <ComboBox.Header>
                         <TextBlock Text="Nhóm sản phẩm" Foreground="Gray" />
                     </ComboBox.Header>
@@ -52,7 +52,7 @@
                     <ComboBoxItem Content="Đồ uống"/>
                     <ComboBoxItem Content="Đồ ăn"/>
                 </ComboBox>
-                <ComboBox x:Name="StatusComboBox" Width="100" Margin="5" Foreground="Black" BorderThickness="1" BorderBrush="Black" SelectedIndex="0">
+                <ComboBox x:Name="StatusComboBox" Width="100" Margin="5" Foreground="Black" BorderThickness="1" BorderBrush="Black" SelectionChanged="Filter_SelectionChanged" SelectedIndex="0">
                     <ComboBox.Header>
                         <TextBlock Text="Trạng thái" Foreground="Gray" />
                     </ComboBox.Header>
@@ -61,7 +61,7 @@
                     <ComboBoxItem Content="Còn hàng"/>
                     <ComboBoxItem Content="Hết hàng"/>
                 </ComboBox>
-                <ComboBox x:Name="SortOrderComboBox" Width="150" Margin="5" Foreground="Black" BorderThickness="1" BorderBrush="Black" SelectedIndex="0">
+                <ComboBox x:Name="SortOrderComboBox" Width="150" Margin="5" Foreground="Black" BorderThickness="1" BorderBrush="Black" SelectionChanged="Filter_SelectionChanged" SelectedIndex="0">
                     <ComboBox.Header>
                         <TextBlock Text="Sắp xếp" Foreground="Gray" />
                     </ComboBox.Header>
@@ -76,10 +76,10 @@
 
                 <Grid Width="200" Margin="5">
                     <TextBox x:Name="SearchTextBox" PlaceholderText="Tìm theo tên/mã/barcode" Padding="5" BorderBrush="Gray" 
-     BorderThickness="1" KeyUp="SearchTextBox_KeyUp" Background="#8D6E63" Height="34" VerticalAlignment="Bottom"/>
+     BorderThickness="1" KeyUp="SearchTextBox_KeyUp"  Background="#8D6E63" Height="34" VerticalAlignment="Bottom"/>
                     <Button Content="🔍" Width="20" Height="20" HorizontalAlignment="Right" 
-                    Margin="0,0,5,0" Background="Transparent" BorderThickness="0" 
-                    Click="SearchButton_Click" Foreground="Black"/>
+    Margin="0,0,5,0" Background="Transparent" BorderThickness="0" 
+    Click="SearchButton_Click" Foreground="Black"/>
                 </Grid>
             </StackPanel>
         </Grid>

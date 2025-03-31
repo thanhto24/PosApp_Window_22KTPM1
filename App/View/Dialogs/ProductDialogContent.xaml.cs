@@ -76,6 +76,12 @@ namespace App.View.Dialogs
 
         private async void LoadImage(string imagePath)
         {
+            // Kiểm tra xem imagePath có bắt đầu với "ms-appx://" không
+            if (imagePath.StartsWith("ms-appx:///"))
+            {
+                // Loại bỏ "ms-appx://" khỏi chuỗi
+                imagePath = imagePath.Substring("ms-appx:///".Length);
+            }
             try
             {
                 BitmapImage bitmapImage = await ProductViewModel.LoadImageFromPath(imagePath);
