@@ -23,7 +23,7 @@ namespace App.Service
                 new Product("NJ001", "Ép cam", 0, 35000, 0, "ms-appx:///Assets/juice_orange.jpg", "Nước ép", 0.08f, 28000, "8938503270074"),
                 new Product("NJ002", "Ép dưa hấu", 0, 30000, 0, "ms-appx:///Assets/juice_watermelon.jpg", "Nước ép", 0.08f, 25000, "8938503270081"),
                 new Product("NJ003", "Ép cà rốt", 0, 32000, 0, "ms-appx:///Assets/juice_carrot.jpg", "Nước ép", 0.08f, 26000, "8938503270098"),
-                new Product("TS001", "Trà sữa", 0, 38000, 0, "ms-appx:///Assets/milktea_classic.jpg", "Trà sữa", 0.07f, 32000, "8938503270104"),
+                new Product("TS001", "Trà sữa khoai môn", 0, 38000, 0, "ms-appx:///Assets/milktea_classic.jpg", "Trà sữa", 0.07f, 32000, "8938503270104"),
                 new Product("TS002", "Hồng trà", 0, 40000, 0, "ms-appx:///Assets/milktea_blackpearl.jpg", "Trà sữa", 0.07f, 34000, "8938503270111"),
                 new Product("TS003", "Lục trà", 0, 42000, 0, "ms-appx:///Assets/milktea_matcha.jpg", "Trà sữa", 0.07f, 35000, "8938503270128"),
                 new Product("SN001", "Khoai tây chiên", 0, 30000, 0, "ms-appx:///Assets/snack_fries.jpg", "Đồ ăn vặt", 0.1f, 20000, "8938503270135"),

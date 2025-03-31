@@ -68,10 +68,13 @@ namespace App.View.Pages
         {
             if (sender is Button button && button.DataContext is Product product)
             {
-                product.Quantity--;
-                CartViewModel.RemoveFromCart(product);
-                OrderSummaryText.Text = $"Số lượng: {CartViewModel.getTotalQuantity().ToString()} món";
-                ApplyDiscount();
+                if(product.Quantity > 0)
+                {
+                    product.Quantity--;
+                    CartViewModel.RemoveFromCart(product);
+                    OrderSummaryText.Text = $"Số lượng: {CartViewModel.getTotalQuantity().ToString()} món";
+                    ApplyDiscount();
+                }
             }
         }
 
@@ -124,7 +127,7 @@ namespace App.View.Pages
         {
             ApplyDiscount();
 
-            if (CartViewModel.totalDiscount == 0)
+            if (CartViewModel.getTotalAmount() == 0)
                 return;
 
             string customerName = string.IsNullOrWhiteSpace(CustomerName.Text) ? "Khách vãng lai" : CustomerName.Text;
