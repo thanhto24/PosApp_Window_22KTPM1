@@ -123,6 +123,10 @@ namespace App.View.Pages
         private async void Checkout_Click(object sender, RoutedEventArgs e)
         {
             ApplyDiscount();
+
+            if (CartViewModel.totalDiscount == 0)
+                return;
+
             string customerName = string.IsNullOrWhiteSpace(CustomerName.Text) ? "Khách vãng lai" : CustomerName.Text;
             CartViewModel.CreateNewOrder(CartViewModel.totalDiscount, customerName);
 

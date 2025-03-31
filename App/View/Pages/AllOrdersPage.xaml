@@ -7,8 +7,7 @@
     xmlns:model="using:App.Model"
     mc:Ignorable="d"
     RequestedTheme="Light"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-    SizeChanged="Page_SizeChanged">
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid Padding="20" Background="Wheat" x:Name="GridRoot">
         <Grid.RowDefinitions>
@@ -19,7 +18,7 @@
 
         <!-- Tiêu đề -->
         <TextBlock Foreground="Black" Text="Order List"
-                   FontSize="20"
+                   FontSize="16"
                    FontWeight="Bold"
                    HorizontalAlignment="Center"
                    Margin="10"/>
@@ -64,31 +63,31 @@
                                     </Grid.ColumnDefinitions>
 
                                     <TextBlock Foreground="Black" Text="#" Grid.Column="0" FontWeight="Bold" Padding="5" 
-                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="Id" TextWrapping="Wrap"/>
+                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="Id" TextWrapping="Wrap" FontSize="12"/>
                                     <TextBlock Foreground="Black" Text="MÃ HÓA ĐƠN" Grid.Column="1" FontWeight="Bold" Padding="5" 
-                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="InvoiceCode" TextWrapping="Wrap"/>
+                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="InvoiceCode" TextWrapping="Wrap" FontSize="12"/>
                                     <TextBlock Foreground="Black" Text="KHÁCH HÀNG" Grid.Column="2" FontWeight="Bold" Padding="5" 
-                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="Customer" TextWrapping="Wrap"/>
+                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="Customer" TextWrapping="Wrap" FontSize="12"/>
                                     <TextBlock Foreground="Black" Text="NGÀY GIỜ BÁN HÀNG" Grid.Column="3" FontWeight="Bold" Padding="5" 
-                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="SaleDateTime" TextWrapping="Wrap"/>
+                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="SaleDateTime" TextWrapping="Wrap" FontSize="12"/>
                                     <TextBlock Foreground="Black" Text="CÁC MÓN TRONG ĐƠN" Grid.Column="4" FontWeight="Bold" Padding="5" 
-                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="Salesperson" TextWrapping="Wrap"/>
+                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="Salesperson" TextWrapping="Wrap" FontSize="12"/>
                                     <TextBlock Foreground="Black" Text="TỔNG TIỀN" Grid.Column="5" FontWeight="Bold" Padding="5" 
-                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="TotalAmount" TextWrapping="Wrap"/>
+                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="TotalAmount" TextWrapping="Wrap" FontSize="12"/>
                                     <TextBlock Foreground="Black" Text="TỔNG GIẢM GIÁ" Grid.Column="6" FontWeight="Bold" Padding="5" 
-                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="TotalDiscount" TextWrapping="Wrap"/>
+                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="TotalDiscount" TextWrapping="Wrap" FontSize="12"/>
                                     <TextBlock Foreground="Black" Text="TỔNG THANH TOÁN" Grid.Column="7" FontWeight="Bold" Padding="5" 
-                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="TotalPayment" TextWrapping="Wrap"/>
+                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="TotalPayment" TextWrapping="Wrap" FontSize="12"/>
                                     <TextBlock Foreground="Black" Text="TỔNG GIÁ VỐN" Grid.Column="8" FontWeight="Bold" Padding="5" 
-                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="TotalCost" TextWrapping="Wrap"/>
+                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="TotalCost" TextWrapping="Wrap" FontSize="12"/>
                                     <TextBlock Foreground="Black" Text="THANH TOÁN" Grid.Column="9" FontWeight="Bold" Padding="5" 
-                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="PaymentMethod" TextWrapping="Wrap"/>
+                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="PaymentMethod" TextWrapping="Wrap" FontSize="12"/>
                                     <TextBlock Foreground="Black" Text="TRẠNG THÁI" Grid.Column="10" FontWeight="Bold" Padding="5" 
-                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="OrderStatus" TextWrapping="Wrap"/>
+                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="OrderStatus" TextWrapping="Wrap" FontSize="12"/>
                                     <TextBlock Foreground="Black" Text="TRẠNG THÁI THANH TOÁN" Grid.Column="11" FontWeight="Bold" Padding="5" 
-                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="PaymentStatus" TextWrapping="Wrap"/>
+                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="PaymentStatus" TextWrapping="Wrap" FontSize="12"/>
                                     <TextBlock Foreground="Black" Text="GHI CHÚ" Grid.Column="12" FontWeight="Bold" Padding="5" 
-                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="Notes" TextWrapping="Wrap"/>
+                           HorizontalAlignment="Center" TextAlignment="Center" Tapped="SortList" Tag="Notes" TextWrapping="Wrap" FontSize="12"/>
                                 </Grid>
 
                                 <!-- Đường kẻ ngang -->
@@ -116,31 +115,31 @@
                                     </Grid.ColumnDefinitions>
 
                                     <TextBlock Foreground="Black" Text="{x:Bind Id}" Grid.Column="0" Padding="5" 
-                                TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"/>
+                                TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center" FontSize="12"/>
                                     <TextBlock Foreground="Black" Text="{x:Bind InvoiceCode}" Grid.Column="1" Padding="5" 
-                                TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"/>
+                                TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center" FontSize="12"/>
                                     <TextBlock Foreground="Black" Text="{x:Bind Customer}" Grid.Column="2" Padding="5" 
-                                TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"/>
+                                TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center" FontSize="12"/>
                                     <TextBlock Foreground="Black" Text="{x:Bind SaleDateTime}" Grid.Column="3" Padding="5" 
-                                TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"/>
+                                TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center" FontSize="12"/>
                                     <Button Content="Chi tiết" Click="ShowOrderDetails_Click"
-                                Grid.Column="4" Padding="5" HorizontalAlignment="Center" Background="Gray"/>
+                                Grid.Column="4" Padding="5" HorizontalAlignment="Center" Background="Gray" FontSize="12"/>
                                     <TextBlock Foreground="Black" Text="{x:Bind TotalAmount}" Grid.Column="5" Padding="5" 
-                                TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"/>
+                                TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center" FontSize="12"/>
                                     <TextBlock Foreground="Black" Text="{x:Bind TotalDiscount}" Grid.Column="6" Padding="5" 
-                                TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"/>
+                                TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center" FontSize="12"/>
                                     <TextBlock Foreground="Black" Text="{x:Bind TotalPayment}" Grid.Column="7" Padding="5" 
-                                TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"/>
+                                TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center" FontSize="12"/>
                                     <TextBlock Foreground="Black" Text="{x:Bind TotalCost}" Grid.Column="8" Padding="5" 
-                                TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"/>
+                                TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center" FontSize="12"/>
                                     <TextBlock Foreground="Black" Text="{x:Bind PaymentMethod}" Grid.Column="9" Padding="5" 
-                                TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"/>
+                                TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center" FontSize="12"/>
                                     <TextBlock Foreground="Black" Text="{x:Bind Status}" Grid.Column="10" Padding="5" 
-                                TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"/>
+                                TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center" FontSize="12"/>
                                     <TextBlock Foreground="Black" Text="{x:Bind PaymentStatus}" Grid.Column="11" Padding="5" 
-                                TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"/>
+                                TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center" FontSize="12"/>
                                     <TextBlock Foreground="Black" Text="{x:Bind Notes}" Grid.Column="12" Padding="5" 
-                                TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"/>
+                                TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center" FontSize="12"/>
 
                                 </Grid>
                             </DataTemplate>
