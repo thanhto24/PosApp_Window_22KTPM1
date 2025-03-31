@@ -54,7 +54,7 @@ namespace App.View.Pages
             }
 
             // Kiểm tra đơn hàng tối thiểu
-            if (!decimal.TryParse(MinOrderBox.Text, out decimal minOrder) || minOrder <= 0)
+            if (!decimal.TryParse(MinOrderBox.Text, out decimal minOrder) || minOrder < 0)
             {
                 ShowMessage("Vui lòng nhập số tiền tối thiểu hợp lệ.");
                 return;
