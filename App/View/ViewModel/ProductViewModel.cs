@@ -18,7 +18,7 @@ namespace App.View.ViewModel
 {
     public class ProductViewModel
     {
-        private IDao _dao;
+        public IDao _dao;
         private readonly string _imagesDirectoryPath;
         private readonly string _imagesRelativePath;
 
@@ -30,7 +30,14 @@ namespace App.View.ViewModel
         {
             _dao = Services.GetKeyedSingleton<IDao>();
             List<Product> products = _dao.Products.GetAll();
+
             Products = new FullObservableCollection<Product>(products);
+            foreach (var product in Products)
+            {
+                // Load image from relative path
+                product.TotalPrice = product.Price * product.Inventory;
+            }
+
             _window = new Microsoft.UI.Xaml.Window();
 
             // Sử dụng AppContext.BaseDirectory để có được đường dẫn cơ sở của ứng dụng

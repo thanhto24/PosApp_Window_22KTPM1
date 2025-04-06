@@ -2,31 +2,66 @@
     x:Class="App.View.Pages.EditProductDialog"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="Chỉnh sửa sản phẩm"
+    Title="Chỉnh sửa tồn kho sản phẩm"
     PrimaryButtonText="Lưu"
     SecondaryButtonText="Hủy"
     PrimaryButtonClick="SaveEditProduct"
-    SecondaryButtonClick="CancelEditProduct">
+    SecondaryButtonClick="CancelEditProduct"
+    DefaultButton="Primary"
+    Width="400"
+    Height="550">
 
     <ScrollViewer VerticalScrollMode="Auto" HorizontalScrollMode="Auto">
-        <StackPanel Padding="10" Spacing="10">
-            <TextBlock Text="Mã sản phẩm" FontWeight="Bold"/>
-            <ComboBox x:Name="CbProductCode" Width="250" SelectionChanged="ProductSelectionChanged">
+        <StackPanel Padding="20" Spacing="12">
+            <TextBlock Text="Chọn sản phẩm" FontWeight="Bold" FontSize="14"/>
+            <ComboBox x:Name="CbProductCode" Width="350" PlaceholderText="Chọn sản phẩm" SelectionChanged="ProductSelectionChanged">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding ProductCode}"/>
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <TextBlock Text="{Binding BarCode}" Width="80" FontWeight="SemiBold"/>
+                            <TextBlock Text="{Binding Name}" Width="220"/>
+                        </StackPanel>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
 
-            <TextBlock Text="Tên sản phẩm" FontWeight="Bold"/>
-            <TextBox x:Name="TxtProductName" Width="250"/>
+            <Grid RowSpacing="12" ColumnSpacing="10" Margin="0,10,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-            <TextBlock Text="Số lượng" FontWeight="Bold"/>
-            <TextBox x:Name="TxtQuantity" Width="250" InputScope="Number"/>
+                <!-- Product Name -->
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Tên sản phẩm:" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                <TextBox x:Name="TxtProductName" Grid.Row="0" Grid.Column="1" Width="250" HorizontalAlignment="Left"/>
 
-            <TextBlock Text="Giá sản phẩm" FontWeight="Bold"/>
-            <TextBox x:Name="TxtPrice" Width="250" InputScope="Number"/>
+                <!-- Inventory -->
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="Số lượng tồn kho:" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                <TextBox x:Name="TxtQuantity" Grid.Row="1" Grid.Column="1" Width="150" HorizontalAlignment="Left" InputScope="Number"/>
+
+                <!-- Price -->
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Giá bán:" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Spacing="5">
+                    <TextBox x:Name="TxtPrice" Width="150" InputScope="Number"/>
+                    <TextBlock Text="đ" VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <!-- Total Value -->
+                <TextBlock Grid.Row="3" Grid.Column="0" Text="Giá trị tồn kho:" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" Spacing="5">
+                    <TextBlock x:Name="TxtTotalValue" FontWeight="Bold" Foreground="SteelBlue" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Grid>
+
+            <TextBlock Margin="0,15,0,0" TextWrapping="Wrap" FontStyle="Italic" Foreground="Gray">
+                Chỉnh sửa số lượng tồn kho và giá bán sẽ tự động cập nhật giá trị tồn kho của sản phẩm.
+            </TextBlock>
         </StackPanel>
     </ScrollViewer>
 </ContentDialog>

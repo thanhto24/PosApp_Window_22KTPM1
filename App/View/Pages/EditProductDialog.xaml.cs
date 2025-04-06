@@ -2,60 +2,170 @@
 using Microsoft.UI.Xaml;
 using System.Collections.ObjectModel;
 using App.Model;
+using App.View.ViewModel;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading.Tasks;
+using App.Utils;
 
 namespace App.View.Pages
 {
     public sealed partial class EditProductDialog : ContentDialog
     {
-        public ObservableCollection<Product> Products { get; set; }
+        public FullObservableCollection<Product> Products { get; set; }
+        private ProductViewModel _productViewModel;
+        private bool _isModified = false;
+
+        private void AddCalculationHandlers()
+        {
+            TxtQuantity.TextChanged += UpdateTotalValue;
+            TxtPrice.TextChanged += UpdateTotalValue;
+        }
 
         public EditProductDialog()
         {
             this.InitializeComponent();
-            Products = new ObservableCollection<Product>(); // Khởi tạo danh sách sản phẩm rỗng
+            AddCalculationHandlers(); // Add event handlers for quantity and price text changes
+
+            Products = new FullObservableCollection<Product>(); // Initialize empty product list
+            _productViewModel = new ProductViewModel();
         }
 
-        public EditProductDialog(ObservableCollection<Product> products) : this()
+        public EditProductDialog(FullObservableCollection<Product> products) : this()
         {
             Products = products;
-            CbProductCode.ItemsSource = Products; // Gán danh sách sản phẩm vào ComboBox
+            CbProductCode.ItemsSource = Products; // Assign product list to ComboBox
+
+            // If there are products, select the first one
+            if (products.Count > 0)
+            {
+                CbProductCode.SelectedIndex = 0;
+            }
         }
 
-        // Sự kiện khi bấm nút "Lưu"
-        private void SaveEditProduct(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        // Event when "Save" button is clicked
+        private async void SaveEditProduct(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
-            if (CbProductCode.SelectedItem is Product selectedProduct)
+            try
             {
-                // Cập nhật thông tin sản phẩm
-                selectedProduct.Name = TxtProductName.Text;
-                selectedProduct.Quantity = int.TryParse(TxtQuantity.Text, out int quantity) ? quantity : selectedProduct.Quantity;
-                selectedProduct.Price = int.TryParse(TxtPrice.Text, out int price) ? price : selectedProduct.Price;
-
-                // Cập nhật UI
-                var index = Products.IndexOf(selectedProduct);
-                if (index != -1)
+                if (CbProductCode.SelectedItem is Product selectedProduct)
                 {
-                    Products[index] = selectedProduct; // Thay đổi trong ObservableCollection để UI cập nhật
+                    // Update product information
+                    string originalName = selectedProduct.Name;
+
+                    // Save original inventory value to check if it changed
+                    int originalInventory = selectedProduct.Inventory;
+
+                    // Parse and validate the new inventory value
+                    if (!int.TryParse(TxtQuantity.Text, out int newInventory) || newInventory < 0)
+                    {
+                        args.Cancel = true; // Prevent dialog from closing
+                        await ShowErrorMessage("Số lượng không hợp lệ. Vui lòng nhập số không âm.");
+                        return;
+                    }
+
+                    // Parse and validate the price
+                    if (!int.TryParse(TxtPrice.Text, out int newPrice) || newPrice < 0)
+                    {
+                        args.Cancel = true; // Prevent dialog from closing
+                        await ShowErrorMessage("Giá không hợp lệ. Vui lòng nhập số không âm.");
+                        return;
+                    }
+
+                    // Update the product properties
+                    selectedProduct.Name = TxtProductName.Text;
+                    selectedProduct.Inventory = newInventory;
+                    selectedProduct.Price = newPrice;
+                    selectedProduct.TotalPrice = newInventory * newPrice;
+
+                    // Update UI and mark as modified if inventory changed
+                    if (originalInventory != newInventory)
+                    {
+                        _isModified = true;
+                    }
+
+                    // Update the product in the database
+                    var updateValues = new Dictionary<string, object>
+                    {
+                        { "Name", selectedProduct.Name },
+                        { "Inventory", selectedProduct.Inventory },
+                        { "Price", selectedProduct.Price },
+                        { "TotalPrice", selectedProduct.TotalPrice }
+                    };
+
+                    // Update in database using repository
+                    _productViewModel._dao.Products.UpdateByQuery(
+                        updateValues,
+                        "BarCode = @BarCode",
+                        new Dictionary<string, object> { { "BarCode", selectedProduct.BarCode } }
+                    );
+
+                    Debug.WriteLine($"Updated product: {selectedProduct.Name}, Inventory: {selectedProduct.Inventory}");
                 }
             }
-
-            this.Hide();
+            catch (Exception ex)
+            {
+                args.Cancel = true; // Prevent dialog from closing
+                await ShowErrorMessage($"Lỗi: {ex.Message}");
+            }
         }
 
-
-        // Sự kiện khi bấm nút "Hủy"
+        // Event when "Cancel" button is clicked
         private void CancelEditProduct(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
-            this.Hide();
+            // No additional action needed, the dialog will be dismissed
         }
 
+        // Show error message
+        private async Task ShowErrorMessage(string message)
+        {
+            ContentDialog errorDialog = new ContentDialog
+            {
+                Title = "Lỗi",
+                Content = message,
+                CloseButtonText = "OK",
+                XamlRoot = this.XamlRoot
+            };
+
+            await errorDialog.ShowAsync();
+        }
+
+        // Event when a product is selected from the dropdown
         private void ProductSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (CbProductCode.SelectedItem is Product selectedProduct)
             {
                 TxtProductName.Text = selectedProduct.Name;
-                TxtQuantity.Text = selectedProduct.Quantity.ToString();
+                TxtQuantity.Text = selectedProduct.Inventory.ToString();
                 TxtPrice.Text = selectedProduct.Price.ToString();
+
+                // Update total value
+                UpdateTotalValue(null, null);
+            }
+        }
+
+        // Check if any changes were made
+        public bool IsModified()
+        {
+            return _isModified;
+        }
+
+
+        
+
+        // Add this method to update the total value when quantity or price changes
+        private void UpdateTotalValue(object sender, TextChangedEventArgs e)
+        {
+            if (int.TryParse(TxtQuantity.Text, out int quantity) &&
+                int.TryParse(TxtPrice.Text, out int price))
+            {
+                int totalValue = quantity * price;
+                TxtTotalValue.Text = $"{totalValue:N0} đ";
+            }
+            else
+            {
+                TxtTotalValue.Text = "0 đ";
             }
         }
     }

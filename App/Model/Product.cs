@@ -7,14 +7,14 @@ namespace App.Model
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public string ProductCode { get; set; }
+        //public string ProductCode { get; set; }
         public string Name { get; set; }
 
         public int Quantity { get; set; }
 
         public int Price { get; set; }
 
-        //public int TotalPrice => Price * Quantity;
+        public int TotalPrice { get; set; } // = Price * Inventory
 
         public string ImagePath { get; set; }
         public string BarCode { get; set; }
@@ -23,9 +23,12 @@ namespace App.Model
         public float Vat { get; set; }
         public int CostPrice { get; set; }
 
-        public Product(string productCode, string name, int quantity, int price, int totalPrice, string image, string typeGroup, float vAT, int costPrice, string barCode)
+        //giá trị tồn kho:
+        public int Inventory { get; set; }
+
+        public Product( string name, int quantity, int price, int totalPrice, string image, string typeGroup, float vAT, int costPrice, string barCode, int inventory = 1)
         {
-            ProductCode = productCode;
+            //ProductCode = productCode;
             Name = name;
             Quantity = quantity;
             Price = price;
@@ -34,6 +37,9 @@ namespace App.Model
             Vat = vAT;
             CostPrice = costPrice;
             BarCode = barCode;
+
+            //tồn kho:
+            this.Inventory = inventory;
         }
 
         public Product() { }

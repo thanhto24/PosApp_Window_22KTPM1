@@ -1,5 +1,10 @@
 # PosApp_Window_22KTPM1
 
+## Infor:
+- Trần Gia Bảo - 22127034
+- Phan Văn Tài - 22127372
+- Tô Quốc Thanh - 22127388
+
 ### Hướng dẫn chạy project
 
 #### **1. Clone và mở project**

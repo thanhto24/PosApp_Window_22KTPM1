@@ -14,21 +14,21 @@ namespace App.Service
         {
             private List<Product> products = new List<Product>()
             {
-                new Product("CF001", "Espresso", 0, 32000, 0, "ms-appx:///Assets/espresso.jpg", "Cà phê", 0.1f, 25000, "8938503270012"),
-                new Product("CF002", "Cappuccino", 0, 35000, 0, "ms-appx:///Assets/cappuccino.jpg", "Cà phê", 0.1f, 27000, "8938503270029"),
-                new Product("CF003", "Latte", 0, 40000, 0, "ms-appx:///Assets/latte.jpg", "Cà phê", 0.1f, 30000, "8938503270036"),
-                new Product("ST001", "Sinh tố bơ", 0, 45000, 0, "ms-appx:///Assets/smoothie_avocado.jpg", "Sinh tố", 0.05f, 38000, "8938503270043"),
-                new Product("ST002", "Sinh tố xoài", 0, 40000, 0, "ms-appx:///Assets/smoothie_mango.jpg", "Sinh tố", 0.05f, 35000, "8938503270050"),
-                new Product("ST003", "Sinh tố dâu", 0, 42000, 0, "ms-appx:///Assets/smoothie_strawberry.jpg", "Sinh tố", 0.05f, 36000, "8938503270067"),
-                new Product("NJ001", "Ép cam", 0, 35000, 0, "ms-appx:///Assets/juice_orange.jpg", "Nước ép", 0.08f, 28000, "8938503270074"),
-                new Product("NJ002", "Ép dưa hấu", 0, 30000, 0, "ms-appx:///Assets/juice_watermelon.jpg", "Nước ép", 0.08f, 25000, "8938503270081"),
-                new Product("NJ003", "Ép cà rốt", 0, 32000, 0, "ms-appx:///Assets/juice_carrot.jpg", "Nước ép", 0.08f, 26000, "8938503270098"),
-                new Product("TS001", "Trà sữa khoai môn", 0, 38000, 0, "ms-appx:///Assets/milktea_classic.jpg", "Trà sữa", 0.07f, 32000, "8938503270104"),
-                new Product("TS002", "Hồng trà", 0, 40000, 0, "ms-appx:///Assets/milktea_blackpearl.jpg", "Trà sữa", 0.07f, 34000, "8938503270111"),
-                new Product("TS003", "Lục trà", 0, 42000, 0, "ms-appx:///Assets/milktea_matcha.jpg", "Trà sữa", 0.07f, 35000, "8938503270128"),
-                new Product("SN001", "Khoai tây chiên", 0, 30000, 0, "ms-appx:///Assets/snack_fries.jpg", "Đồ ăn vặt", 0.1f, 20000, "8938503270135"),
-                new Product("SN002", "Gà rán", 0, 45000, 0, "ms-appx:///Assets/snack_friedchicken.jpg", "Đồ ăn vặt", 0.1f, 35000, "8938503270142"),
-                new Product("SN003", "Sandwich", 0, 35000, 0, "ms-appx:///Assets/snack_sandwich.jpg", "Đồ ăn vặt", 0.1f, 28000, "8938503270159")
+                //new Product("CF001", "Espresso", 0, 32000, 0, "ms-appx:///Assets/espresso.jpg", "Cà phê", 0.1f, 25000, "8938503270012"),
+                //new Product("CF002", "Cappuccino", 0, 35000, 0, "ms-appx:///Assets/cappuccino.jpg", "Cà phê", 0.1f, 27000, "8938503270029"),
+                //new Product("CF003", "Latte", 0, 40000, 0, "ms-appx:///Assets/latte.jpg", "Cà phê", 0.1f, 30000, "8938503270036"),
+                //new Product("ST001", "Sinh tố bơ", 0, 45000, 0, "ms-appx:///Assets/smoothie_avocado.jpg", "Sinh tố", 0.05f, 38000, "8938503270043"),
+                //new Product("ST002", "Sinh tố xoài", 0, 40000, 0, "ms-appx:///Assets/smoothie_mango.jpg", "Sinh tố", 0.05f, 35000, "8938503270050"),
+                //new Product("ST003", "Sinh tố dâu", 0, 42000, 0, "ms-appx:///Assets/smoothie_strawberry.jpg", "Sinh tố", 0.05f, 36000, "8938503270067"),
+                //new Product("NJ001", "Ép cam", 0, 35000, 0, "ms-appx:///Assets/juice_orange.jpg", "Nước ép", 0.08f, 28000, "8938503270074"),
+                //new Product("NJ002", "Ép dưa hấu", 0, 30000, 0, "ms-appx:///Assets/juice_watermelon.jpg", "Nước ép", 0.08f, 25000, "8938503270081"),
+                //new Product("NJ003", "Ép cà rốt", 0, 32000, 0, "ms-appx:///Assets/juice_carrot.jpg", "Nước ép", 0.08f, 26000, "8938503270098"),
+                //new Product("TS001", "Trà sữa khoai môn", 0, 38000, 0, "ms-appx:///Assets/milktea_classic.jpg", "Trà sữa", 0.07f, 32000, "8938503270104"),
+                //new Product("TS002", "Hồng trà", 0, 40000, 0, "ms-appx:///Assets/milktea_blackpearl.jpg", "Trà sữa", 0.07f, 34000, "8938503270111"),
+                //new Product("TS003", "Lục trà", 0, 42000, 0, "ms-appx:///Assets/milktea_matcha.jpg", "Trà sữa", 0.07f, 35000, "8938503270128"),
+                //new Product("SN001", "Khoai tây chiên", 0, 30000, 0, "ms-appx:///Assets/snack_fries.jpg", "Đồ ăn vặt", 0.1f, 20000, "8938503270135"),
+                //new Product("SN002", "Gà rán", 0, 45000, 0, "ms-appx:///Assets/snack_friedchicken.jpg", "Đồ ăn vặt", 0.1f, 35000, "8938503270142"),
+                //new Product("SN003", "Sandwich", 0, 35000, 0, "ms-appx:///Assets/snack_sandwich.jpg", "Đồ ăn vặt", 0.1f, 28000, "8938503270159")
             };
 
             public List<Product> GetAll() => products;
