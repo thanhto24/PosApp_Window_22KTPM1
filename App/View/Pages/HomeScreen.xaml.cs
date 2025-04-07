@@ -52,10 +52,25 @@ namespace App.View.Pages
 
 
         // Xử lý sự kiện khi bấm nút "+"
-        private void AddButton_Click(object sender, RoutedEventArgs e)
+        private async void AddButton_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button button && button.DataContext is Product product)
             {
+                // Check if adding one more would exceed inventory
+                if (product.Quantity + 1 > product.Inventory)
+                {
+                    ContentDialog inventoryDialog = new ContentDialog
+                    {
+                        Title = "Thông báo",
+                        Content = $"Không đủ hàng trong kho. Chỉ còn {product.Inventory} sản phẩm.",
+                        CloseButtonText = "OK",
+                        XamlRoot = this.Content.XamlRoot
+                    };
+
+                    await inventoryDialog.ShowAsync();
+                    return;
+                }
+
                 product.Quantity++;
                 CartViewModel.AddToCart(product);
                 OrderSummaryText.Text = $"Số lượng: {CartViewModel.getTotalQuantity().ToString()} món";
@@ -141,6 +156,9 @@ namespace App.View.Pages
             string promoCode = PromoCodeTextBox.Text.Trim();
             VoucherViewModel.des(promoCode);
 
+            // Update inventory in database
+            UpdateInventoryAfterSale();
+
             ContentDialog checkoutDialog = new ContentDialog
             {
                 Title = "Thông báo",
@@ -152,6 +170,38 @@ namespace App.View.Pages
 
 
             await checkoutDialog.ShowAsync();
+
+            // Reset product quantities in UI
+            foreach (var product in ProductViewModel.Products)
+            {
+                product.Quantity = 0;
+            }
+        }
+
+        private void UpdateInventoryAfterSale()
+        {
+            foreach (var cartItem in CartViewModel.CartItems)
+            {
+                // Find the product in the products list
+                var product = ProductViewModel.Products.FirstOrDefault(p => p.BarCode == cartItem.Product.BarCode);
+                if (product != null)
+                {
+                    // Update inventory
+                    product.Inventory -= cartItem.Quantity;
+
+                    // Update in database
+                    var updateValues = new Dictionary<string, object>
+                    {
+                        { "Inventory", product.Inventory }
+                    };
+
+                    ProductViewModel._dao.Products.UpdateByQuery(
+                        updateValues,
+                        "BarCode = @BarCode",
+                        new Dictionary<string, object> { { "BarCode", product.BarCode } }
+                    );
+                }
+            }
         }
     }
 }

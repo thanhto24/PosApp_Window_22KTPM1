@@ -14,6 +14,12 @@
             <!-- Other app resources here -->
             <coverter:IntegerToVisibilityMsgConverter x:Key="IntegerToVisibilityMsgConverter"/>
             <coverter:IntegerToVisibilityListConverter x:Key="IntegerToVisibilityListConverter"/>
+
+            <!-- Converter to show elements when inventory is zero -->
+            <coverter:ZeroToVisibleConverter x:Key="ZeroToVisibleConverter"/>
+
+            <!-- Converter to hide elements when inventory is zero -->
+            <coverter:ZeroToCollapsedConverter x:Key="ZeroToCollapsedConverter"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

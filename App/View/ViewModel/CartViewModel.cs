@@ -32,6 +32,13 @@ namespace App.View.ViewModel
                 var existingItem = CartItems.FirstOrDefault(ci => ci.Product.Name == product.Name);
                 if (existingItem != null)
                 {
+                    // Check if adding one more would exceed inventory
+                    if (existingItem.Quantity + 1 > product.Inventory)
+                    {
+                        // This should not happen as we check in the UI, but just in case
+                        return;
+                    }
+
                     existingItem.Quantity++;
                 }
             }
@@ -53,6 +60,11 @@ namespace App.View.ViewModel
                     if (existingItem != null)
                     {
                         existingItem.Quantity--;
+
+                        if (existingItem.Quantity <= 0)  
+                        {
+                            CartItems.Remove(existingItem);
+                        }
                     }
                 }
                 else

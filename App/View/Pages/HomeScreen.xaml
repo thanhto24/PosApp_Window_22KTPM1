@@ -76,16 +76,32 @@
                                                     <RowDefinition Height="1*"/>
                                                     <RowDefinition Height="2*"/>
                                                 </Grid.RowDefinitions>
-                                                
+
                                                 <Image Grid.Row="0" Source="{x:Bind ImagePath}" Width="100" Height="100" Margin="0,0,0,10"/>
                                                 <TextBlock Grid.Row="1" Text="{x:Bind Name}" FontSize="18" FontWeight="Bold" HorizontalAlignment="Center" Foreground="Black" TextAlignment="Center" TextWrapping="Wrap"/>
                                                 <TextBlock Grid.Row="2" Text="{x:Bind Price}" FontSize="16" Foreground="Gray" HorizontalAlignment="Center"/>
-                                                <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0, -25, 0, 0" Padding="5" Background="Black" VerticalAlignment="Bottom">
+
+                                                <!-- Inventory Status -->
+                                                <TextBlock Grid.Row="3" 
+                                                  Text="Hết hàng" 
+                                                  Foreground="Red" 
+                                                  FontWeight="Bold"
+                                                  HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center"
+                                                  Visibility="{x:Bind Inventory, Converter={StaticResource ZeroToVisibleConverter}}"/>
+
+                                                <StackPanel Grid.Row="3" 
+                                                    Orientation="Horizontal" 
+                                                    HorizontalAlignment="Center" 
+                                                    Margin="0, -25, 0, 0" 
+                                                    Padding="5" 
+                                                    Background="Black" 
+                                                    VerticalAlignment="Bottom"
+                                                    Visibility="{x:Bind Inventory, Converter={StaticResource ZeroToCollapsedConverter}}">
                                                     <Button Content="-" Width="30" Click="RemoveButton_Click" Foreground="#66FF66" Background="#222"/>
                                                     <TextBlock Text="{x:Bind Quantity}" FontSize="16" Margin="10, 4, 10, 0" Foreground="#CCFF00"/>
                                                     <Button Content="+" Width="32" Click="AddButton_Click" Foreground="#66FF66" Background="#222"/>
                                                 </StackPanel>
-
                                             </Grid>
                                         </Border>
                                     </DataTemplate>

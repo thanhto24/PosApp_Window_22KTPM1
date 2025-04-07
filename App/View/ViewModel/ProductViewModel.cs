@@ -350,6 +350,8 @@ namespace App.View.ViewModel
             var filteredProducts = _dao.Products.GetByQuery(new Dictionary<string, object> { { "TypeGroup", TypeGroup } });
             foreach (var product in filteredProducts)
             {
+                // Make sure inventory is at least 0, never negative
+                product.Inventory = Math.Max(0, product.Inventory);
                 Products.Add(product);
             }
         }
