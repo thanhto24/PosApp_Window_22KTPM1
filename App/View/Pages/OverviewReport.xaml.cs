@@ -14,9 +14,14 @@ namespace App.View.Pages
     public sealed partial class OverviewReport : Page
     {
         public ObservableCollection<string> PresetDates { get; set; }
-        public ObservableCollection<Product> Products { get; set; }
+        //public ObservableCollection<Product> Products { get; set; }
         public ReportViewModel ReportViewModel { get; set; }
         public OrderViewModel OrderViewModel { get; set; }
+
+        //cho biểu đồ:
+        public LineChartViewModel LineChartViewModel { get; set; }
+
+
 
         public decimal totalRevenue;
         public decimal totalCost;
@@ -35,6 +40,8 @@ namespace App.View.Pages
             };
             OrderViewModel = new OrderViewModel();
             ReportViewModel = new ReportViewModel();
+            LineChartViewModel = new LineChartViewModel();
+
             this.DataContext = this;
             LoadReportData();
         }
@@ -61,6 +68,8 @@ namespace App.View.Pages
                     DatePickerFlyout.Hide();
                 }
             }
+            // Cập nhật dữ liệu sau khi thay đổi ngày
+            LoadReportData();
         }
 
         // Áp dụng ngày tùy chỉnh
@@ -72,6 +81,8 @@ namespace App.View.Pages
             {
                 DatePickerFlyout.Hide();
             }
+            // Cập nhật dữ liệu sau khi thay đổi ngày
+            LoadReportData();
         }
 
         // Hủy chọn ngày
@@ -93,19 +104,46 @@ namespace App.View.Pages
 
         }
 
+        private void ChartViewMode_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ReportViewModel == null || LineChartViewModel == null)
+                return;
+
+            string timeFrame = "day";
+
+            if (ChartViewMode.SelectedIndex == 1)
+                timeFrame = "month";
+            else if (ChartViewMode.SelectedIndex == 2)
+                timeFrame = "year";
+
+            // Cập nhật biểu đồ với chế độ đã chọn
+            LineChartViewModel.UpdateChart(ReportViewModel.GetAllOrders(), timeFrame);
+        }
+
         private void LoadReportData()
         {
             CalculateSummary();
 
             // Xóa dữ liệu cũ và cập nhật mới
-            ReportViewModel.report.Clear();
-            foreach (var report in ReportViewModel.report)
-            {
-                ReportViewModel.report.Add(report);
-                Debug.WriteLine($"[DEBUG] Report: Orders = {report.TotalOrders}, Revenue = {report.TotalRevenue}, Profit = {report.TotalProfit}");
-            }
+            //ReportViewModel.report.Clear();
+            //foreach (var report in ReportViewModel.report)
+            //{
+            //    ReportViewModel.report.Add(report);
+            //    Debug.WriteLine($"[DEBUG] Report: Orders = {report.TotalOrders}, Revenue = {report.TotalRevenue}, Profit = {report.TotalProfit}");
+            //}
 
             UpdateReportUI();
+
+            // Cập nhật biểu đồ với chế độ xem hiện tại
+            string timeFrame = "day";
+            if (ChartViewMode != null)
+            {
+                if (ChartViewMode.SelectedIndex == 1)
+                    timeFrame = "month";
+                else if (ChartViewMode.SelectedIndex == 2)
+                    timeFrame = "year";
+            }
+            LineChartViewModel.UpdateChart(ReportViewModel.GetAllOrders(), timeFrame);
         }
 
         private void UpdateReportUI()
@@ -134,8 +172,8 @@ namespace App.View.Pages
             }
 
             Debug.WriteLine($"[DEBUG] Summary: Orders = {totalOrders}, Revenue = {totalRevenue}, TotalDiscount = {totalCost}, Profit = {totalProfit}");
-            var report = new ReportData(totalOrders, totalRevenue, totalProfit);
-            ReportViewModel.addReport(report);
+            //var report = new ReportData(totalOrders, totalRevenue, totalProfit);
+            //ReportViewModel.addReport(report);
 
         }
 
