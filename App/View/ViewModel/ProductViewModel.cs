@@ -1,6 +1,7 @@
 ﻿using App.Model;
 using App.Service;
 using App.Utils;
+using BarcodeStandard;
 using Microsoft.UI.Xaml.Media.Imaging;
 using System;
 using System.Collections.Generic;
@@ -24,7 +25,7 @@ namespace App.View.ViewModel
 
         public FullObservableCollection<Product> Products { get; set; }
 
-        private Microsoft.UI.Xaml.Window _window;
+        public Microsoft.UI.Xaml.Window _window;
 
         public ProductViewModel()
         {
@@ -36,6 +37,13 @@ namespace App.View.ViewModel
             {
                 // Load image from relative path
                 product.TotalPrice = product.Price * product.Inventory;
+
+                // Tạo barcode cho mỗi sản phẩm
+                if (product.BarCodeBitmap == null)
+                {
+                    product.BarCodeBitmap = new BitmapImage();
+                    _ = product.LoadBarcodeAsync(product.BarCode);
+                }
             }
 
             _window = new Microsoft.UI.Xaml.Window();

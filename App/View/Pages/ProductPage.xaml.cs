@@ -7,9 +7,13 @@ using Microsoft.UI.Xaml.Controls;
 using App.View.Dialogs;
 using App.View.ViewModel;
 using App.Model;
-using App.Utils;
 using System.Collections.Generic;
-using Microsoft.UI.Xaml.Media;
+using BarcodeStandard;
+using Windows.Storage.Pickers;
+using WinRT.Interop;
+using Windows.Storage.Streams;
+using System.IO;
+using System.Linq;
 
 namespace App.View.Pages
 {
@@ -33,6 +37,83 @@ namespace App.View.Pages
                 ProductModelPage = new ProductViewModel(); // Fallback without window
             }
         }
+
+
+        private async void SaveBarCode_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                // Lấy barcode từ CommandParameter
+                var button = sender as Button;
+                string barCode = button.CommandParameter as string;
+
+                if (string.IsNullOrEmpty(barCode))
+                {
+                    await ShowErrorDialog("Không tìm thấy mã vạch để lưu.");
+                    return;
+                }
+
+                // Tìm sản phẩm có barcode tương ứng
+                var product = ProductModelPage.Products.FirstOrDefault(p => p.BarCode == barCode);
+
+                if (product == null || product.BarCodeBitmap == null)
+                {
+                    await ShowErrorDialog("Không tìm thấy hình ảnh mã vạch để lưu.");
+                    return;
+                }
+
+                // Tạo FileSavePicker để chọn nơi lưu file
+                var savePicker = new FileSavePicker();
+
+                // Khởi tạo FileSavePicker với window handle
+                InitializeWithWindow.Initialize(savePicker, WindowNative.GetWindowHandle(ProductModelPage._window));
+
+                savePicker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
+                savePicker.FileTypeChoices.Add("PNG Image", new List<string>() { ".png" });
+                savePicker.SuggestedFileName = $"Barcode_{barCode}";
+
+                // Hiển thị dialog lưu file
+                StorageFile file = await savePicker.PickSaveFileAsync();
+
+                if (file != null)
+                {
+                    // Tạo lại barcode và lưu trực tiếp
+                    Barcode bc = new Barcode();
+                    var blackColor = new SkiaSharp.SKColorF(0, 0, 0); // Đen
+                    var whiteColor = new SkiaSharp.SKColorF(1, 1, 1); // Trắng
+
+                    using var img = bc.Encode(BarcodeStandard.Type.Code128, barCode,
+                                          blackColor, whiteColor,
+                                          300, 150); // Kích thước lớn hơn để in ấn
+
+                    using var data = img.Encode(SkiaSharp.SKEncodedImageFormat.Png, 100);
+                    using var stream = await file.OpenAsync(FileAccessMode.ReadWrite);
+
+                    using (var outputStream = stream.GetOutputStreamAt(0))
+                    {
+                        using (var dataWriter = new DataWriter(outputStream))
+                        {
+                            using (var memoryStream = new MemoryStream())
+                            {
+                                using (var skiaStream = data.AsStream())
+                                {
+                                    await skiaStream.CopyToAsync(memoryStream);
+                                }
+
+                                dataWriter.WriteBytes(memoryStream.ToArray());
+                                await dataWriter.StoreAsync();
+                                await outputStream.FlushAsync();
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                await ShowErrorDialog($"Lỗi khi lưu mã vạch: {ex.Message}");
+            }
+        }
+
 
 
         // Add New Product Button Click
@@ -245,7 +326,7 @@ namespace App.View.Pages
             // Check if Enter key was pressed
             if (e.Key == Windows.System.VirtualKey.Enter)
             {
-                ApplyFilters();
+                _ = ApplyFilters();
             }
         }
 
