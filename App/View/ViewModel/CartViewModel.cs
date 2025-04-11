@@ -17,6 +17,7 @@ namespace App.View.ViewModel
         private Dictionary<string, int> cart;
         private IDao _dao;
         public double totalDiscount;
+        public bool IsVATEnabled { get; set; } = false;
         public CartViewModel()
         {
             _dao = Services.GetKeyedSingleton<IDao>();
@@ -81,7 +82,12 @@ namespace App.View.ViewModel
 
         public double getTotalAmount()
         {
-            double total = CartItems.Sum(item => item.Product.Price * item.Quantity);
+            double total = CartItems.Sum(item =>
+            {
+                double vatMultiplier = IsVATEnabled ? (1 + item.Product.Vat / 100.0) : 1.0;
+                return item.Product.Price * item.Quantity * vatMultiplier;
+            });
+
             return total;
         }
 

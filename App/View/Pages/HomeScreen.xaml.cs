@@ -167,8 +167,6 @@ namespace App.View.Pages
                 XamlRoot = this.Content.XamlRoot
             };
 
-
-
             await checkoutDialog.ShowAsync();
 
             // Reset product quantities in UI
@@ -176,6 +174,18 @@ namespace App.View.Pages
             {
                 product.Quantity = 0;
             }
+        }
+
+        private void VatToggleButton_Checked(object sender, RoutedEventArgs e)
+        {
+            CartViewModel.IsVATEnabled = true;
+            ApplyDiscount();
+        }
+
+        private void VatToggleButton_Unchecked(object sender, RoutedEventArgs e)
+        {
+            CartViewModel.IsVATEnabled = false;
+            ApplyDiscount();
         }
 
         private void UpdateInventoryAfterSale()
