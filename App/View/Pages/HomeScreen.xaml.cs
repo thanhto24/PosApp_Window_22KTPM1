@@ -11,6 +11,8 @@ using System.Globalization;
 using System.Diagnostics;
 using App.Service;
 using App.View.Pages;
+using System.Threading.Tasks;
+using Microsoft.UI.Xaml.Input;
 
 namespace App.View.Pages
 {
@@ -202,6 +204,65 @@ namespace App.View.Pages
                     );
                 }
             }
+        }
+
+        private void SearchButton_Click(object sender, RoutedEventArgs e)
+        {
+            ApplyFilters();
+        }
+        private void SearchBox_KeyUp(object sender, KeyRoutedEventArgs e)
+        {
+            // Check if Enter key was pressed
+            if (e.Key == Windows.System.VirtualKey.Enter)
+            {
+                ApplyFilters();
+            }
+        }
+
+        private async Task ApplyFilters()
+        {
+            try
+            {
+                var filter = new Dictionary<string, object>();
+                var searchBox = this.FindName("TextBoxSearch") as TextBox;
+                string searchText = "";
+
+                if (searchBox != null && !string.IsNullOrEmpty(searchBox.Text))
+                {
+                    searchText = searchBox.Text;
+                    filter.Add("Name", searchText + "%"); // Use % for partial matching
+                }
+
+
+                // Apply date filter if needed (requires additional implementation in the DAO)
+                // filter.Add("DateFilter", new Dictionary<string, DateTime> { 
+                //    { "StartDate", _startDate },
+                //    { "EndDate", _endDate }
+                // });
+
+                // Default sort by name ascending
+                Dictionary<string, int> sort = new Dictionary<string, int> { { "Name", 1 } };
+
+                await ProductViewModel.NewFilter(filter, sort);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error applying filters: {ex.Message}");
+                await ShowErrorDialog($"Lỗi: {ex.Message}");
+            }
+        }
+
+        private async Task ShowErrorDialog(string message)
+        {
+            ContentDialog errorDialog = new ContentDialog
+            {
+                Title = "Lỗi",
+                Content = message,
+                CloseButtonText = "OK",
+                XamlRoot = this.XamlRoot
+            };
+
+            await errorDialog.ShowAsync();
         }
     }
 }
