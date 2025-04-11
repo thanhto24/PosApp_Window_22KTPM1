@@ -134,7 +134,7 @@ namespace App.View.ViewModel
 
                     // Save new image
                     string imagePath = await SaveProductImage(newImageFile, product.BarCode);
-                    product.ImagePath = imagePath;
+                    product.ImagePath = "ms-appx:///" + imagePath;
                 }
 
                 // Prepare update values

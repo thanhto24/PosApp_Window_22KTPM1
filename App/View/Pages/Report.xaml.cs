@@ -100,6 +100,10 @@ namespace App.View.Pages
                 {
                     this.Frame.Navigate(typeof(OverviewReport));
                 }
+                else if (menuItem.Title == "Mặt hàng bán chạy")
+                {
+                    this.Frame.Navigate(typeof(BestSellingProductsPage));
+                }
             }
         }
 

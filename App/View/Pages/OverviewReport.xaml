@@ -6,7 +6,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    xmlns:lvc="using:LiveChartsCore.SkiaSharpView.WinUI">
 
     <ScrollViewer HorizontalScrollMode="Auto" VerticalScrollMode="Auto"
                   HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Background="Wheat">
@@ -152,6 +153,31 @@
 
 
             </StackPanel>
+
+            <!-- Biểu đồ doanh thu -->
+            <Grid Grid.Row="4" Margin="40,40,40,40">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+                    <TextBlock Text="Biểu đồ doanh thu" FontSize="16" FontWeight="SemiBold"/>
+                    <ComboBox x:Name="ChartViewMode" Width="150" Margin="20,0,0,0" SelectedIndex="0" SelectionChanged="ChartViewMode_SelectionChanged">
+                        <ComboBoxItem Content="Theo ngày"/>
+                        <ComboBoxItem Content="Theo tháng"/>
+                        <ComboBoxItem Content="Theo năm"/>
+                    </ComboBox>
+                </StackPanel>
+
+                <Border Grid.Row="1" BorderBrush="LightGray" BorderThickness="1" Padding="10" Height="400">
+                    <lvc:CartesianChart x:Name="RevenueChart" 
+                          Series="{Binding LineChartViewModel.RevenueSeries}"
+                          XAxes="{Binding LineChartViewModel.XAxes}"
+                          YAxes="{Binding LineChartViewModel.YAxes}"
+                          TooltipPosition="Top"/>
+                </Border>
+            </Grid>
 
 
             <!--
