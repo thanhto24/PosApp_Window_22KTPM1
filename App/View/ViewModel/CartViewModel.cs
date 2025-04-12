@@ -62,7 +62,7 @@ namespace App.View.ViewModel
                     {
                         existingItem.Quantity--;
 
-                        if (existingItem.Quantity <= 0)  
+                        if (existingItem.Quantity <= 0)
                         {
                             CartItems.Remove(existingItem);
                         }
@@ -104,7 +104,7 @@ namespace App.View.ViewModel
         }
 
 
-        public void CreateNewOrder(double totalDiscount, string nameCustomer)
+        public void CreateNewOrder(double totalDiscount, string nameCustomer, string paymentType)
         {
             int newId = _dao.Orders.GetAll().Count + 1;
             string invoiceId = $"INV{newId:D3}";
@@ -127,7 +127,7 @@ namespace App.View.ViewModel
                 totalDiscount: discount,
                 totalPayment: finalAmount,
                 totalCost: totalCost,
-                paymentMethod: "Tiền mặt",
+                paymentMethod: paymentType,
                 status: "Đã giao",
                 paymentStatus: "Đã thanh toán",
                 notes: "Giao hàng thành công"

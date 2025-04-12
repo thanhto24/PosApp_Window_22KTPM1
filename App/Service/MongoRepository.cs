@@ -12,7 +12,7 @@ namespace App.Service
     public class MongoRepository<T> : IRepository<T> where T : class, new()
     {
         private static readonly HttpClient _httpClient = new HttpClient();
-        private const string BaseUrl = "http://localhost:5678/"; // Thay bằng API backend của bạn
+        private const string BaseUrl = "http://localhost:5678/";
         private readonly string _modelName;
 
         public MongoRepository()

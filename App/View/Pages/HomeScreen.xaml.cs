@@ -13,6 +13,20 @@ using App.Service;
 using App.View.Pages;
 using System.Threading.Tasks;
 using Microsoft.UI.Xaml.Input;
+using System.Net.Http;
+using System.Net.Http.Json;
+using Microsoft.UI.Text;
+using Microsoft.UI.Xaml.Media.Imaging;
+using static QRCoder.PayloadGenerator;
+using System.Text.Json;
+using QRCoder;
+using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.Storage.Streams;
+using Windows.UI.Core;
+using static App.Service.Payos;
+using Windows.System;
+using Microsoft.UI;
+using Microsoft.UI.Xaml.Media;
 
 namespace App.View.Pages
 {
@@ -85,7 +99,7 @@ namespace App.View.Pages
         {
             if (sender is Button button && button.DataContext is Product product)
             {
-                if(product.Quantity > 0)
+                if (product.Quantity > 0)
                 {
                     product.Quantity--;
                     CartViewModel.RemoveFromCart(product);
@@ -140,7 +154,7 @@ namespace App.View.Pages
             OrderSummaryText.Text = $"Số lượng: {CartViewModel.getTotalQuantity().ToString()} món";
         }
 
-        private async void Checkout_Click(object sender, RoutedEventArgs e)
+        private async Task Checkout(string paymentType)
         {
             ApplyDiscount();
 
@@ -148,7 +162,7 @@ namespace App.View.Pages
                 return;
 
             string customerName = string.IsNullOrWhiteSpace(CustomerName.Text) ? "Khách vãng lai" : CustomerName.Text;
-            CartViewModel.CreateNewOrder(CartViewModel.totalDiscount, customerName);
+            CartViewModel.CreateNewOrder(CartViewModel.totalDiscount, customerName, paymentType);
 
 
             string phone = CustomerCodeTextBox.Text.Trim();
@@ -176,6 +190,12 @@ namespace App.View.Pages
             {
                 product.Quantity = 0;
             }
+        }
+
+
+        private async void Checkout_Click(object sender, RoutedEventArgs e)
+        {
+            await Checkout("Tiền mặt");
         }
 
         private void VatToggleButton_Checked(object sender, RoutedEventArgs e)
@@ -215,6 +235,105 @@ namespace App.View.Pages
                 }
             }
         }
+
+        private async void QR_Click(object sender, RoutedEventArgs e)
+        {
+            var paymentService = new PaymentService();
+            int amount = (int)Math.Floor(this.finalAmount);
+
+            try
+            {
+                var result = await paymentService.CreatePayment(amount);
+                if (result == null)
+                {
+                    await ShowErrorDialog("Không tạo được mã thanh toán.");
+                    return;
+                }
+
+                // Tạo dialog và hiển thị nội dung QR như bạn làm trước đó...
+                ContentDialog qrDialog = new ContentDialog
+                {
+                    Title = "Quét mã QR để thanh toán",
+                    XamlRoot = this.XamlRoot,
+                    CloseButtonText = "Đóng",
+                    DefaultButton = ContentDialogButton.Close,
+                };
+
+                StackPanel contentPanel = new StackPanel { Spacing = 15, HorizontalAlignment = HorizontalAlignment.Center };
+
+                // Tạo ảnh QR
+                QRCodeGenerator qrGenerator = new QRCodeGenerator();
+                QRCodeData qrCodeData = qrGenerator.CreateQrCode(result.qrCode, QRCodeGenerator.ECCLevel.Q);
+                PngByteQRCode qrCode = new PngByteQRCode(qrCodeData);
+                byte[] qrCodeBytes = qrCode.GetGraphic(20);
+
+                InMemoryRandomAccessStream stream = new InMemoryRandomAccessStream();
+                await stream.WriteAsync(qrCodeBytes.AsBuffer());
+                stream.Seek(0);
+
+                BitmapImage qrImage = new BitmapImage();
+                await qrImage.SetSourceAsync(stream);
+
+                contentPanel.Children.Add(new Image { Source = qrImage, Width = 250, Height = 250 });
+
+                contentPanel.Children.Add(new TextBlock { Text = $"Mã đơn hàng: {result.orderCode}", TextAlignment = TextAlignment.Center });
+                contentPanel.Children.Add(new TextBlock { Text = $"Số tiền: {amount:N0} VND", TextAlignment = TextAlignment.Center });
+
+                Button openUrlButton = new Button
+                {
+                    Content = "Mở trang thanh toán",
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                };
+                openUrlButton.Click += async (s2, e2) =>
+                {
+                    await Launcher.LaunchUriAsync(new Uri(result.checkoutUrl));
+                };
+                contentPanel.Children.Add(openUrlButton);
+
+                qrDialog.Content = contentPanel;
+
+                var dialogTask = qrDialog.ShowAsync();
+
+                _ = Task.Run(async () =>
+                {
+                    try
+                    {
+                        while (true)
+                        {
+                            bool isPaid = await paymentService.CheckPaymentStatus(result.orderCode);
+
+                            if (isPaid)
+                            {
+                                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                                {
+                                    qrDialog.Hide();
+                                });
+                                break;
+                            }
+
+                            await Task.Delay(3000);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+                        {
+                            await ShowErrorDialog($"Lỗi kiểm tra thanh toán:\n{ex.Message}");
+                        });
+                    }
+                });
+
+
+                await dialogTask;
+                await Checkout("QR");
+
+            }
+            catch (Exception ex)
+            {
+                await ShowErrorDialog($"Lỗi: {ex.Message}");
+            }
+        }
+
 
         private void SearchButton_Click(object sender, RoutedEventArgs e)
         {
