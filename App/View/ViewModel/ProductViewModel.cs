@@ -1,6 +1,7 @@
 ﻿using App.Model;
 using App.Service;
 using App.Utils;
+using BarcodeStandard;
 using Microsoft.UI.Xaml.Media.Imaging;
 using System;
 using System.Collections.Generic;
@@ -27,7 +28,7 @@ namespace App.View.ViewModel
 
         public FullObservableCollection<Product> Products { get; set; }
 
-        private Microsoft.UI.Xaml.Window _window;
+        public Microsoft.UI.Xaml.Window _window;
 
         public ProductViewModel()
         {
@@ -39,24 +40,104 @@ namespace App.View.ViewModel
             {
                 // Load image from relative path
                 product.TotalPrice = product.Price * product.Inventory;
+
+                // Tạo barcode cho mỗi sản phẩm
+                if (product.BarCodeBitmap == null)
+                {
+                    product.BarCodeBitmap = new BitmapImage();
+                    _ = product.LoadBarcodeAsync(product.BarCode);
+                }
             }
 
             _window = new Microsoft.UI.Xaml.Window();
 
-            // Sử dụng AppContext.BaseDirectory để có được đường dẫn cơ sở của ứng dụng
-            string baseDirectory = AppContext.BaseDirectory;
+            // Get the project directory instead of the bin directory
+            string projectDirectory = GetProjectDirectory();
 
             // Đường dẫn tuyệt đối đến thư mục Images trong project
-            _imagesDirectoryPath = Path.Combine(baseDirectory, "Assets", "ProductImages");
+            _imagesDirectoryPath = Path.Combine(projectDirectory, "Assets", "ProductImages");
 
             // Đường dẫn tương đối để lưu vào database
             _imagesRelativePath = Path.Combine("Assets", "ProductImages");
+
+            //Debug.WriteLine("duong dan den project: ", projectDirectory);
+
+            //Debug.WriteLine("CHECK DUONG DAN TUYET DOI DEN PROJECT: ", _imagesDirectoryPath);
+            //Debug.WriteLine("CHECK DUONG DAN TUONG DOI DEN DATABASE: ", _imagesRelativePath);
 
             // Đảm bảo thư mục tồn tại
             if (!Directory.Exists(_imagesDirectoryPath))
             {
                 Directory.CreateDirectory(_imagesDirectoryPath);
             }
+        }
+
+        
+
+        // Helper method to get the actual project directory
+        private static string GetProjectDirectory()
+        {
+            // Bắt đầu với đường dẫn của assembly đang thực thi
+            string assemblyLocation = Assembly.GetExecutingAssembly().Location;
+            string assemblyDirectory = Path.GetDirectoryName(assemblyLocation);
+
+            // In ra để kiểm tra
+            Debug.WriteLine($"Assembly location: {assemblyLocation}");
+            Debug.WriteLine($"Assembly directory: {assemblyDirectory}");
+
+            // Tạo một đối tượng DirectoryInfo từ thư mục assembly
+            DirectoryInfo directory = new DirectoryInfo(assemblyDirectory);
+
+            // Đi ngược lên cho đến khi tìm thấy thư mục App hoặc thư mục chứa file .csproj
+            while (directory != null &&
+                   directory.Name != "App" &&
+                   !Directory.GetFiles(directory.FullName, "*.csproj").Any())
+            {
+                Debug.WriteLine($"Checking directory: {directory.FullName}");
+                directory = directory.Parent;
+            }
+
+            // Nếu tìm thấy thư mục App hoặc thư mục chứa file .csproj
+            if (directory != null)
+            {
+                Debug.WriteLine($"Found project directory: {directory.FullName}");
+                return directory.FullName;
+            }
+
+            // Thử tìm kiếm từ thư mục hiện tại và đi lên cho đến khi tìm thấy thư mục gốc của solution
+            string currentDirectory = Directory.GetCurrentDirectory();
+            Debug.WriteLine($"Current directory: {currentDirectory}");
+
+            directory = new DirectoryInfo(currentDirectory);
+            while (directory != null && !Directory.GetFiles(directory.FullName, "*.sln").Any())
+            {
+                directory = directory.Parent;
+            }
+
+            // Nếu tìm thấy thư mục chứa file .sln
+            if (directory != null)
+            {
+                // Tìm thư mục dự án App trong thư mục solution
+                string appDirectory = Path.Combine(directory.FullName, "App");
+                if (Directory.Exists(appDirectory))
+                {
+                    Debug.WriteLine($"Found App directory: {appDirectory}");
+                    return appDirectory;
+                }
+            }
+
+            // Nếu không tìm thấy, có thể thử một phương pháp khác - lưu ở một vị trí cố định
+            // Ví dụ: lưu vào thư mục Documents
+            string documentsFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            string appAssetsFolder = Path.Combine(documentsFolder, "AppAssets");
+
+            if (!Directory.Exists(appAssetsFolder))
+            {
+                Directory.CreateDirectory(appAssetsFolder);
+            }
+
+            Debug.WriteLine($"Using documents folder fallback: {appAssetsFolder}");
+            return documentsFolder;
         }
 
         public async Task NewFilter(Dictionary<string, object> filter, Dictionary<string, int>? sort = null)
@@ -238,6 +319,9 @@ namespace App.View.ViewModel
                     }
                 }
 
+                //update ProductImages folder trong bin -> cải tiến UX
+                CopyFolderImager.CopyProductImagesFolder();
+
                 // Return the relative path to use in ImagePath property
                 string relativePath = Path.Combine(_imagesRelativePath, fileName);
                 return relativePath;
@@ -254,13 +338,19 @@ namespace App.View.ViewModel
         {
             try
             {
-                // Chuyển đổi đường dẫn tương đối thành đường dẫn tuyệt đối
-                string absolutePath = Path.Combine(AppContext.BaseDirectory, relativePath);
+                // Get the project directory
+                string projectDirectory = GetProjectDirectory();
+
+                // Convert relative path to absolute path using project directory
+                string absolutePath = Path.Combine(projectDirectory, relativePath.Replace("ms-appx:///", ""));
 
                 if (File.Exists(absolutePath))
                 {
                     File.Delete(absolutePath);
                 }
+
+                //update ProductImages folder trong bin -> cải tiến UX
+                CopyFolderImager.CopyProductImagesFolder();
             }
             catch (Exception ex)
             {
@@ -277,8 +367,12 @@ namespace App.View.ViewModel
 
             try
             {
-                // Chuyển đổi đường dẫn tương đối thành đường dẫn tuyệt đối
-                string absolutePath = Path.Combine(AppContext.BaseDirectory, relativePath);
+                // Get the project directory using a similar approach as in GetProjectDirectory
+                string projectDirectory = GetProjectDirectory();
+
+                // Convert relative path to absolute path
+                string absolutePath = Path.Combine(projectDirectory,
+                    relativePath.Replace("ms-appx:///", ""));
 
                 if (!File.Exists(absolutePath))
                     return null;

@@ -65,11 +65,16 @@
                                 <Grid Margin="0, 5, 0, 0" ColumnSpacing="10" HorizontalAlignment="Left">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="2*"/>
-                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
                                     <TextBox x:Name="TextBoxSearch" Grid.Column="0" Width="200" Height="30" Padding="10, 5, 5, 5" KeyUp="SearchBox_KeyUp" Background="LightGray"/>
                                     <Button Grid.Column="1" Width="45" Height="35" VerticalAlignment="Center" HorizontalAlignment="Right" Click="SearchButton_Click">
                                         <FontIcon Glyph="&#xE721;" Foreground="Black"/>
+                                    </Button>
+                                    <!-- Nút quét barcode mới -->
+                                    <Button Grid.Column="2" Width="45" Height="35" VerticalAlignment="Center" HorizontalAlignment="Right" Click="BarcodeScanButton_Click" Margin="5,0,0,0">
+                                        <FontIcon Glyph="&#xE8B1;" Foreground="Black"/>
                                     </Button>
                                 </Grid>
                             </StackPanel>

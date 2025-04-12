@@ -1,27 +1,34 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using App.Model;
 using App.View.ViewModel;
 using System.Linq;
-using App.Utils;
-using System.Globalization;
 using System.Diagnostics;
-using App.Service;
-using App.View.Pages;
 using System.Threading.Tasks;
 using Microsoft.UI.Xaml.Input;
+using Windows.Media.Capture;
+using Windows.Media.MediaProperties;
+using Windows.Graphics.Imaging;
+using ZXing.Common;
+using ZXing;
+using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.Media.Core;
+using Windows.Media.Devices;
+using Windows.Media;
+using Microsoft.UI.Xaml.Media.Imaging;
+using Windows.Storage.Streams;
+using Windows.Storage.Pickers;
+using ZXing.OneD;
+using App.Utils;
 using System.Net.Http;
 using System.Net.Http.Json;
 using Microsoft.UI.Text;
-using Microsoft.UI.Xaml.Media.Imaging;
 using static QRCoder.PayloadGenerator;
 using System.Text.Json;
 using QRCoder;
 using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Storage.Streams;
 using Windows.UI.Core;
 using static App.Service.Payos;
 using Windows.System;
@@ -57,6 +64,22 @@ namespace App.View.Pages
 
             ApplyDiscount();
         }
+
+        private async void BarcodeScanButton_Click(object sender, RoutedEventArgs e)
+        {
+            var scanner = new CameraScanner(ProductViewModel._window);
+
+            // Đăng ký sự kiện xử lý khi quét barcode thành công
+            scanner.OnBarcodeScanSuccess += async (barcodeText) => {
+                // Thiết lập giá trị tìm kiếm và thực hiện tìm kiếm
+                TextBoxSearch.Text = barcodeText;
+                await ApplyFilters(barcodeText);
+            };
+
+            // Khởi động quét barcode
+            await scanner.ScanBarcodeFromCamera(this.Content.XamlRoot);
+        }
+
 
         private void DrinkCategoryList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -201,6 +224,12 @@ namespace App.View.Pages
             {
                 product.Quantity = 0;
             }
+
+            CartViewModel.Clear_();
+            PromoCodeTextBox.Text = "";
+            CustomerCodeTextBox.Text = "";
+            ApplyDiscount();
+            OrderSummaryText.Text = $"Số lượng: {CartViewModel.getTotalQuantity().ToString()} món";
         }
 
 
@@ -359,35 +388,32 @@ namespace App.View.Pages
             }
         }
 
-        private async Task ApplyFilters()
+        private async Task ApplyFilters(string barcode = null)
         {
             try
             {
                 var filter = new Dictionary<string, object>();
-                var searchBox = this.FindName("TextBoxSearch") as TextBox;
-                string searchText = "";
 
-                if (searchBox != null && !string.IsNullOrEmpty(searchBox.Text))
+                // Nếu có barcode, ưu tiên tìm theo barcode
+                if (!string.IsNullOrEmpty(barcode))
                 {
-                    searchText = searchBox.Text;
-                    filter.Add("Name", searchText + "%"); // Use % for partial matching
+                    filter.Add("BarCode", barcode);
+                }
+                else if (TextBoxSearch != null && !string.IsNullOrEmpty(TextBoxSearch.Text))
+                {
+                    // Nếu không có barcode, tìm theo text
+                    string searchText = TextBoxSearch.Text;
+                    filter.Add("Name", searchText + "%"); // Sử dụng % cho tìm kiếm một phần
                 }
 
-
-                // Apply date filter if needed (requires additional implementation in the DAO)
-                // filter.Add("DateFilter", new Dictionary<string, DateTime> { 
-                //    { "StartDate", _startDate },
-                //    { "EndDate", _endDate }
-                // });
-
-                // Default sort by name ascending
+                // Sắp xếp mặc định theo tên
                 Dictionary<string, int> sort = new Dictionary<string, int> { { "Name", 1 } };
 
                 await ProductViewModel.NewFilter(filter, sort);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Error applying filters: {ex.Message}");
+                Debug.WriteLine($"Lỗi áp dụng bộ lọc: {ex.Message}");
                 await ShowErrorDialog($"Lỗi: {ex.Message}");
             }
         }
