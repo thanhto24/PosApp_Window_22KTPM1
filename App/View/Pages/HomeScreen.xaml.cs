@@ -16,6 +16,12 @@ using ZXing;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Media.Core;
 using Windows.Media.Devices;
+using Windows.Media;
+using Microsoft.UI.Xaml.Media.Imaging;
+using Windows.Storage.Streams;
+using Windows.Storage.Pickers;
+using ZXing.OneD;
+using App.Utils;
 
 namespace App.View.Pages
 {
@@ -48,203 +54,18 @@ namespace App.View.Pages
 
         private async void BarcodeScanButton_Click(object sender, RoutedEventArgs e)
         {
-            await ScanBarcodeFromCameraRealtime();
+            var scanner = new CameraScanner(ProductViewModel._window);
+
+            // Đăng ký sự kiện xử lý khi quét barcode thành công
+            scanner.OnBarcodeScanSuccess += async (barcodeText) => {
+                // Thiết lập giá trị tìm kiếm và thực hiện tìm kiếm
+                TextBoxSearch.Text = barcodeText;
+                await ApplyFilters(barcodeText);
+            };
+
+            // Khởi động quét barcode
+            await scanner.ScanBarcodeFromCamera(this.Content.XamlRoot);
         }
-
-        private async Task ScanBarcodeFromCameraRealtime()
-        {
-            MediaCapture mediaCapture = null;
-            DispatcherTimer scanTimer = null;
-            ContentDialog captureDialog = null;
-
-            try
-            {
-                // Khởi tạo camera
-                mediaCapture = new MediaCapture();
-                var settings = new MediaCaptureInitializationSettings
-                {
-                    StreamingCaptureMode = StreamingCaptureMode.Video
-                };
-
-                await mediaCapture.InitializeAsync(settings);
-
-                // Tạo CaptureElement để hiển thị camera
-                var captureElement = new MediaPlayerElement
-                {
-                    Width = 400,
-                    Height = 300,
-                    Stretch = Microsoft.UI.Xaml.Media.Stretch.Uniform
-                };
-
-                // Tạo TextBlock để hiển thị trạng thái
-                var statusTextBlock = new TextBlock
-                {
-                    Text = "Đang quét barcode...",
-                    TextAlignment = TextAlignment.Center,
-                    Margin = new Thickness(0, 10, 0, 0)
-                };
-
-                // Tạo StackPanel chứa camera preview và trạng thái
-                var content = new StackPanel();
-                content.Children.Add(captureElement);
-                content.Children.Add(statusTextBlock);
-
-                // Tạo dialog để hiển thị camera
-                captureDialog = new ContentDialog
-                {
-                    Title = "Quét mã barcode",
-                    Content = content,
-                    CloseButtonText = "Hủy bỏ",
-                    XamlRoot = this.Content.XamlRoot
-                };
-
-                // Kết nối camera với CaptureElement
-                var mediaPlayer = new Windows.Media.Playback.MediaPlayer();
-                captureElement.SetMediaPlayer(mediaPlayer);
-
-                // Kết nối camera với MediaPlayer
-                var mediaSource = MediaSource.CreateFromMediaFrameSource(mediaCapture.FrameSources.First().Value);
-                mediaPlayer.Source = mediaSource;
-
-                // Bắt đầu hiển thị camera
-                await mediaCapture.StartPreviewAsync();
-
-                // Tạo timer để thực hiện quét barcode liên tục
-                scanTimer = new DispatcherTimer();
-                scanTimer.Interval = TimeSpan.FromMilliseconds(500); // Quét mỗi 500ms
-
-                scanTimer.Tick += async (s, args) =>
-                {
-                    try
-                    {
-                        // Capture frame từ camera
-                        var lowLagCapture = await mediaCapture.PrepareLowLagPhotoCaptureAsync(
-                            ImageEncodingProperties.CreateJpeg());
-
-                        var capturedPhoto = await lowLagCapture.CaptureAsync();
-                        var softwareBitmap = capturedPhoto.Frame.SoftwareBitmap;
-
-                        // Giải phóng capture
-                        await lowLagCapture.FinishAsync();
-
-                        // Xử lý ảnh để tìm barcode
-                        var scannedBarcode = ProcessBarcodeImage(softwareBitmap);
-
-                        if (!string.IsNullOrEmpty(scannedBarcode))
-                        {
-                            // Cập nhật trạng thái
-                            statusTextBlock.Text = $"Đã tìm thấy: {scannedBarcode}";
-
-                            // Dừng timer và tắt camera
-                            scanTimer.Stop();
-                            await mediaCapture.StopPreviewAsync();
-
-                            // Đóng dialog
-                            captureDialog.Hide();
-
-                            // Thiết lập giá trị tìm kiếm và thực hiện tìm kiếm
-                            TextBoxSearch.Text = scannedBarcode;
-                            await ApplyFilters(scannedBarcode);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        statusTextBlock.Text = $"Lỗi: {ex.Message}";
-                    }
-                };
-
-                // Bắt đầu quét
-                scanTimer.Start();
-
-                // Hiển thị dialog và đợi kết quả
-                var dialogResult = await captureDialog.ShowAsync();
-
-                // Nếu dialog đóng (người dùng ấn nút hủy), dừng timer và camera
-                if (scanTimer.IsEnabled)
-                {
-                    scanTimer.Stop();
-                }
-
-                if (mediaCapture != null)
-                {
-                    await mediaCapture.StopPreviewAsync();
-                }
-            }
-            catch (Exception ex)
-            {
-                // Đảm bảo dừng timer và camera trong trường hợp lỗi
-                if (scanTimer != null && scanTimer.IsEnabled)
-                {
-                    scanTimer.Stop();
-                }
-
-                if (mediaCapture != null)
-                {
-                    try
-                    {
-                        if (mediaCapture.CameraStreamState == CameraStreamState.Streaming)
-                        {
-                            await mediaCapture.StopPreviewAsync();
-                        }
-                    }
-                    catch (Exception innerEx)
-                    {
-                        Debug.WriteLine($"Lỗi khi dừng preview: {innerEx.Message}");
-                    }
-                }
-
-                await ShowErrorDialog($"Lỗi khi quét barcode: {ex.Message}");
-            }
-        }
-
-        private string ProcessBarcodeImage(SoftwareBitmap bitmap)
-        {
-            try
-            {
-                // Đảm bảo bitmap ở định dạng Bgra8
-                if (bitmap.BitmapPixelFormat != BitmapPixelFormat.Bgra8)
-                {
-                    bitmap = SoftwareBitmap.Convert(bitmap, BitmapPixelFormat.Bgra8, BitmapAlphaMode.Premultiplied);
-                }
-
-                // Lấy dữ liệu pixel
-                byte[] pixelData = new byte[bitmap.PixelWidth * bitmap.PixelHeight * 4];
-                bitmap.CopyToBuffer(pixelData.AsBuffer());
-
-                // Tạo RGBLuminanceSource trực tiếp từ dữ liệu BGRA
-                // ZXing sẽ tự động xử lý việc chuyển đổi sang luminance
-                var luminanceSource = new RGBLuminanceSource(pixelData, bitmap.PixelWidth, bitmap.PixelHeight);
-
-                // Tạo BinaryBitmap
-                var binaryBitmap = new BinaryBitmap(new HybridBinarizer(luminanceSource));
-
-                // Thiết lập barcode reader
-                var reader = new MultiFormatReader();
-                var hints = new Dictionary<DecodeHintType, object>
-                {
-                    { DecodeHintType.POSSIBLE_FORMATS, new List<BarcodeFormat> {
-                        BarcodeFormat.EAN_13,
-                        BarcodeFormat.EAN_8,
-                        BarcodeFormat.UPC_A,
-                        BarcodeFormat.UPC_E,
-                        BarcodeFormat.CODE_39,
-                        BarcodeFormat.CODE_128
-                    }},
-                    { DecodeHintType.TRY_HARDER, true }
-                };
-
-                // Giải mã barcode
-                var result = reader.decode(binaryBitmap, hints);
-
-                return result?.Text;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Lỗi xử lý hình ảnh barcode: {ex.Message}");
-                return null;
-            }
-        }
-
 
 
         private void DrinkCategoryList_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -380,6 +201,12 @@ namespace App.View.Pages
             {
                 product.Quantity = 0;
             }
+
+            CartViewModel.Clear_();
+            PromoCodeTextBox.Text = "";
+            CustomerCodeTextBox.Text = "";
+            ApplyDiscount();
+            OrderSummaryText.Text = $"Số lượng: {CartViewModel.getTotalQuantity().ToString()} món";
         }
 
         private void VatToggleButton_Checked(object sender, RoutedEventArgs e)

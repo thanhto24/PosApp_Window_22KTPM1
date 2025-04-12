@@ -14,6 +14,7 @@ using Windows.Foundation;
 using Windows.Foundation.Collections;
 using App.View.Pages;
 using Microsoft.Data.Sqlite;
+using App.Utils;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -33,6 +34,9 @@ namespace App
             this.InitializeComponent();
 
             //InitializeDatabase();
+
+            //update ProductImages folder trong bin -> cải tiến UX
+            CopyFolderImager.CopyProductImagesFolder();
 
             // Điều hướng đến Login.xaml khi ứng dụng khởi động
             MainFrame.Navigate(typeof(Login));
