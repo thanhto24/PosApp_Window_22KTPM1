@@ -55,6 +55,7 @@
     <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" />
     <PackageReference Include="System.Drawing.Common" Version="9.0.4" />
     <PackageReference Include="WinUIEx" Version="2.5.1" />
+    <PackageReference Include="ZXing.Net" Version="0.16.10" />
   </ItemGroup>
   <ItemGroup>
     <Content Update="Assets\tea1.jpg">
