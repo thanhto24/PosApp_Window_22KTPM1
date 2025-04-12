@@ -44,12 +44,22 @@ namespace App.Utils
             }
         }
 
-         private void ItemPropertyChanged(object? sender, PropertyChangedEventArgs e)
-         {
-             var args = new NotifyCollectionChangedEventArgs(
-                 NotifyCollectionChangedAction.Replace, sender, sender, IndexOf((T)sender!)
-             );
-             OnCollectionChanged(args);
-         }
+        private void ItemPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (sender is T changedItem)
+            {
+                int index = IndexOf(changedItem);
+                if (index >= 0) // Chỉ raise event nếu item nằm trong collection
+                {
+                    var args = new NotifyCollectionChangedEventArgs(
+                        NotifyCollectionChangedAction.Replace,
+                        changedItem,
+                        changedItem,
+                        index
+                    );
+                    OnCollectionChanged(args);
+                }
+            }
+        }
     }
 }

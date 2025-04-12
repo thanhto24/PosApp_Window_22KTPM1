@@ -35,7 +35,7 @@ namespace App
             //InitializeDatabase();
 
             // Điều hướng đến Login.xaml khi ứng dụng khởi động
-            MainFrame.Navigate(typeof(Login));
+            MainFrame.Navigate(typeof(Dashboard));
         }
 
     }

@@ -27,6 +27,7 @@ using static App.Service.Payos;
 using Windows.System;
 using Microsoft.UI;
 using Microsoft.UI.Xaml.Media;
+using Microsoft.UI.Xaml.Navigation;
 
 namespace App.View.Pages
 {
@@ -150,8 +151,18 @@ namespace App.View.Pages
             CartViewModel.Clear_();
             PromoCodeTextBox.Text = "";
             CustomerCodeTextBox.Text = "";
+
+            ProductViewModel.ClearAllQuantities();
+
             ApplyDiscount();
             OrderSummaryText.Text = $"Số lượng: {CartViewModel.getTotalQuantity().ToString()} món";
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+
+            ClearCart_Click(null, null);
         }
 
         private async Task Checkout(string paymentType)
