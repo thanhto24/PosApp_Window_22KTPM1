@@ -13,6 +13,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
+    <Content Remove="Assets\qr-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="View\Dialogs\ProductDialogContent.xaml" />
     <None Remove="View\Pages\BestSellingProductPage.xaml" />
     <None Remove="View\Pages\CustomerGroupPage.xaml" />
@@ -54,6 +57,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" />
     <PackageReference Include="System.Drawing.Common" Version="9.0.4" />
+    <PackageReference Include="QRCoder" Version="1.6.0" />
     <PackageReference Include="WinUIEx" Version="2.5.1" />
     <PackageReference Include="ZXing.Net" Version="0.16.10" />
   </ItemGroup>
@@ -67,6 +71,11 @@
     <Content Update="Assets\tea3.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Assets\qr-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Page Update="View\Pages\BestSellingProductPage.xaml">

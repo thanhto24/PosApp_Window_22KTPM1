@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const controller = require("../controllers/godController");
-
+const payosRouter = require("./payos");
 function validateModelName(req, res, next) {
     req.modelName = req.params.modelName.toLowerCase();
     if (!req.modelName) {
@@ -22,5 +22,6 @@ router.delete("/rmByQuery/:modelName", validateModelName, controller.removeByQue
 router.put("/updateByQuery/:modelName", validateModelName, controller.updateByQuery); // Cập nhật theo điều kiện
 router.post("/filtered/:modelName", validateModelName, controller.getAllFiltered);
 router.post("/getByQuery/:modelName", validateModelName, controller.getByQuery);
+router.use("/payos", payosRouter); // Sử dụng router payos
 
 module.exports = router;

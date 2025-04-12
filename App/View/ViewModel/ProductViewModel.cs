@@ -22,6 +22,9 @@ namespace App.View.ViewModel
         public IDao _dao;
         private readonly string _imagesDirectoryPath;
         private readonly string _imagesRelativePath;
+        public static List<Product> AllProducts { get; set; } = new List<Product>();
+
+        public static List<Product> DisplayProducts { get; set; } = new List<Product>();
 
         public FullObservableCollection<Product> Products { get; set; }
 
@@ -439,14 +442,39 @@ namespace App.View.ViewModel
 
         public void LoadProductsByCategory(string TypeGroup)
         {
-            Products.Clear();
+            // Clear DisplayProducts before adding new products for the selected category
+            DisplayProducts.Clear();
 
+            // Lọc sản phẩm của category hiện tại từ DAO
             var filteredProducts = _dao.Products.GetByQuery(new Dictionary<string, object> { { "TypeGroup", TypeGroup } });
+
             foreach (var product in filteredProducts)
             {
-                // Make sure inventory is at least 0, never negative
+                // Đảm bảo số lượng tồn kho không âm
                 product.Inventory = Math.Max(0, product.Inventory);
-                Products.Add(product);
+
+                // Chỉ thêm vào AllProducts nếu sản phẩm chưa có
+                if (!AllProducts.Any(p => p.Name == product.Name))
+                {
+                    AllProducts.Add(product);  // Thêm vào AllProducts nếu chưa có
+                }
+
+                DisplayProducts.Add(product);  // Chỉ thêm sản phẩm vào DisplayProducts của category hiện tại
+            }
+
+            Products.Clear();
+            foreach (var product in DisplayProducts)
+            {
+                Products.Add(product);  // Cập nhật lại Products cho UI
+            }
+        }
+
+        // Hàm xóa quantity của tất cả sản phẩm
+        public static void ClearAllQuantities()
+        {
+            foreach (var product in AllProducts)
+            {
+                product.Quantity = 0;
             }
         }
     }

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using App.Service;
+using App.View.ViewModel;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -34,7 +35,7 @@ namespace App
         public App()
         {
             this.InitializeComponent();
-            Services.AddKeyedSingleton<IDao, MongoDao>();
+            Services.AddKeyedSingleton<IDao, MockDao>();
         }
 
         /// <summary>
