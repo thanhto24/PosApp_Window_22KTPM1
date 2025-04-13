@@ -70,7 +70,8 @@ namespace App.View.Pages
             var scanner = new CameraScanner(ProductViewModel._window);
 
             // Đăng ký sự kiện xử lý khi quét barcode thành công
-            scanner.OnBarcodeScanSuccess += async (barcodeText) => {
+            scanner.OnBarcodeScanSuccess += async (barcodeText) =>
+            {
                 // Thiết lập giá trị tìm kiếm và thực hiện tìm kiếm
                 TextBoxSearch.Text = barcodeText;
                 await ApplyFilters(barcodeText);
@@ -133,12 +134,15 @@ namespace App.View.Pages
             }
         }
 
-
-        private void PromoCodeTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void checkVoucher()
         {
             string promoCode = PromoCodeTextBox.Text.Trim();
 
-            vcDis = VoucherViewModel.ApplyVoucher(promoCode) / 100;
+            vcDis = VoucherViewModel.ApplyVoucher(promoCode, CartViewModel.getTotalAmount()) / 100;
+        }
+
+        private void PromoCodeTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
             ApplyDiscount();
         }
 
@@ -154,7 +158,7 @@ namespace App.View.Pages
         {
             double total = CartViewModel.getTotalAmount();
             double discountVc = 0, discountCustomer = 0;
-
+            checkVoucher();
 
             // Áp dụng mã khuyến mãi
             discountVc = total * vcDis;
@@ -204,7 +208,8 @@ namespace App.View.Pages
             CustomerViewModel.storeData(phone, name, finalAmount);
 
             string promoCode = PromoCodeTextBox.Text.Trim();
-            VoucherViewModel.des(promoCode);
+            if (this.vcDis > 0)
+                VoucherViewModel.des(promoCode);
 
             // Update inventory in database
             UpdateInventoryAfterSale();
@@ -365,7 +370,11 @@ namespace App.View.Pages
 
 
                 await dialogTask;
-                await Checkout("QR");
+                bool Paid = await paymentService.CheckPaymentStatus(result.orderCode);
+                if (Paid)
+                {
+                    await Checkout("QR");
+                }
 
             }
             catch (Exception ex)

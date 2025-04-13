@@ -20,9 +20,13 @@
 
             <!-- Converter to hide elements when inventory is zero -->
             <coverter:ZeroToCollapsedConverter x:Key="ZeroToCollapsedConverter"/>
-            
+
             <!-- converter to trans int to VNĐ -->
             <coverter:CurrencyConverter x:Key="CurrencyConverter"/>
+
+            <!--Dateformater-->
+            <coverter:DateFormatConverter x:Key="DateFormatConverter"/>
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -6,53 +6,158 @@
     xmlns:model="using:App.Model"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    Background="Wheat">
+    mc:Ignorable="d">
 
-    <StackPanel>
-        <!-- Tiêu đề -->
-        <TextBlock Foreground="Black" Text="Customer List"
-                   FontSize="20"
-                   FontWeight="Bold"
-                   HorizontalAlignment="Center"
-                   Margin="10"/>
+    <Page.Resources>
+        <Style x:Key="HeaderTextStyle" TargetType="TextBlock">
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#333333"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="5"/>
+        </Style>
 
-        <StackPanel Visibility="{x:Bind CustomerViewModel.displayCustomers.Count, Mode=OneWay, Converter={StaticResource IntegerToVisibilityMsgConverter}}">
-            <TextBlock Text="Không có khách hàng nào được tìm thấy."
-                   Foreground="Red"
-                   FontSize="16"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center"/>
-            <Button  Content="Làm mới" Click="OnResetClick" Margin="5" HorizontalAlignment="Center"/>
-        </StackPanel>
+        <Style x:Key="CellTextStyle" TargetType="TextBlock">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+            <Setter Property="Foreground" Value="#333333"/>
+            <Setter Property="Margin" Value="5"/>
+        </Style>
 
-        <Grid  Visibility="{x:Bind CustomerViewModel.displayCustomers.Count, Mode=OneWay, Converter={StaticResource IntegerToVisibilityListConverter}}">
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#5D4037"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="15,8"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+    </Page.Resources>
+
+    <Grid Background="Wheat">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header with gradient background -->
+        <Grid Grid.Row="0" Height="120">
+            <Grid.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Color="#D38C3E" Offset="0.0"/>
+                    <GradientStop Color="OrangeRed" Offset="1.0"/>
+                </LinearGradientBrush>
+            </Grid.Background>
+
+            <StackPanel VerticalAlignment="Center" Margin="20,0">
+                <TextBlock Text="Danh sách khách hàng" 
+                           FontSize="28" 
+                           FontWeight="Bold" 
+                           Foreground="White"/>
+                <TextBlock Text="Quản lý thông tin khách hàng của bạn" 
+                           FontSize="14" 
+                           Foreground="White" 
+                           Margin="0,5,0,0"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- Main Content -->
+        <Grid Grid.Row="1" Margin="20">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <!-- Phần đầu: Bộ lọc và Nút -->
-            <Grid Grid.Row="0" Margin="10">
-                <StackPanel Orientation="Horizontal">
-                    <TextBox x:Name="SearchBox" Width="400" Background="#5D4037" Foreground="White" PlaceholderText="Nhập số điện thoại..."/>
-                    <Button Content="Tìm kiếm" Click="OnSearchClick" Margin="5,0,0,0" Background="#D38C3E"/>
-                    <Button Content="Làm mới" Click="OnResetClick" Margin="5,0,0,0" Background="#D38C3E"/>
+            <!-- Empty state message -->
+            <StackPanel Grid.Row="0" Grid.RowSpan="2" 
+                      Visibility="{x:Bind CustomerViewModel.displayCustomers.Count, Mode=OneWay, Converter={StaticResource IntegerToVisibilityMsgConverter}}"
+                      VerticalAlignment="Center" 
+                      HorizontalAlignment="Center">
+                <Border Background="#FFF3E0" 
+                        CornerRadius="8" 
+                        Padding="30,20" 
+                        BorderBrush="#FFE0B2" 
+                        BorderThickness="1">
+                    <StackPanel>
+                        <TextBlock Text="&#xE783;" 
+                                 FontFamily="Segoe MDL2 Assets" 
+                                 FontSize="48" 
+                                 Foreground="#FF8F00" 
+                                 HorizontalAlignment="Center"/>
+                        <TextBlock Text="Không có khách hàng nào được tìm thấy."
+                                 Foreground="#FF8F00"
+                                 FontSize="18"
+                                 FontWeight="SemiBold"
+                                 HorizontalAlignment="Center"
+                                 Margin="0,15,0,20"/>
+                        <Button Content="Làm mới" 
+                              Click="OnResetClick" 
+                              Style="{StaticResource ButtonStyle}"
+                              HorizontalAlignment="Center"
+                              Background="#FF8F00"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+
+            <!-- Search and filter section -->
+            <Grid Grid.Row="0" 
+                  Visibility="{x:Bind CustomerViewModel.displayCustomers.Count, Mode=OneWay, Converter={StaticResource IntegerToVisibilityListConverter}}"
+                  Margin="0,0,0,15">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" 
+                        Background="#F5F5F5" 
+                        CornerRadius="4" 
+                        Padding="5">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="&#xE721;" 
+                                 FontFamily="Segoe MDL2 Assets" 
+                                 FontSize="16" 
+                                 VerticalAlignment="Center" 
+                                 Margin="10,0" 
+                                 Foreground="#757575"/>
+                        <TextBox x:Name="SearchBox" 
+                               Grid.Column="1" 
+                               Background="Transparent" 
+                               BorderThickness="0" 
+                               PlaceholderText="Nhập số điện thoại để tìm kiếm..." 
+                               VerticalAlignment="Center"/>
+                    </Grid>
+                </Border>
+
+                <StackPanel Grid.Column="1" 
+                          Orientation="Horizontal" 
+                          HorizontalAlignment="Right">
+                    <Button Content="Tìm kiếm" 
+                          Click="OnSearchClick" 
+                          Style="{StaticResource ButtonStyle}"
+                          Background="Orange"/>
+                    <Button Content="Làm mới" 
+                          Click="OnResetClick" 
+                          Style="{StaticResource ButtonStyle}" 
+                          Background="SandyBrown"/>
                 </StackPanel>
             </Grid>
 
-
-
-
-            <!-- Danh sách khách hàng -->
-            <Grid Grid.Row="1">
+            <!-- Customer list -->
+            <Grid Grid.Row="1" 
+                  Visibility="{x:Bind CustomerViewModel.displayCustomers.Count, Mode=OneWay, Converter={StaticResource IntegerToVisibilityListConverter}}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <!-- Header -->
-                <Grid Grid.Row="0" Margin="10,0,10,0" Background="Gray">
+                <!-- Table header -->
+                <Grid Grid.Row="0" Background="#EEEEEE">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="1*"/>
@@ -61,15 +166,40 @@
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Text="Tên khách hàng" Grid.Column="0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center" Foreground="Black"/>
-                    <TextBlock Text="Số điện thoại" Grid.Column="1" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center" Foreground="Black"/>
-                    <TextBlock Text="Hạng thành viên" Grid.Column="2" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center" Foreground="Black"/>
-                    <TextBlock Text="Số đơn hàng" Grid.Column="3" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center" Foreground="Black"/>
-                    <TextBlock Text="Tổng chi tích lũy" Grid.Column="4" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center" Foreground="Black"/>
+                    <Border Grid.Column="0" BorderBrush="#E0E0E0" BorderThickness="0,0,1,0">
+                        <TextBlock Text="Tên khách hàng" Style="{StaticResource HeaderTextStyle}"/>
+                    </Border>
+                    <Border Grid.Column="1" BorderBrush="#E0E0E0" BorderThickness="0,0,1,0">
+                        <TextBlock Text="Số điện thoại" Style="{StaticResource HeaderTextStyle}"/>
+                    </Border>
+                    <Border Grid.Column="2" BorderBrush="#E0E0E0" BorderThickness="0,0,1,0">
+                        <TextBlock Text="Hạng thành viên" Style="{StaticResource HeaderTextStyle}"/>
+                    </Border>
+                    <Border Grid.Column="3" BorderBrush="#E0E0E0" BorderThickness="0,0,1,0">
+                        <TextBlock Text="Số đơn hàng" Style="{StaticResource HeaderTextStyle}"/>
+                    </Border>
+                    <Border Grid.Column="4">
+                        <TextBlock Text="Tổng chi tích lũy" Style="{StaticResource HeaderTextStyle}"/>
+                    </Border>
                 </Grid>
 
-                <!-- ListView -->
-                <ListView Grid.Row="1" Margin="10,0,10,0" ItemsSource="{x:Bind CustomerViewModel.displayCustomers}">
+                <!-- Customer list with improved styling -->
+                <ListView Grid.Row="1" 
+                        ItemsSource="{x:Bind CustomerViewModel.displayCustomers}" 
+                        SelectionMode="Single"
+                        IsItemClickEnabled="True"
+                        Background="White"
+                        BorderThickness="1"
+                        BorderBrush="#E0E0E0">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            <Setter Property="Padding" Value="0"/>
+                            <Setter Property="MinHeight" Value="50"/>
+                            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+                            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="model:Customer">
                             <Grid>
@@ -81,20 +211,26 @@
                                     <ColumnDefinition Width="1*"/>
                                 </Grid.ColumnDefinitions>
 
-                                <TextBlock Text="{x:Bind Name}" Grid.Column="0" Margin="-30, 0, 0, 0" HorizontalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center" Foreground="Black"/>
-                                <TextBlock Text="{x:Bind Phone_num}" Grid.Column="1" HorizontalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center" Foreground="Black"/>
-                                <TextBlock Text="{x:Bind Rank}" Grid.Column="2" HorizontalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center" Foreground="Black"/>
-                                <TextBlock Text="{x:Bind AmountOrder}" Grid.Column="3" HorizontalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center" Foreground="Black"/>
-                                <TextBlock Text="{x:Bind TotalPaid}" Grid.Column="4" HorizontalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center" Foreground="Black"/>
+                                <Border Grid.Column="0" BorderBrush="#E0E0E0" BorderThickness="0,0,1,0">
+                                    <TextBlock Text="{x:Bind Name}" Style="{StaticResource CellTextStyle}"/>
+                                </Border>
+                                <Border Grid.Column="1" BorderBrush="#E0E0E0" BorderThickness="0,0,1,0">
+                                    <TextBlock Text="{x:Bind Phone_num}" Style="{StaticResource CellTextStyle}"/>
+                                </Border>
+                                <Border Grid.Column="2" BorderBrush="#E0E0E0" BorderThickness="0,0,1,0">
+                                    <TextBlock Text="{x:Bind Rank}" Style="{StaticResource CellTextStyle}"/>
+                                </Border>
+                                <Border Grid.Column="3" BorderBrush="#E0E0E0" BorderThickness="0,0,1,0">
+                                    <TextBlock Text="{x:Bind AmountOrder}" Style="{StaticResource CellTextStyle}"/>
+                                </Border>
+                                <Border Grid.Column="4">
+                                    <TextBlock Text="{x:Bind TotalPaid}" Style="{StaticResource CellTextStyle}"/>
+                                </Border>
                             </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
             </Grid>
         </Grid>
-    </StackPanel>
-
-
-
-
+    </Grid>
 </Page>

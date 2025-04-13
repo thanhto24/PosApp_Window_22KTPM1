@@ -53,29 +53,29 @@
         <!-- Nhập code -->
         <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Margin="0,5,0,0">
             <TextBlock Text="Nhập code *" FontWeight="Bold" Foreground="Red"/>
-            <TextBox x:Name="CodeBox" PlaceholderText="Nhập mã code" Padding="8" Background="Gray" Foreground="Black"/>
+            <TextBox x:Name="CodeBox" PlaceholderText="Nhập mã code" Padding="8" Background="White" Foreground="Black"/>
         </StackPanel>
 
         <!-- Nhập số lượng -->
         <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Margin="0,5,0,0">
             <TextBlock Text="Số lượng mã giảm giá (Tối đa 20) *" FontWeight="Bold" Foreground="Red"/>
-            <TextBox x:Name="VoucherQuantityBox" PlaceholderText="Nhập số lượng" Padding="8" Background="Gray" Foreground="Black"/>
+            <TextBox x:Name="VoucherQuantityBox" PlaceholderText="Nhập số lượng" Padding="8" Background="White" Foreground="Black"/>
         </StackPanel>
 
         <!-- Nhập thông tin voucher -->
         <StackPanel Grid.Row="4" Grid.ColumnSpan="2" Margin="0,10,0,0">
             <TextBlock Text="Ghi chú (nếu có)" FontWeight="Bold" Foreground="Black"/>
-            <TextBox x:Name="NoteBox" PlaceholderText="Nhập mô tả voucher" Padding="8" Background="Gray" Foreground="Black"/>
+            <TextBox x:Name="NoteBox" PlaceholderText="Nhập mô tả voucher" Padding="8" Background="White" Foreground="Black"/>
         </StackPanel>
 
         <StackPanel Grid.Row="5" Grid.ColumnSpan="2" Margin="0,10,0,0">
             <TextBlock Text="Áp dụng cho đơn hàng tối thiểu (VNĐ) *" FontWeight="Bold" Foreground="Red"/>
-            <TextBox x:Name="MinOrderBox" PlaceholderText="Nhập số tiền tối thiểu" Padding="8" Background="Gray" Foreground="Black"/>
+            <TextBox x:Name="MinOrderBox" PlaceholderText="Nhập số tiền tối thiểu" Padding="8" Background="White" Foreground="Black"/>
         </StackPanel>
 
         <StackPanel Grid.Row="6" Grid.ColumnSpan="2" Margin="0,10,0,0">
             <TextBlock Text="Giá trị giảm (0% đến 100%) *" FontWeight="Bold" Foreground="Red"/>
-            <TextBox x:Name="DiscountValueBox" PlaceholderText="Nhập phần trăm giảm" Padding="8" Background="Gray" Foreground="Black"/>
+            <TextBox x:Name="DiscountValueBox" PlaceholderText="Nhập phần trăm giảm" Padding="8" Background="White" Foreground="Black"/>
         </StackPanel>
 
 

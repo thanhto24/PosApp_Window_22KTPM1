@@ -108,17 +108,51 @@ namespace App.View.ViewModel
 
         }
 
-        public double ApplyVoucher(string code)
+        //public double ApplyVoucher(string code)
+        //{
+        //    var filter = new Dictionary<string, object>
+        //    {
+        //        {"Code", code },
+        //    };
+        //    var voucher = _dao.Vouchers.GetByQuery(filter);
+        //    if (voucher != null && voucher.Any())
+        //    {
+        //        return (double)voucher[0].DiscountValue;
+        //    }
+        //    return 0;
+        //}
+        public double ApplyVoucher(string code, double orderValue)
         {
             var filter = new Dictionary<string, object>
-            {
-                {"Code", code },
-            };
+    {
+        {"Code", code },
+    };
             var voucher = _dao.Vouchers.GetByQuery(filter);
+
             if (voucher != null && voucher.Any())
             {
-                return (double)voucher[0].DiscountValue;
+                var currentVoucher = voucher[0];
+                DateTime currentDate = DateTime.Now;
+
+                // Kiểm tra thời gian hiệu lực
+                if (currentDate < currentVoucher.StartDate || currentDate > currentVoucher.EndDate)
+                {
+                    // Voucher hết hạn hoặc chưa có hiệu lực
+                    return 0;
+                }
+
+                // Kiểm tra giá trị đơn hàng tối thiểu
+                if (orderValue < (double)currentVoucher.MinOrder)
+                {
+                    // Đơn hàng không đạt giá trị tối thiểu
+                    return 0;
+                }
+
+                // Voucher hợp lệ, trả về giá trị giảm giá
+                return (double)currentVoucher.DiscountValue;
             }
+
+            // Không tìm thấy voucher
             return 0;
         }
 

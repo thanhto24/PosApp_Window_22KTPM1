@@ -26,12 +26,13 @@ namespace App.View.ViewModel
         {
             displayCustomers.Clear();
 
-            var foundCustomer = customers.FirstOrDefault(c => c.Phone_num == phone);
-            if (foundCustomer != null)
+            var foundCustomers = customers.Where(c => c.Phone_num != null && c.Phone_num.Contains(phone));
+            foreach (var customer in foundCustomers)
             {
-                displayCustomers.Add(foundCustomer);
+                displayCustomers.Add(customer);
             }
         }
+
 
         public void resetClick()
         {

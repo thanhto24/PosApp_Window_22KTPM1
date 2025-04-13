@@ -28,6 +28,7 @@ namespace App.View.Pages
         public Dashboard()
         {
             this.InitializeComponent();
+            container.Navigate(Type.GetType($"{GetType().Namespace}.HomeScreen"));
         }
 
         private void navigation_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)

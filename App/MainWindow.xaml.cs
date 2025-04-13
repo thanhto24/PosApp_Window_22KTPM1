@@ -15,6 +15,10 @@ using Windows.Foundation.Collections;
 using App.View.Pages;
 using Microsoft.Data.Sqlite;
 using App.Utils;
+using Microsoft.UI.Windowing;
+using WinUIEx;
+using WinRT.Interop;
+using System.Runtime.InteropServices;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -28,17 +32,25 @@ namespace App
     public sealed partial class MainWindow : Window
     {
         //private static readonly string DatabasePath = Path.Combine(AppContext.BaseDirectory, "database.db");
+        [DllImport("user32.dll")]
+        private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+        private const int SW_MAXIMIZE = 3;
+
 
         public MainWindow()
         {
             this.InitializeComponent();
+            this.Title = "Coffee App";
 
-            //InitializeDatabase();
+            // Maximize cửa sổ khi khởi động
+            IntPtr hWnd = WindowNative.GetWindowHandle(this);
+            ShowWindow(hWnd, SW_MAXIMIZE);
 
-            //update ProductImages folder trong bin -> cải tiến UX
+            // Copy ảnh
             CopyFolderImager.CopyProductImagesFolder();
 
-            // Điều hướng đến Login.xaml khi ứng dụng khởi động
+            // Điều hướng đến Dashboard
             MainFrame.Navigate(typeof(Dashboard));
         }
 

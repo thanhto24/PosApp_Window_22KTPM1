@@ -237,8 +237,8 @@
                     <Button Content="Xóa hết" Click="ClearCart_Click"  Margin="0, 5, 0, 0" HorizontalAlignment="Stretch" Background="#D38C3E" BorderThickness="0"/>
                     <Grid HorizontalAlignment="Stretch">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="7*"/>
+                            <ColumnDefinition Width="2*" />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="40"/>
