@@ -49,7 +49,7 @@ namespace App.Utils
             if (sender is T changedItem)
             {
                 int index = IndexOf(changedItem);
-                if (index >= 0) // Chỉ raise event nếu item nằm trong collection
+                if (index >= 0)
                 {
                     var args = new NotifyCollectionChangedEventArgs(
                         NotifyCollectionChangedAction.Replace,

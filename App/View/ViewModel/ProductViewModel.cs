@@ -442,10 +442,8 @@ namespace App.View.ViewModel
 
         public void LoadProductsByCategory(string TypeGroup)
         {
-            // Clear DisplayProducts before adding new products for the selected category
             DisplayProducts.Clear();
 
-            // Lọc sản phẩm của category hiện tại từ DAO
             var filteredProducts = _dao.Products.GetByQuery(new Dictionary<string, object> { { "TypeGroup", TypeGroup } });
 
             foreach (var product in filteredProducts)
@@ -453,13 +451,17 @@ namespace App.View.ViewModel
                 // Đảm bảo số lượng tồn kho không âm
                 product.Inventory = Math.Max(0, product.Inventory);
 
-                // Chỉ thêm vào AllProducts nếu sản phẩm chưa có
-                if (!AllProducts.Any(p => p.Name == product.Name))
+                // Kiểm tra nếu sản phẩm đã tồn tại trong AllProducts theo Name -> dùng lại instance cũ
+                var existingProduct = AllProducts.FirstOrDefault(p => p.Name == product.Name);
+                if (existingProduct != null)
                 {
-                    AllProducts.Add(product);  // Thêm vào AllProducts nếu chưa có
+                    DisplayProducts.Add(existingProduct);
                 }
-
-                DisplayProducts.Add(product);  // Chỉ thêm sản phẩm vào DisplayProducts của category hiện tại
+                else
+                {
+                    AllProducts.Add(product);
+                    DisplayProducts.Add(product);
+                }
             }
 
             Products.Clear();

@@ -24,6 +24,13 @@ namespace App.View.ViewModel
         {
             _dao = Services.GetKeyedSingleton<IDao>();
             List<Order_> list_order = _dao.Orders.GetAll();
+
+            var i = 0;
+            foreach (var order in list_order)
+            {
+                order.Id = ++i;
+            }
+
             orders = new FullObservableCollection<Order_>(list_order);
             DisplayedOrders = new FullObservableCollection<Order_>();
 
