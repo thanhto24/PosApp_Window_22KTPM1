@@ -35,6 +35,10 @@ using Windows.System;
 using Microsoft.UI;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
+using App.View.Dialogs;
+using Windows.Web.Http;
+using static App.Service.GHN;
+using static App.Service.GHN.ShipService;
 
 namespace App.View.Pages
 {
@@ -49,6 +53,11 @@ namespace App.View.Pages
 
         private double finalAmount = 0;
         public double vcDis = 0, cusDis = 0;
+        public double vatFee = 0, shipFee = 0;
+        public bool isShip = false;
+        public CreateOrderRequest orderShip = new CreateOrderRequest();
+        public ShipService shipService;
+        public string orderCodeCreated = "";
         public HomeScreen()
         {
             this.InitializeComponent();
@@ -58,7 +67,7 @@ namespace App.View.Pages
 
             VoucherViewModel = new VoucherViewModel();
             CustomerViewModel = new CustomerViewModel();
-
+            shipService = new ShipService();
             if (CategoryViewModel.categories.Any() && ProductViewModel.Products.Any())
                 ProductViewModel.LoadProductsByCategory(CategoryViewModel.categories[0].Name);
 
@@ -158,17 +167,19 @@ namespace App.View.Pages
         {
             double total = CartViewModel.getTotalAmount();
             double discountVc = 0, discountCustomer = 0;
+            double otherFee = vatFee + shipFee;
             checkVoucher();
 
             // Áp dụng mã khuyến mãi
             discountVc = total * vcDis;
             discountCustomer = total * cusDis;
 
-            finalAmount = total - discountVc - discountCustomer;
+            finalAmount = total + otherFee - discountVc - discountCustomer;
             CartViewModel.totalDiscount = discountVc + discountCustomer;
 
             // Hiển thị số tiền trên giao diện
             TotalAmountTextBlock.Text = $"{total:N0}đ";
+            OtherFeeTextBlock.Text = $"{otherFee:N0}đ";
             DiscountAmountTextBlock.Text = $"-{discountVc + discountCustomer:N0}đ";
             FinalAmountTextBlock.Text = $"{finalAmount:N0}đ";
         }
@@ -197,10 +208,27 @@ namespace App.View.Pages
             ApplyDiscount();
 
             if (CartViewModel.getTotalAmount() == 0)
+            {
+                await ShowErrorDialog("Vui lòng thêm sản phẩm");
                 return;
-
+            }
             string customerName = string.IsNullOrWhiteSpace(CustomerName.Text) ? "Khách vãng lai" : CustomerName.Text;
-            CartViewModel.CreateNewOrder(CartViewModel.totalDiscount, customerName, paymentType);
+
+            if (isShip)
+            {
+                if (CustomerName.Text == "" || CustomerCodeTextBox.Text == "")
+                {
+                    await ShowErrorDialog("Tên khách hàng, số điện thoại không được để trống khi ship");
+                    return;
+                }
+                await CreateOrderShipFunc();
+                CartViewModel.CreateNewOrder(CartViewModel.totalDiscount, customerName, "COD", "Đang giao hàng", "Thanh toán khi nhận hàng", "GHN: " + orderCodeCreated);
+                orderCodeCreated = "";
+            }
+            else
+                CartViewModel.CreateNewOrder(CartViewModel.totalDiscount, customerName, paymentType);
+
+
 
 
             string phone = CustomerCodeTextBox.Text.Trim();
@@ -211,8 +239,12 @@ namespace App.View.Pages
             if (this.vcDis > 0)
                 VoucherViewModel.des(promoCode);
 
+
             // Update inventory in database
             UpdateInventoryAfterSale();
+
+
+
 
             ContentDialog checkoutDialog = new ContentDialog
             {
@@ -233,6 +265,8 @@ namespace App.View.Pages
             CartViewModel.Clear_();
             PromoCodeTextBox.Text = "";
             CustomerCodeTextBox.Text = "";
+            vatFee = 0;
+            shipFee = 0;
             ApplyDiscount();
             OrderSummaryText.Text = $"Số lượng: {CartViewModel.getTotalQuantity().ToString()} món";
         }
@@ -245,13 +279,15 @@ namespace App.View.Pages
 
         private void VatToggleButton_Checked(object sender, RoutedEventArgs e)
         {
-            CartViewModel.IsVATEnabled = true;
+            //CartViewModel.IsVATEnabled = true;
+            vatFee = CartViewModel.getVATFee();
             ApplyDiscount();
         }
 
         private void VatToggleButton_Unchecked(object sender, RoutedEventArgs e)
         {
-            CartViewModel.IsVATEnabled = false;
+            //CartViewModel.IsVATEnabled = false;
+            vatFee = 0;
             ApplyDiscount();
         }
 
@@ -425,6 +461,75 @@ namespace App.View.Pages
                 Debug.WriteLine($"Lỗi áp dụng bộ lọc: {ex.Message}");
                 await ShowErrorDialog($"Lỗi: {ex.Message}");
             }
+        }
+        private async void ShipOrder_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new AddressSelectionDialog();
+            dialog.XamlRoot = this.XamlRoot;
+
+            // Mở ContentDialog và chờ kết quả
+            var result = await dialog.ShowAsync();
+
+            if (result == ContentDialogResult.Primary)
+            {
+                isShip = true;
+
+                var toProvince = dialog.ToAddress.Province.id; // Địa chỉ nhận
+                var toDistrict = dialog.ToAddress.District.id;
+                var toWard = dialog.ToAddress.Ward.id;
+                var toDetailedAddress = dialog.ToAddress.Detailed;
+
+
+                orderShip.to_district_id = dialog.ToAddress.District.id;
+                orderShip.to_ward_code = dialog.ToAddress.Ward.id.ToString();
+                orderShip.to_address = dialog.ToAddress.Detailed;
+
+                shipFee = await GetShipFeeAsync(orderShip.to_ward_code, orderShip.to_district_id);
+            }
+            else
+            {
+                isShip = false;
+                shipFee = 0;
+            }
+            ApplyDiscount();
+        }
+
+        private void ShipOrder_UnClick(object sender, RoutedEventArgs e)
+        {
+            shipFee = 0;
+            isShip = false;
+        }
+
+        private async Task CreateOrderShipFunc()
+        {
+            CreateOrderRequest order = this.orderShip;
+            order.to_phone = CustomerCodeTextBox.Text;
+            order.to_name = CustomerName.Text;
+
+            OrderShipResponse order_create = await shipService.CreateOrderShip(order);
+            if (order_create != null)
+            {
+                orderCodeCreated = order_create.order_code;
+                await ShowDialogFunc("Tạo thành công đơn ship GHN\n", "Code: " + order_create.order_code + "\nPhí vận chuyển: " + order_create.total_fee);
+
+            }
+            else
+            {
+                await ShowErrorDialog("Không tạo được đơn hàng, vui lòng thử lại");
+            }
+        }
+
+        private async Task ShowDialogFunc(string Title, string message)
+        {
+            ContentDialog errorDialog = new ContentDialog
+            {
+                Title = Title,
+                Content = message,
+                CloseButtonText = "OK",
+                XamlRoot = this.XamlRoot
+            };
+
+            await errorDialog.ShowAsync();
         }
 
         private async Task ShowErrorDialog(string message)

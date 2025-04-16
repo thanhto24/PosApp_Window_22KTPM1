@@ -1,0 +1,38 @@
+<ContentDialog
+    x:Class="App.View.Dialogs.AddressSelectionDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:App.View.Dialogs"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="Chọn địa chỉ"
+    PrimaryButtonText="Xác nhận"
+    SecondaryButtonText="Hủy"
+    PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
+    SecondaryButtonClick="ContentDialog_SecondaryButtonClick">
+
+    <StackPanel Spacing="12">
+        <!-- Tỉnh -->
+        <TextBlock Text="Tỉnh/Thành phố"/>
+        <ComboBox x:Name="ToProvinceComboBox"
+                  SelectionChanged="ToProvinceComboBox_SelectionChanged"
+                  DisplayMemberPath="name"/>
+
+        <!-- Quận/Huyện -->
+        <TextBlock Text="Quận/Huyện"/>
+        <ComboBox x:Name="ToDistrictComboBox"
+                  SelectionChanged="ToDistrictComboBox_SelectionChanged"
+                  DisplayMemberPath="name"/>
+
+        <!-- Phường/Xã -->
+        <TextBlock Text="Phường/Xã"/>
+        <ComboBox x:Name="ToWardComboBox"
+                  DisplayMemberPath="name"/>
+
+        <!-- Địa chỉ chi tiết -->
+        <TextBlock Text="Địa chỉ cụ thể"/>
+        <TextBox x:Name="ToDetailedAddressTextBox"
+                 PlaceholderText="Nhập địa chỉ chi tiết"/>
+    </StackPanel>
+</ContentDialog>
