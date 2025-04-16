@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using App.Model;
 using App.Service;
 using App.Utils;
+using App.View.Dialogs;
+using Microsoft.UI.Xaml.Controls;
 using Newtonsoft.Json;
 
 
@@ -80,12 +82,20 @@ namespace App.View.ViewModel
             }
         }
 
+        public double getVATFee()
+        {
+            double totalVAT = CartItems.Sum(item =>
+            {
+                return item.Product.Price * item.Quantity * (item.Product.Vat / 100);
+            });
+            return totalVAT;
+        }
+
         public double getTotalAmount()
         {
             double total = CartItems.Sum(item =>
             {
-                double vatMultiplier = IsVATEnabled ? (1 + item.Product.Vat / 100.0) : 1.0;
-                return item.Product.Price * item.Quantity * vatMultiplier;
+                return item.Product.Price * item.Quantity;
             });
 
             return total;
@@ -104,7 +114,7 @@ namespace App.View.ViewModel
         }
 
 
-        public void CreateNewOrder(double totalDiscount, string nameCustomer, string paymentType)
+        public void CreateNewOrder(double totalDiscount, string nameCustomer, string paymentType, string status = "Đã giao", string paymentStatus = "Đã thanh toán", string note = "Giao hàng thành công")
         {
             int newId = _dao.Orders.GetAll().Count + 1;
             string invoiceId = $"INV{newId:D3}";
@@ -128,9 +138,9 @@ namespace App.View.ViewModel
                 totalPayment: finalAmount,
                 totalCost: totalCost,
                 paymentMethod: paymentType,
-                status: "Đã giao",
-                paymentStatus: "Đã thanh toán",
-                notes: "Giao hàng thành công"
+                status: status,
+                paymentStatus: paymentStatus,
+                notes: note
             );
 
             var json = Newtonsoft.Json.JsonConvert.SerializeObject(order, Formatting.Indented);
@@ -139,6 +149,10 @@ namespace App.View.ViewModel
             _dao.Orders.Insert(order);
         }
 
+        public void ShipOrder()
+        {
+
+        }
 
     }
 }

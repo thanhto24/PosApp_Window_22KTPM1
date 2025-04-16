@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const controller = require("../controllers/godController");
 const payosRouter = require("./payos");
+const ghnRouter = require("./ghn");
 function validateModelName(req, res, next) {
     req.modelName = req.params.modelName.toLowerCase();
     if (!req.modelName) {
@@ -23,5 +24,5 @@ router.put("/updateByQuery/:modelName", validateModelName, controller.updateByQu
 router.post("/filtered/:modelName", validateModelName, controller.getAllFiltered);
 router.post("/getByQuery/:modelName", validateModelName, controller.getByQuery);
 router.use("/payos", payosRouter); // Sử dụng router payos
-
+router.use("/ghn", ghnRouter); // Sử dụng router ghn
 module.exports = router;

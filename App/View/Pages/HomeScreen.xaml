@@ -149,16 +149,14 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <Button Grid.Column="0" Background="#E8EBFA" Foreground="Black" Padding="8, 6" CornerRadius="8" Margin="5, 10, 0, 0">
+                <ToggleButton Grid.Column="0" Background="#E8EBFA" Foreground="Black" Padding="8, 6" CornerRadius="8" Margin="5, 10, 0, 0" Checked="ShipOrder_Click" Unchecked="ShipOrder_UnClick">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <FontIcon Glyph="&#xE72D;" FontSize="16"/>
-                        <TextBlock Text="Mang đi" FontSize="14" FontWeight="Bold" Margin="4,0,0,0"/>
+                        <TextBlock Text="Giao hàng" FontSize="14" FontWeight="Bold" Margin="4,0,0,0"/>
                     </StackPanel>
-                </Button>
+                </ToggleButton>
 
                 <!-- Nút Áp VAT -->
                 <ToggleButton x:Name="VatToggleButton" Grid.Column="1"
@@ -170,10 +168,6 @@
                   Foreground="Black"
                   Checked="VatToggleButton_Checked"
                   Unchecked="VatToggleButton_Unchecked"/>
-
-                <Button Grid.Column="3" Background="Black" Padding="8" Margin="0, 10, 5, 0">
-                    <FontIcon Glyph="&#xE716;" FontSize="16"/>
-                </Button>
             </Grid>
 
             <TextBox x:Name="CustomerName" Grid.Row="1" PlaceholderText="Nhập tên khách hàng" Background="#5D4037" BorderThickness="0" Padding="6, 8, 12, 0" FontSize="12" Margin="7, 10, 7, 0"/>
@@ -212,6 +206,16 @@
                     <TextBlock x:Name="TotalAmountTextBlock" Foreground="Red" FontSize="15" FontWeight="Bold" HorizontalAlignment="Right" Grid.Column="1"/>
                 </Grid>
 
+                <!-- Tổng tiền -->
+                <Grid x:Name="Phuphi" Margin="0, 5, 0, 0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Phụ phí: " Foreground="Black" FontSize="14" Grid.Column="0"/>
+                    <TextBlock x:Name="OtherFeeTextBlock" Foreground="Red" FontSize="15" FontWeight="Bold" HorizontalAlignment="Right" Grid.Column="1"/>
+                </Grid>
+
                 <!-- Số tiền được giảm -->
                 <Grid x:Name="TienGiam" Margin="0, 5, 0, 0">
                     <Grid.ColumnDefinitions>
@@ -234,16 +238,16 @@
 
                 <!-- Nút Xóa và Thanh toán -->
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="5, 10, 5, 5" Width="250" BorderThickness="0">
-                    <Button Content="Xóa hết" Click="ClearCart_Click"  Margin="0, 5, 0, 0" MaxWidth="160" HorizontalAlignment="Stretch" Background="#D38C3E" BorderThickness="0"/>
-                    <Grid HorizontalAlignment="Stretch" Margin="42, 0, 0, 0">
+                    <Button Content="Xóa hết" Click="ClearCart_Click"  Margin="0, 5, 0, 0" HorizontalAlignment="Stretch" Background="#D38C3E" BorderThickness="0"/>
+                    <Grid HorizontalAlignment="Stretch">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="7*" MaxWidth="120"/>
+                            <ColumnDefinition Width="7*"/>
                             <ColumnDefinition Width="2*" />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="40"/>
                         </Grid.RowDefinitions>
-                        <Button Content="Thanh toán" Click="Checkout_Click" HorizontalAlignment="Stretch" Margin="5, 5, 5, 0" Background="#D38C3E" BorderThickness="0" Grid.Column="0" Grid.Row="0"/>
+                        <Button Content="Thanh toán" Click="Checkout_Click" HorizontalAlignment="Stretch" Margin="0, 5, 5, 0" Background="#D38C3E" BorderThickness="0" Grid.Column="0" Grid.Row="0"/>
                         <Button Click="QR_Click"
                                 Background="#D38C3E"
                                 Foreground="White"
