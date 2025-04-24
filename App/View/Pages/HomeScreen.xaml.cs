@@ -374,39 +374,9 @@ namespace App.View.Pages
 
                 qrDialog.Content = contentPanel;
 
-                var dialogTask = qrDialog.ShowAsync();
 
-                _ = Task.Run(async () =>
-                {
-                    try
-                    {
-                        while (true)
-                        {
-                            bool isPaid = await paymentService.CheckPaymentStatus(result.orderCode);
+                await qrDialog.ShowAsync();
 
-                            if (isPaid)
-                            {
-                                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                                {
-                                    qrDialog.Hide();
-                                });
-                                break;
-                            }
-
-                            await Task.Delay(3000);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
-                        {
-                            await ShowErrorDialog($"Lỗi kiểm tra thanh toán:\n{ex.Message}");
-                        });
-                    }
-                });
-
-
-                await dialogTask;
                 bool Paid = await paymentService.CheckPaymentStatus(result.orderCode);
                 if (Paid)
                 {
