@@ -100,7 +100,14 @@ exports.updateByQuery = async (req, res) => {
     });
 
     console.log(result);
-    res.json({ message: `Đã cập nhật ${result.modifiedCount} bản ghi` });
+    if(res)
+      res.status(200).json({
+        message: `Đã cập nhật thanh công ${result.modifiedCount} bản ghi`,
+      });
+    else
+      return {
+        message: `Đã cập nhật thanh công ${result.modifiedCount} bản ghi`,
+      };
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: error.message });

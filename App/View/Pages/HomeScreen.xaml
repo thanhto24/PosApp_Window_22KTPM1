@@ -152,7 +152,7 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <ToggleButton Grid.Column="0" Background="#E8EBFA" Foreground="Black" Padding="8, 6" CornerRadius="8" Margin="5, 10, 0, 0" Checked="ShipOrder_Click" Unchecked="ShipOrder_UnClick">
+                <ToggleButton x:Name="ShipToggleButton" Grid.Column="0" Background="#E8EBFA" Foreground="Black" Padding="8, 6" CornerRadius="8" Margin="5, 10, 0, 0" Checked="ShipOrder_Click" Unchecked="ShipOrder_UnClick">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock Text="Giao hàng" FontSize="14" FontWeight="Bold" Margin="4,0,0,0"/>
                     </StackPanel>

@@ -11,7 +11,7 @@ namespace App.View.ViewModel
     public class OrderViewModel
     {
         private IDao _dao;
-        private const int ItemsPerPage = 5;
+        private const int ItemsPerPage = 10;
 
         public FullObservableCollection<Order_> orders { get; set; }
         public FullObservableCollection<Order_> DisplayedOrders { get; set; }

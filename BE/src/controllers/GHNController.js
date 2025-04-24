@@ -1,5 +1,6 @@
 require("dotenv").config();
 const axios = require("axios");
+const godController = require("./godController");
 
 const ghnAPI = axios.create({
   baseURL: process.env.GHN_BASE_URL,
@@ -75,6 +76,24 @@ exports.createOrder = async (req, res) => {
     });
     const result = response.data.data;
     console.log(result);
+
+    setTimeout(async () => {
+      try {
+        await godController.updateByQuery({
+          params: { modelName: "order_" },
+          body: {
+            SetValues: { Status: "Đã ship" },
+            WhereClause: "Notes=@note", 
+            WhereParams: {
+              note: `GHN: ${result.order_code}`, 
+            },
+          }
+        });
+        console.log("Đã cập nhật trạng thái đơn hàng thành 'Đã ship'.");
+      } catch (err) {
+        console.error("Lỗi khi cập nhật trạng thái đơn hàng:", err.message);
+      }
+    }, 1 * 60 * 1000); 
     res.json({
       order_code: result.order_code,
       total_fee: result.total_fee,

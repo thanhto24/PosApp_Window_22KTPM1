@@ -387,18 +387,31 @@ namespace App.View.Pages
                 qrDialog.Content = contentPanel;
 
 
-                await qrDialog.ShowAsync();
+                _ = qrDialog.ShowAsync(); // không await để dialog không block luồng
 
-                bool Paid = await paymentService.CheckPaymentStatus(result.orderCode);
-                if (Paid)
+                bool paid = false;
+                int elapsed = 0;
+                int timeout = 5 * 60 * 1000; // 5 phút (milliseconds)
+                int checkInterval = 3000; // kiểm tra mỗi 3 giây
+
+                while (!paid && elapsed < timeout)
+                {
+                    await Task.Delay(checkInterval);
+                    elapsed += checkInterval;
+
+                    paid = await paymentService.CheckPaymentStatus(result.orderCode);
+                }
+
+                qrDialog.Hide(); // đóng dialog dù thành công hay không
+
+                if (paid)
                 {
                     await Checkout("QR");
                 }
                 else
                 {
-                    await ShowErrorDialog("Thanh toán không thành công!");
+                    await ShowErrorDialog("Thanh toán không thành công hoặc đã hết thời gian chờ.");
                 }
-
             }
             catch (Exception ex)
             {
@@ -472,6 +485,13 @@ namespace App.View.Pages
                 orderShip.to_address = dialog.ToAddress.Detailed;
 
                 shipFee = await GetShipFeeAsync(orderShip.to_ward_code, orderShip.to_district_id);
+                if (shipFee == -1)
+                {
+                    shipFee = 0;
+                    isShip = false;
+                    await ShowErrorDialog("Rất tiếc, hiện GHN không hỗ trợ giao hàng ở vị trí này");
+                    ShipToggleButton.IsChecked = false;
+                }
             }
             else
             {
