@@ -221,8 +221,14 @@ namespace App.View.Pages
                     await ShowErrorDialog("Tên khách hàng, số điện thoại không được để trống khi ship");
                     return;
                 }
-                await CreateOrderShipFunc();
+                bool canShip = await CreateOrderShipFunc();
+                if (!canShip)
+                {
+                    Clear_All();
+                    return;
+                }
                 CartViewModel.CreateNewOrder(CartViewModel.totalDiscount, customerName, "COD", "Đang giao hàng", "Thanh toán khi nhận hàng", "GHN: " + orderCodeCreated);
+
                 orderCodeCreated = "";
             }
             else
@@ -255,8 +261,14 @@ namespace App.View.Pages
             };
 
             await checkoutDialog.ShowAsync();
+            Clear_All();
 
+        }
+
+        private void Clear_All()
+        {
             // Reset product quantities in UI
+
             foreach (var product in ProductViewModel.Products)
             {
                 product.Quantity = 0;
@@ -265,12 +277,12 @@ namespace App.View.Pages
             CartViewModel.Clear_();
             PromoCodeTextBox.Text = "";
             CustomerCodeTextBox.Text = "";
+            CustomerName.Text = "";
             vatFee = 0;
             shipFee = 0;
             ApplyDiscount();
             OrderSummaryText.Text = $"Số lượng: {CartViewModel.getTotalQuantity().ToString()} món";
         }
-
 
         private async void Checkout_Click(object sender, RoutedEventArgs e)
         {
@@ -381,6 +393,10 @@ namespace App.View.Pages
                 {
                     await Checkout("QR");
                 }
+                else
+                {
+                    await ShowErrorDialog("Thanh toán không thành công!");
+                }
 
             }
             catch (Exception ex)
@@ -470,22 +486,30 @@ namespace App.View.Pages
             isShip = false;
         }
 
-        private async Task CreateOrderShipFunc()
+        private async Task<bool> CreateOrderShipFunc()
         {
             CreateOrderRequest order = this.orderShip;
             order.to_phone = CustomerCodeTextBox.Text;
             order.to_name = CustomerName.Text;
 
             OrderShipResponse order_create = await shipService.CreateOrderShip(order);
-            if (order_create != null)
+            if (order_create != null && order_create.total_fee != -1)
             {
                 orderCodeCreated = order_create.order_code;
                 await ShowDialogFunc("Tạo thành công đơn ship GHN\n", "Code: " + order_create.order_code + "\nPhí vận chuyển: " + order_create.total_fee);
-
+                return true;
             }
             else
             {
-                await ShowErrorDialog("Không tạo được đơn hàng, vui lòng thử lại");
+                if (order_create == null)
+                {
+                    await ShowErrorDialog("Không tạo được đơn hàng, vui lòng thử lại");
+                }
+                else
+                {
+                    await ShowErrorDialog(order_create.order_code);
+                }
+                return false;
             }
         }
 

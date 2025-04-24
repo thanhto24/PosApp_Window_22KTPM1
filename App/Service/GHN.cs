@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 
 namespace App.Service
 {
@@ -80,10 +81,16 @@ namespace App.Service
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    var error = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"Lỗi tạo đơn hàng: {error}");
+                    // An toàn hơn
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    var json = JsonConvert.DeserializeObject<dynamic>(errorContent);
+                    string errorMessage = json?.error?.message != null ? json.error.message.ToString() : "Unknown error";
+                    //throw new Exception($"Lỗi tạo đơn hàng: {error}");
 
-                    return new OrderShipResponse();
+                    OrderShipResponse responseShipResponse = new OrderShipResponse();
+                    responseShipResponse.order_code = errorMessage;
+                    responseShipResponse.total_fee = -1;
+                    return responseShipResponse;
                 }
 
                 var result = await response.Content.ReadAsStringAsync();
@@ -106,7 +113,8 @@ namespace App.Service
                 if (!response.IsSuccessStatusCode)
                 {
                     var error = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"Lỗi lấy phí ship: {error}");
+                    //throw new Exception($"Lỗi lấy phí ship: {error}");
+                    return -1;
                 }
 
                 var result = await response.Content.ReadAsStringAsync();
