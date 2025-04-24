@@ -12,27 +12,52 @@
     PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
     SecondaryButtonClick="ContentDialog_SecondaryButtonClick">
 
-    <StackPanel Spacing="12">
+    <StackPanel Spacing="12" Padding="0,8">
         <!-- Tỉnh -->
         <TextBlock Text="Tỉnh/Thành phố"/>
         <ComboBox x:Name="ToProvinceComboBox"
-                  SelectionChanged="ToProvinceComboBox_SelectionChanged"
-                  DisplayMemberPath="name"/>
+                  Width="360"
+                  SelectionChanged="ToProvinceComboBox_SelectionChanged">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding name}" 
+                               TextTrimming="CharacterEllipsis" 
+                               TextWrapping="NoWrap"/>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
 
         <!-- Quận/Huyện -->
         <TextBlock Text="Quận/Huyện"/>
         <ComboBox x:Name="ToDistrictComboBox"
-                  SelectionChanged="ToDistrictComboBox_SelectionChanged"
-                  DisplayMemberPath="name"/>
+                  Width="360"
+                  SelectionChanged="ToDistrictComboBox_SelectionChanged">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding name}" 
+                               TextTrimming="CharacterEllipsis" 
+                               TextWrapping="NoWrap"/>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
 
         <!-- Phường/Xã -->
         <TextBlock Text="Phường/Xã"/>
         <ComboBox x:Name="ToWardComboBox"
-                  DisplayMemberPath="name"/>
+                  Width="360">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding name}" 
+                               TextTrimming="CharacterEllipsis" 
+                               TextWrapping="NoWrap"/>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
 
         <!-- Địa chỉ chi tiết -->
         <TextBlock Text="Địa chỉ cụ thể"/>
         <TextBox x:Name="ToDetailedAddressTextBox"
+                 Width="360"
                  PlaceholderText="Nhập địa chỉ chi tiết"/>
     </StackPanel>
 </ContentDialog>

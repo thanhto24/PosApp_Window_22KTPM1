@@ -139,17 +139,29 @@ exports.getWardsByDistrict = async (req, res) => {
     const response = await ghnAPI.get("/master-data/ward", {
       params: { district_id },
     });
+
     const wards = response.data.data
       .map((w) => ({
         id: w.WardCode,
         name: w.WardName,
         district_id: w.DistrictID,
       }))
-      .sort((a, b) => a.name.localeCompare(b.name));
+      .sort((a, b) => {
+        const nameA = a.name.match(/\d+/);
+        const nameB = b.name.match(/\d+/);
+        const numA = nameA ? parseInt(nameA[0]) : 0;
+        const numB = nameB ? parseInt(nameB[0]) : 0;
 
-    console.log(wards);
+        if (numA !== numB) {
+          return numA - numB;
+        }
+
+        return a.name.localeCompare(b.name);
+      });
+
     res.json(wards);
   } catch (err) {
     res.status(500).json({ error: err.response?.data || err.message });
   }
 };
+
