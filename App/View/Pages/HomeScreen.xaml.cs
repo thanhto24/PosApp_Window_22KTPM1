@@ -159,7 +159,8 @@ namespace App.View.Pages
         {
             string phone = CustomerCodeTextBox.Text.Trim();
 
-            cusDis = CustomerViewModel.ApplyCusPhone(phone) / 100;
+            //cusDis = CustomerViewModel.ApplyCusPhone(phone) / 100;
+            cusDis = CustomerViewModel.ApplyCusPhone(phone);
             ApplyDiscount();
         }
 
