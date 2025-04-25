@@ -146,9 +146,24 @@ namespace App.View.ViewModel
             if (filteredProduct != null)
             {
                 Products.Clear();
+
+
                 foreach (Product product in filteredProduct)
                 {
                     Products.Add(product);
+                }
+
+                foreach (var product in Products)
+                {
+                    // Load image from relative path
+                    product.TotalPrice = product.Price * product.Inventory;
+
+                    // Tạo barcode cho mỗi sản phẩm
+                    if (product.BarCodeBitmap == null)
+                    {
+                        product.BarCodeBitmap = new BitmapImage();
+                        _ = product.LoadBarcodeAsync(product.BarCode);
+                    }
                 }
             }
         }

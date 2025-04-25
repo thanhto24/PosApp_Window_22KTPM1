@@ -44,9 +44,9 @@
             </NavigationView.MenuItems>
 
             <NavigationView.FooterMenuItems>
-                <NavigationViewItem Content="Account" Tag="SamplePage4" Icon="Contact" />
-                <NavigationViewItem Content="Your Cart" Tag="SamplePage5" Icon="Shop" />
-                <NavigationViewItem Content="Help" Tag="SamplePage5" Icon="Help" />
+                <NavigationViewItem Content="Account"  Icon="Contact" />
+                <NavigationViewItem Content="Your Cart"  Icon="Shop" />
+                <NavigationViewItem Content="Help" Icon="Help" />
             </NavigationView.FooterMenuItems>
 
             <Frame x:Name="container"/>

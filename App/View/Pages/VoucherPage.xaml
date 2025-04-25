@@ -41,12 +41,12 @@
         <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Margin="0,10,0,0" Orientation="Horizontal" Spacing="15">
             <StackPanel>
                 <TextBlock Text="Từ ngày *" FontWeight="Bold" Foreground="Red"/>
-                <CalendarDatePicker x:Name="StartDatePicker" Width="170" Background="#5D4037" Foreground="White"/>
+                <CalendarDatePicker x:Name="StartDatePicker" Width="170" Background="#9c7662" Foreground="Black"/>
             </StackPanel>
 
             <StackPanel>
                 <TextBlock Text="Đến ngày *" FontWeight="Bold" Foreground="Red"/>
-                <CalendarDatePicker x:Name="EndDatePicker" Width="170" Background="#5D4037" Foreground="White"/>
+                <CalendarDatePicker x:Name="EndDatePicker" Width="170" Background="#9c7662" Foreground="Black"/>
             </StackPanel>
         </StackPanel>
 

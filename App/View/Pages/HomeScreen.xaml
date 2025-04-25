@@ -170,7 +170,7 @@
                   Unchecked="VatToggleButton_Unchecked"/>
             </Grid>
 
-            <TextBox x:Name="CustomerName" Grid.Row="1" PlaceholderText="Nhập tên khách hàng" Background="#5D4037" BorderThickness="0" Padding="6, 8, 12, 0" FontSize="12" Margin="7, 10, 7, 0"/>
+            <TextBox x:Name="CustomerName" Grid.Row="1" PlaceholderText="Nhập tên khách hàng" Background="#9c7662" BorderThickness="0" Padding="6, 8, 12, 0" FontSize="12" Margin="7, 10, 7, 0"/>
 
             <TextBlock Grid.Row="2" x:Name="OrderSummaryText" Text="Số lượng: 0 món" FontSize="16" FontWeight="Bold" Margin="10, 10, 0, 0" Foreground="Black"/>
 
@@ -193,8 +193,8 @@
             </ScrollViewer>
 
             <StackPanel Grid.Row="4" Orientation="Vertical" HorizontalAlignment="Center" Margin="5, 10, 5, 20">
-                <TextBox x:Name="PromoCodeTextBox" Padding="10, 8, 0, 0" PlaceholderText="Voucher" TextChanged="PromoCodeTextBox_TextChanged" Margin="0, 0, 0, 5" Background="#5D4037" BorderThickness="0" FontSize="12"/>
-                <TextBox x:Name="CustomerCodeTextBox" Padding="10, 8, 0, 0" PlaceholderText="SĐT tích điểm" TextChanged="CustomerCodeTextBox_TextChanged" Margin="0, 0, 0, 5" Background="#5D4037" BorderThickness="0" FontSize="12"/>
+                <TextBox x:Name="PromoCodeTextBox" Padding="10, 8, 0, 0" PlaceholderText="Voucher" TextChanged="PromoCodeTextBox_TextChanged" Margin="0, 0, 0, 5" Background="#9c7662" BorderThickness="0" FontSize="12"/>
+                <TextBox x:Name="CustomerCodeTextBox" Padding="10, 8, 0, 0" PlaceholderText="SĐT tích điểm" TextChanged="CustomerCodeTextBox_TextChanged" Margin="0, 0, 0, 5" Background="#9c7662" BorderThickness="0" FontSize="12"/>
 
                 <!-- Tổng tiền -->
                 <Grid x:Name="TongTien" Margin="0, 5, 0, 0">
