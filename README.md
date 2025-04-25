@@ -8,8 +8,10 @@
 ### Hướng dẫn chạy project
 
 #### **1. Clone và mở project**
-- **Bước 1**: Clone project từ GitHub:  
-  👉 [PosApp_Window_22KTPM1](https://github.com/thanhto24/PosApp_Window_22KTPM1.git)  
+- **Bước 1**: Clone project từ drive (để có sẵn file env) hoặc từ GitHub:  
+  👉 [PosApp_Window_22KTPM1](https://github.com/thanhto24/PosApp_Window_22KTPM1.git)
+ 
+
 - **Bước 2**: Mở project bằng Visual Studio:  
   - Truy cập vào thư mục **App**  
   - Mở file **App.sln** bằng Visual Studio  
@@ -39,9 +41,7 @@ Services.AddKeyedSingleton<IDao, MongoDao>();
 ##### **Bước 2:** Mở thư mục **BE** bằng VS Code.  
 ##### **Bước 3:** Tạo file **.env** trong thư mục **BE** với nội dung sau:  
 ```sh
-PORT=5678
-
-MONGO_URI=mongodb+srv://thanhto:thanhto123@window.qb955.mongodb.net/newdb?retryWrites=true&w=majority&appName=Window
+Xem trong drive
 ```
 ##### **Bước 4:** Mở terminal tại thư mục **BE** và chạy lệnh:  
 ```sh
