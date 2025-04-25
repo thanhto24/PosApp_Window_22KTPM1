@@ -213,6 +213,17 @@ namespace App.View.Pages
                 await ShowErrorDialog("Vui lòng thêm sản phẩm");
                 return;
             }
+
+            string phone = CustomerCodeTextBox.Text.Trim();
+            if (!string.IsNullOrEmpty(phone))
+            {
+                if (!System.Text.RegularExpressions.Regex.IsMatch(phone, @"^0\d{9,10}$"))
+                {
+                    await ShowErrorDialog("Vui lòng nhập số điện thoại hợp lệ");
+                    return;
+                }
+            }
+
             string customerName = string.IsNullOrWhiteSpace(CustomerName.Text) ? "Khách vãng lai" : CustomerName.Text;
 
             if (isShip)
@@ -238,7 +249,9 @@ namespace App.View.Pages
 
 
 
-            string phone = CustomerCodeTextBox.Text.Trim();
+
+
+
             string name = CustomerName.Text.Trim();
             CustomerViewModel.storeData(phone, name, finalAmount);
 

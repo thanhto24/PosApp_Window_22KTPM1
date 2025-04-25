@@ -27,6 +27,14 @@ namespace App.View.ViewModel
             }
         }
 
+        public bool isDup(string code)
+        {
+            foreach (Voucher voucher in vouchers)
+                if (code.Equals(voucher.Code))
+                    return true;
+            return false;
+        }
+
         public void Add(Voucher item)
         {
             vouchers.Add(item);

@@ -17,7 +17,7 @@ namespace App.View.Pages
     {
         public VoucherViewModel VoucherViewModel { get; set; }
         private Voucher? _selectedVoucher;
-        private string DatabasePath = Path.Combine(AppContext.BaseDirectory, "database.db");
+        //private string DatabasePath = Path.Combine(AppContext.BaseDirectory, "database.db");
 
         public VoucherPage()
         {
@@ -27,9 +27,15 @@ namespace App.View.Pages
 
         private void GenerateVoucher(object sender, RoutedEventArgs e)
         {
-            if(CodeBox.Text == null)
+            if (CodeBox.Text == null)
             {
                 ShowMessage("Vui lòng nhập mã Code.");
+                return;
+            }
+
+            if (VoucherViewModel.isDup(CodeBox.Text))
+            {
+                ShowMessage("Mã Code bị trùng với dữ liệu trong CSDL, vui lòng chọn mã khác");
                 return;
             }
 
@@ -62,30 +68,40 @@ namespace App.View.Pages
 
             // Kiểm tra giá trị giảm
             string discountText = DiscountValueBox.Text.Replace("%", "").Trim();
-            if (!decimal.TryParse(discountText, out decimal discountValue) || discountValue <= 0 ||  discountValue > 100)
+            if (!decimal.TryParse(discountText, out decimal discountValue) || discountValue <= 0 || discountValue > 100)
             {
                 ShowMessage("Vui lòng nhập % hợp lệ, từ 0% đến 100%).");
                 return;
             }
 
             // Nếu tất cả kiểm tra hợp lệ, tiến hành tạo mã giảm giá
-            if(_selectedVoucher != null)
+            if (_selectedVoucher != null)
             {
                 VoucherViewModel.UpdateVoucher(_selectedVoucher, CodeBox.Text, (DateTimeOffset)StartDatePicker.Date, (DateTimeOffset)EndDatePicker.Date, quantity, minOrder, discountValue, NoteBox.Text);
-                AddVoucherButton.Content = "Tạo mã giảm giá";
-                _selectedVoucher = null;
-                CodeBox.Text = "Nhập mã code";
-                StartDatePicker.Date = null;
-                EndDatePicker.Date = null;
-                VoucherQuantityBox.Text = "Nhập số lượng";
-                NoteBox.Text = "Nhập mô tả voucher";
-                MinOrderBox.Text = "Nhập số tiền tối thiểu";
-                DiscountValueBox.Text = "Nhập phần trăm giảm";
+                ShowMessage("Đã cập nhật voucher");
+                reser_all();
             }
             else
+            {
                 VoucherViewModel.CreateVoucher(CodeBox.Text, (DateTimeOffset)StartDatePicker.Date, (DateTimeOffset)EndDatePicker.Date, quantity, minOrder, discountValue, NoteBox.Text);
+                ShowMessage("Đã tạo voucher");
+                reser_all();
+
+            }
         }
 
+        private void reser_all()
+        {
+            AddVoucherButton.Content = "Tạo mã giảm giá";
+            _selectedVoucher = null;
+            CodeBox.Text = "Nhập mã code";
+            StartDatePicker.Date = null;
+            EndDatePicker.Date = null;
+            VoucherQuantityBox.Text = "Nhập số lượng";
+            NoteBox.Text = "Nhập mô tả voucher";
+            MinOrderBox.Text = "Nhập số tiền tối thiểu";
+            DiscountValueBox.Text = "Nhập phần trăm giảm";
+        }
         private void EditVoucher_Click(object sender, RoutedEventArgs e)
         {
             Button clickedButton = sender as Button;
