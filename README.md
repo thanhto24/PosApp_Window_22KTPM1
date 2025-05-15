@@ -1,5 +1,5 @@
 # PosApp_Window_22KTPM1
-
+🎥 **Video Demo:** [Video demo link](https://youtu.be/wKFr_z9iaWM)
 ## Infor:
 - Trần Gia Bảo - 22127034
 - Phan Văn Tài - 22127372
